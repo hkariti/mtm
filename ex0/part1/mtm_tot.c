@@ -16,7 +16,7 @@ int main() {
     numbers = malloc(numbers_count*sizeof(int));
     printf("Enter numbers:\n");
     for (int i=0; i < numbers_count; i++) {
-        if ((scanf("%d", &numbers[i]) != 1) || (numbers[i] <= 0)) {
+        if ((scanf("%d", &numbers[i]) != 1)) {
             printf("Invalid number\n");
             free(numbers);
             return 1;
@@ -27,6 +27,9 @@ int main() {
         set_bits = 0;
         exponent = 0;
         temp = numbers[i];
+        if (temp < 0) {
+            continue;
+        }
         for (int j=0; j < BITS_IN_INT; j++) {
             if ((temp & 1) == 1) {
                 set_bits++;
