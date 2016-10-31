@@ -10,7 +10,7 @@ int main() {
     printf("Enter size of input:\n");
     if ((scanf("%d", &numbers_count) != 1) || (numbers_count <= 0)) {
         printf("Invalid size\n");
-        return 1;
+        return 0;
     }
 
     numbers = malloc(numbers_count*sizeof(int));
@@ -19,7 +19,7 @@ int main() {
         if ((scanf("%d", &numbers[i]) != 1)) {
             printf("Invalid number\n");
             free(numbers);
-            return 1;
+            return 0;
         }
     }
     exponents_sum = 0;
