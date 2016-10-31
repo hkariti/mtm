@@ -42,7 +42,7 @@ int main() {
             exponents_sum += exponent;
         }
     }
-    printf("Total exponents sum is %d\n", exponents_sum);
+    printf("Total exponent sum is %d\n", exponents_sum);
 
     free(numbers);
     return 0;
