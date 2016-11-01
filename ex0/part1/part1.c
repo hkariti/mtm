@@ -4,6 +4,8 @@
 
 #define BITS_IN_INT (sizeof(int)*8)
 
+void sum_exponents(int, int*);
+
 int main() {
     int numbers_count, *numbers;
 
