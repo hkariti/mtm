@@ -1,0 +1,48 @@
+#!/bin/bash
+
+function get_pokemon_level {
+    user=$1
+    pokemon=$1
+
+    cat Users/$user/$user.txt | grep "^$pokemon" | cut -d: -f2 | cut -d, -f1
+}
+
+function get_pokemon_cp {
+    user=$1
+    pokemon=$1
+
+    cat Users/$user/$user.txt | grep "^$pokemon" | cut -d: -f2 | cut -d, -f3
+}
+
+function get_pokemon_hp {
+    user=$1
+    pokemon=$1
+
+    cat Users/$user/$user.txt | grep "^$pokemon" | cut -d: -f2 | cut -d, -f2
+}
+
+attacking_user=$1
+attacked_user=$2
+
+attack_info=`check_if_attack $attacking_user $attacked_user`
+
+if [ -z "$attack_info" ]; then
+    exit 0
+fi
+
+attacking_pokemon=`echo $attack_info | cut -d " " -f 3`
+attacked_pokemon=`echo $attack_info | cut -d " " -f 6`
+level=`get_pokemon_level $attacking_user $attacking_pokemon`
+cp=`get_pokemon_cp $attacking_user $attacking_pokemon`
+hp=`get_pokemon_hp $attacked_user $attacked_pokemon`
+
+level=$(($level + 1))
+attacking_pokemon=`check_evolution $attacking_pokemon $level`
+hp=$(( $hp - $cp ))
+if [[ "$hp" -lt 0 ]]; then
+    hp=0
+fi
+
+echo $attacking_user : $attacking_pokemon $attacked_user : $attacked_pokemon
+echo $attacking_pokemon : level : $level
+echo $attacked_pokemon : hp : $hp
