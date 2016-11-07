@@ -1,0 +1,10 @@
+#!/bin/bash
+
+user=$1
+values=`echo $@ | cut -d " " -f 3-`
+
+for pokemon in `find_pokemons $2 $values | cut -d " " -f 2`; do
+	for user_filtered_pokemon in `cat Users/${user}/${user}.txt | grep $pokemon | cut -d ":" -f 1`; do
+		echo $user_filtered_pokemon
+	done
+done
