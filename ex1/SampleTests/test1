@@ -1,0 +1,3 @@
+#!/bin/bash
+# Test find_pokemons:
+find_pokemons T Grass

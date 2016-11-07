@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Test 5 :
+find_user_with_pokemons Ash W Ground

@@ -1,0 +1,3 @@
+#!/bin/bash
+# Test4 :
+find_user_with_pokemons Ash T Grass Ground
