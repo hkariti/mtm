@@ -1,0 +1,22 @@
+#!/bin/bash
+
+attribute=$1
+if [ "$attribute" == "T" ]; then
+	attribute="Type"
+else
+	attribute="Weakness"
+fi
+
+shift
+
+for pokemon_name in `get_all_pokemon_names | sort`; do
+	for requested_value in $@; do
+		if get_pokemon_attribute $pokemon_name $attribute | grep --quiet -c $requested_value; then 
+			echo "`get_pokemon_attribute $pokemon_name Index` $pokemon_name"
+			break
+		fi
+	done
+done
+
+#need to check if can use --quiet, shift
+#sort not nessecarilly working
