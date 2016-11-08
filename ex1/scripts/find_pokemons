@@ -7,10 +7,10 @@ else
 	attribute="Weakness"
 fi
 
-shift
+values=`echo $@ | cut -d " " -f 2-`
 
 for pokemon_name in `get_all_pokemon_names | sort`; do
-	for requested_value in $@; do
+	for requested_value in $values; do
 		if get_pokemon_attribute $pokemon_name $attribute | grep --quiet -c $requested_value; then 
 			echo "`get_pokemon_attribute $pokemon_name Index` $pokemon_name"
 			break
@@ -18,5 +18,5 @@ for pokemon_name in `get_all_pokemon_names | sort`; do
 	done
 done
 
-#need to check if can use --quiet, shift
+#need to check if can use --quiet
 #sort not nessecarilly working
