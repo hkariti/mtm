@@ -15,7 +15,7 @@ attacking_pokemon_level=`get_pokemon_level $attacking_user $attacking_pokemon`
 attacking_pokemon_cp=`get_pokemon_cp $attacking_user $attacking_pokemon`
 attacked_pokemon_hp=`get_pokemon_hp $attacked_user $attacked_pokemon`
 
-attacking_pokemon_level=$(($level + 1))
+attacking_pokemon_level=$(($attacking_pokemon_level + 1))
 attacking_pokemon=`check_evolution $attacking_pokemon $attacking_pokemon_level`
 attacked_pokemon_hp=$(( $attacked_pokemon_hp - $attacking_pokemon_cp ))
 if (( attacked_pokemon_hp < 0 )); then
