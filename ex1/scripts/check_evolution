@@ -1,0 +1,19 @@
+#!/bin/bash
+
+pokemon=$1
+current_level=$2
+
+for evolution in `tail -n-3 Pokemons/${pokemon}/${pokemon}.txt`; do
+	level_range=`echo $evolution | cut -d ":" -f 2-`
+	evolution_name=`echo $evolution | cut -d ":" -f 1`
+	if (( current_level >= `echo "$level_range" | cut -d "-" -f 1` )); then
+		if [[ "`echo $level_range | cut -d "-" -f 2`" == "" ]]; then
+			echo $evolution_name
+			break
+		else
+			if (( current_level <= `echo "$level_range" | cut -d "-" -f 2` )); then
+				echo $evolution_name
+			fi
+		fi
+	fi
+done
