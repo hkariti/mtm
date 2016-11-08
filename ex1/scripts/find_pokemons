@@ -1,22 +1,16 @@
 #!/bin/bash
 
 attribute=$1
+requested_values=`echo $@ | cut -d " " -f 2-`
+
 if [ "$attribute" == "T" ]; then
 	attribute="Type"
 else
-	attribute="Weakness"
+	attribute="Weaknesses"
 fi
 
-values=`echo $@ | cut -d " " -f 2-`
-
-for pokemon_name in `get_all_pokemon_names | sort`; do
-	for requested_value in $values; do
-		if get_pokemon_attribute $pokemon_name $attribute | grep --quiet -c $requested_value; then 
-			echo "`get_pokemon_attribute $pokemon_name Index` $pokemon_name"
-			break
-		fi
+for value in $requested_values; do
+	for pokemon in `grep ^$attribute Pokemons/*/*.txt | grep $value | cut -d "/" -f 2`; do
+		echo "`get_pokemon_attribute $pokemon Index` $pokemon"
 	done
-done
-
-#need to check if can use --quiet
-#sort not nessecarilly working
+done | sort -nr | uniq
