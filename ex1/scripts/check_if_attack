@@ -8,4 +8,4 @@ for user1_pokemon in `cat Users/${user1}/${user1}.txt | cut -d ":" -f 1`; do
 	for matched_user2_pokemon in `find_user_with_pokemons $user2 W $user1_pokemon_types`; do
 		echo "$user1 : $user1_pokemon $user2 : $matched_user2_pokemon"
 	done
-done
+done | sort -r -k 2 | sort -r -k 4

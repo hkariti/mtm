@@ -5,7 +5,5 @@ values=`echo $@ | cut -d " " -f 3-`
 attribute=$2
 
 for pokemon in `find_pokemons $attribute $values | cut -d " " -f 2`; do
-	for user_filtered_pokemon in `cat Users/${user}/${user}.txt | grep $pokemon | cut -d ":" -f 1`; do
-		echo $user_filtered_pokemon
-	done
-done
+	cat Users/${user}/${user}.txt | grep $pokemon | cut -d ":" -f 1
+done | sort
