@@ -5,23 +5,23 @@ attacked_user=$2
 
 attack_info=`check_if_attack $attacking_user $attacked_user`
 
-if [ -z "$attack_info" ]; then
+if [ "$attack_info" == "" ]; then
     exit 0
 fi
 
 attacking_pokemon=`echo $attack_info | cut -d " " -f 3`
 attacked_pokemon=`echo $attack_info | cut -d " " -f 6`
-level=`get_pokemon_level $attacking_user $attacking_pokemon`
-cp=`get_pokemon_cp $attacking_user $attacking_pokemon`
-hp=`get_pokemon_hp $attacked_user $attacked_pokemon`
+attacking_pokemon_level=`get_pokemon_level $attacking_user $attacking_pokemon`
+attacking_pokemon_cp=`get_pokemon_cp $attacking_user $attacking_pokemon`
+attacked_pokemon_hp=`get_pokemon_hp $attacked_user $attacked_pokemon`
 
-level=$(($level + 1))
-attacking_pokemon=`check_evolution $attacking_pokemon $level`
-hp=$(( $hp - $cp ))
-if [[ "$hp" -lt 0 ]]; then
-    hp=0
+attacking_pokemon_level=$(($level + 1))
+attacking_pokemon=`check_evolution $attacking_pokemon $attacking_pokemon_level`
+attacked_pokemon_hp=$(( $attacked_pokemon_hp - $attacking_pokemon_cp ))
+if (( attacked_pokemon_hp < 0 )); then
+    $attacked_pokemon_hp=0
 fi
 
 echo $attacking_user : $attacking_pokemon $attacked_user : $attacked_pokemon
-echo $attacking_pokemon : level : $level
-echo $attacked_pokemon : hp : $hp
+echo $attacking_pokemon : level : $attacking_pokemon_level
+echo $attacked_pokemon : hp : $attacked_pokemon_hp
