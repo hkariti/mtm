@@ -1,0 +1,6 @@
+#!/bin/bash
+
+user=$1
+pokemon=$2
+
+cat Users/$user/$user.txt | grep "^$pokemon" | cut -d: -f2 | cut -d, -f3

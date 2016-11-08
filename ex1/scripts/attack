@@ -1,26 +1,5 @@
 #!/bin/bash
 
-function get_pokemon_level {
-    user=$1
-    pokemon=$1
-
-    cat Users/$user/$user.txt | grep "^$pokemon" | cut -d: -f2 | cut -d, -f1
-}
-
-function get_pokemon_cp {
-    user=$1
-    pokemon=$1
-
-    cat Users/$user/$user.txt | grep "^$pokemon" | cut -d: -f2 | cut -d, -f3
-}
-
-function get_pokemon_hp {
-    user=$1
-    pokemon=$1
-
-    cat Users/$user/$user.txt | grep "^$pokemon" | cut -d: -f2 | cut -d, -f2
-}
-
 attacking_user=$1
 attacked_user=$2
 
