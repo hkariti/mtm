@@ -1,6 +1,3 @@
 #!/bin/bash
 
-for i in Pokemons/*; do 
-echo -n "`echo $i | cut -d / -f 2- | sort` "
-done
-echo ""
+ls Pokemons
