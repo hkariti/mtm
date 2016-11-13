@@ -4,6 +4,10 @@ user=$1
 values=`echo $@ | cut -d " " -f 3-`
 attribute=$2
 
+if [[ ! -d "Users/$user" ]]; then
+    exit 0
+fi
+
 for pokemon in `find_pokemons $attribute $values | cut -d " " -f 2`; do
 	cat Users/${user}/${user}.txt | grep "^$pokemon:" | cut -d ":" -f 1
 done | sort
