@@ -1,0 +1,218 @@
+#include "pokemon.h"
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+
+#define MAX_EXPERIENCE_VALUE	9901
+#define INVALID_INDEX	-1
+
+bool isTypeValid(PokemonType type) {
+	if (type < 0 || type > TYPE_ELECTRIC) { //UGLY: other way to check if type is ok??
+		return false;
+	}
+	return true;
+}
+
+bool isNameValid(char* name) {
+	if (NULL == name) {
+		return false;
+	}
+	if (strlen(name) == 0) {
+		return false;
+	}
+	return true;
+}
+
+bool validatePokemonProperties(char* name, PokemonType type, int experience,
+	int max_number_of_moves) {
+	if (!isNameValid(name)) {
+		return false;
+	}
+	if (!isTypeValid(type)) {
+		return false;
+	}
+	if (experience > MAX_EXPERIENCE_VALUE || experience < 0) { // what about 0?
+		return false;
+	}
+	if (max_number_of_moves < 0) { // what about 0?
+		return false;
+	}
+	return true;
+}
+
+bool validateMoveProperties() {
+
+}
+
+PokemonResult stringInit(char** src, char** dest) {
+	if (NULL == src || NULL == dest || NULL == *src) {
+		return POKEMON_NULL_ARG;
+	}
+	int len = strlen(*src);
+	*dest = malloc(len + 1);
+	if (NULL == *dest) {
+		return POKEMON_OUT_OF_MEM;
+	}
+	for (unsigned int i = 0; i <= len; i++) {
+		(*dest)[i] = (*src)[i];
+	}
+	return POKEMON_SUCCESS;
+}
+
+Pokemon pokemonCreate(char* name, PokemonType type, int experience,
+	int max_number_of_moves) {
+	if (!validatePokemonProperties(name, type, experience, max_number_of_moves)) {
+		return NULL;
+	}
+	char* name_clone;
+	if (POKEMON_SUCCESS != stringInit(&name, &name_clone)) {
+		return NULL;
+	}
+	Pokemon created_pokemon = malloc(sizeof(struct pokemon_t));
+	if (NULL == created_pokemon) {
+		return NULL;
+	}
+	created_pokemon->experience = experience;
+	created_pokemon->name = name_clone;
+	created_pokemon->max_number_of_moves = max_number_of_moves;
+	created_pokemon->type = type;
+	created_pokemon->health_points = 1; //TODO: Input health_points from pokemonHeal;
+	created_pokemon->number_of_moves = 0;
+	created_pokemon->moves = malloc(sizeof(PokemonMove)*max_number_of_moves);;
+	for (int i = 0; i < max_number_of_moves; i++) {
+		created_pokemon->moves[i] = NULL;
+	}
+	return created_pokemon;
+}
+
+void pokemonDestroy(Pokemon pokemon) {
+	if (NULL == pokemon) {
+		return;
+	}
+	free(pokemon->name);
+	while (pokemon->number_of_moves > 0) {
+		pokemonUnteachMove(pokemon, pokemon->moves[0]->name);
+	}
+	free(pokemon->moves);
+	free(pokemon);
+}
+
+Pokemon pokemonCopy(Pokemon pokemon) {
+	if (NULL == pokemon) {
+		return NULL;
+	}
+	Pokemon new_pokemon = pokemonCreate(pokemon->name, pokemon->type, pokemon->experience, pokemon->max_number_of_moves);
+	if (NULL == new_pokemon) {
+		return NULL;
+	}
+	new_pokemon->health_points = pokemon->health_points;
+	new_pokemon->moves = pokemon->moves; //TODO: copy pokemon moves
+	new_pokemon->number_of_moves = pokemon->number_of_moves;
+	return new_pokemon;
+}	
+
+// returns move's index in moves array. if doesn't exist returns -1
+int findMoveByName(Pokemon pokemon, char* move_name) {
+	for (int i = 0; i < pokemon->number_of_moves; i++) {
+		if (0 == strcmp(pokemon->moves[i]->name, move_name)) {
+			return i;
+		}
+	}
+	return INVALID_INDEX;
+}
+
+PokemonResult pokemonTeachMove(Pokemon pokemon, char* move_name,
+	PokemonType type, int max_power_points, int strength) {
+	if (NULL == pokemon || NULL == move_name) {
+		return POKEMON_NULL_ARG;
+	}
+	if (!isNameValid(move_name)) {
+		return POKEMON_INVALID_MOVE_NAME;
+	}
+	if (!isTypeValid(type)) {
+		return POKEMON_INVALID_TYPE;
+	}
+	if (max_power_points < 0) { // what about 0?
+		return POKEMON_INVALID_POWER_POINTS;
+	}
+	if (strength < 0) { // what about 0?
+		return POKEMON_INVALID_STRENGTH;
+	}
+	if (TYPE_NORMAL != type && pokemon->type != type) {
+		return POKEMON_INCOMPATIBLE_MOVE_TYPE;
+	}
+	if (INVALID_INDEX  != findMoveByName(pokemon, move_name)) {
+		return POKEMON_MOVE_ALREADY_EXISTS;
+	}
+
+	if (pokemon->number_of_moves == pokemon->max_number_of_moves) {
+		PokemonMove lowest_lexicographic_move = pokemon->moves[0]; //TODO: if max_number_of_moves can be 0!??
+		for (int i = 1; i < pokemon->number_of_moves; i++) {
+			if (strcmp(lowest_lexicographic_move->name, pokemon->moves[i]->name) < 0) {
+				lowest_lexicographic_move = pokemon->moves[0];
+			}
+		}
+		pokemonUnteachMove(pokemon, lowest_lexicographic_move->name);
+	}
+	pokemon->moves[pokemon->number_of_moves] = malloc(sizeof(struct pokemon_move_t));
+	if (NULL == pokemon->moves[pokemon->number_of_moves]) {
+		return POKEMON_OUT_OF_MEM;
+	}
+	if (POKEMON_SUCCESS != stringInit(&move_name, &pokemon->moves[pokemon->number_of_moves]->name)) {
+		free(pokemon->moves[pokemon->number_of_moves]);
+		return POKEMON_OUT_OF_MEM;
+	}
+	pokemon->moves[pokemon->number_of_moves]->max_power_points = max_power_points;
+	pokemon->moves[pokemon->number_of_moves]->strength = strength;
+	pokemon->moves[pokemon->number_of_moves]->type = type;
+	pokemon->moves[pokemon->number_of_moves]->power_points = max_power_points;
+
+	pokemon->number_of_moves++;
+
+	return POKEMON_SUCCESS;
+}
+
+PokemonResult pokemonUnteachMove(Pokemon pokemon, char* move_name) {
+	if (NULL == pokemon || move_name == NULL) {
+		return POKEMON_NULL_ARG;
+	}
+	if (!isNameValid(move_name)) {
+		return POKEMON_INVALID_NAME;
+	}
+	int move_to_unteach_index = findMoveByName(pokemon, move_name);
+	if (INVALID_INDEX == move_to_unteach_index) {
+		return POKEMON_MOVE_DOES_NOT_EXIST;
+	}
+	free(pokemon->moves[move_to_unteach_index]->name);
+	free(pokemon->moves[move_to_unteach_index]);
+	// if move is not the last node in array
+	if (move_to_unteach_index < pokemon->number_of_moves - 1) {
+		// squeeze the array by moving the last node to the node index we just removed.
+		pokemon->moves[move_to_unteach_index] = pokemon->moves[pokemon->number_of_moves - 1];
+	}
+	pokemon->number_of_moves--;
+	return POKEMON_SUCCESS;
+}
+
+int pokemonGetLevel(Pokemon pokemon) {
+	assert(pokemon);
+	int level = pokemon->experience / 100;
+	if (0 != pokemon->experience % 100) {
+		level++;
+	}
+	return level;
+}
+
+int main() {
+	char *str ="";
+	char* dest;
+	Pokemon pokemon = pokemonCreate("Pika", TYPE_GRASS, 101, 30);
+	printf("%d\n", pokemonGetLevel(pokemon));
+	printf("%d", pokemonTeachMove(pokemon, "Hit", TYPE_GRASS, 10, 3));
+	printf("%d", pokemonUnteachMove(pokemon, "Hit"));
+	pokemonDestroy(pokemon);
+	printf("%d\n", stringInit(&str, &dest));
+	printf("strlen %d\n", strlen(str));
+	printf("string: %s\n", dest);
+	scanf("%c", &str);
+ }
