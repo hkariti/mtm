@@ -5,6 +5,15 @@
 
 #define MAX_EXPERIENCE_VALUE	9901
 #define INVALID_INDEX	-1
+#define CRITICAL_ATTACK_FACTOR	2
+#define NORMAL_ATTACK_FACTOR	1
+#define FIRST_LOWERCASE_LETTER 'a'
+#define FIRST_UPPERCASE_LETTER 'A'
+#define LAST_LOWERCASE_LETTER 'z'
+#define LAST_UPPERCASE_LETTER 'Z'
+#define SEPERATION_LETTER	'-'
+#define NULL_CHARACTER	'\0'
+
 
 bool isTypeValid(PokemonType type) {
 	if (type < 0 || type > TYPE_ELECTRIC) { //UGLY: other way to check if type is ok??
@@ -173,7 +182,7 @@ PokemonResult pokemonTeachMove(Pokemon pokemon, char* move_name,
 }
 
 PokemonResult pokemonUnteachMove(Pokemon pokemon, char* move_name) {
-	if (NULL == pokemon || move_name == NULL) {
+	if (NULL == pokemon || NULL == move_name) {
 		return POKEMON_NULL_ARG;
 	}
 	if (!isNameValid(move_name)) {
@@ -203,10 +212,168 @@ int pokemonGetLevel(Pokemon pokemon) {
 	return level;
 }
 
+int pokemonGetRank(Pokemon pokemon) {
+	assert(pokemon);
+	if (0 == pokemon->number_of_moves) {
+		return 0;
+	}
+	int average_move_strength = 0;
+	for (int i = 0; i < pokemon->number_of_moves; i++) {
+		average_move_strength += pokemon->moves[i]->strength;
+	}
+	average_move_strength /= pokemon->number_of_moves;
+	return average_move_strength + pokemonGetLevel(pokemon);
+}
+
+int getMoveAttackFactor(PokemonMove move, Pokemon attacked_pokemon) {
+	if (TYPE_WATER == move->type && TYPE_FIRE == attacked_pokemon) {
+		return CRITICAL_ATTACK_FACTOR;
+	}
+	if (TYPE_FIRE == move->type && TYPE_GRASS == attacked_pokemon) {
+		return CRITICAL_ATTACK_FACTOR;
+	}
+	if (TYPE_GRASS == move->type && TYPE_WATER == attacked_pokemon) {
+		return CRITICAL_ATTACK_FACTOR;
+	}
+	if (TYPE_ELECTRIC == move->type && TYPE_WATER == attacked_pokemon) {
+		return CRITICAL_ATTACK_FACTOR;
+	}
+	return NORMAL_ATTACK_FACTOR;
+}
+
+PokemonResult pokemonUseMove(Pokemon pokemon, Pokemon opponent_pokemon, char* move_name) {
+	if (NULL == pokemon || NULL == opponent_pokemon || NULL == move_name) {
+		return POKEMON_NULL_ARG;
+	}
+	if (!strlen(move_name)) {
+		return POKEMON_INVALID_MOVE_NAME;
+	}
+	PokemonMove move = findMoveByName(pokemon, move_name);
+	if (NULL == move) {
+		return POKEMON_MOVE_DOES_NOT_EXIST;
+	}
+	if (0 == move->power_points) {
+		return POKEMON_NO_POWER_POINTS;
+	}
+	if (0 == pokemon->health_points || 0 == opponent_pokemon->health_points) {
+		return POKEMON_NO_HEALTH_POINTS;
+	}
+	int factor = getMoveAttackFactor(move, opponent_pokemon);
+	int attack_points = factor * (pokemonGetLevel(pokemon) * 2 + move->strength);
+	if (attack_points > opponent_pokemon->health_points) {
+		attack_points = opponent_pokemon->health_points;
+	}
+	opponent_pokemon->health_points -= attack_points;
+	pokemon->experience += attack_points;
+	if (pokemon->experience > MAX_EXPERIENCE_VALUE) {
+		pokemon->experience = MAX_EXPERIENCE_VALUE;
+	}
+	move->power_points--;
+	return POKEMON_SUCCESS;
+}
+
+PokemonResult pokemonHeal(Pokemon pokemon) { //Q: What if current hp is high enoguh??
+	if (NULL == pokemon) {
+		return POKEMON_NULL_ARG;
+	}
+	pokemon->health_points = (100 + pokemonGetLevel(pokemon)) * 10; //TOOD: defines?
+	for (int i = 0; i < pokemon->number_of_moves; i++) {
+		pokemon->moves[i]->power_points = pokemon->moves[i]->max_power_points;
+	}
+	return POKEMON_SUCCESS;
+}
+
+PokemonResult pokemonEvolve(Pokemon pokemon, char* new_name) {
+	if (NULL == pokemon || NULL == new_name) {
+		return POKEMON_NULL_ARG;
+	}
+	if (!strlen(new_name)) {
+		return POKEMON_INVALID_NAME;
+	}
+
+	int prev_experience = pokemon->experience;
+	int previous_level = pokemonGetLevel(pokemon);
+	while (previous_level == pokemonGetLevel(pokemon)) {
+		pokemon->experience++;
+		if (MAX_EXPERIENCE_VALUE <= pokemon->experience) {
+			pokemon->experience = prev_experience;
+			return POKEMON_CANNOT_EVOLVE;
+		}
+	}
+
+	char* new_name_clone;
+	stringInit(&new_name, &new_name_clone);
+	if (NULL == new_name_clone) {
+		pokemon->experience = prev_experience;
+		return POKEMON_OUT_OF_MEM;
+	}
+
+	free(pokemon->name);
+	pokemon->name = new_name_clone;
+	return POKEMON_SUCCESS;
+}
+
+PokemonResult pokemonPrintName(Pokemon pokemon, FILE* file) {	//Q: need to check if file as write access?
+	if (NULL == pokemon || NULL == file) {
+		return POKEMON_NULL_ARG;
+	}
+	fputs(pokemon->name, file); //Q: need to add \n ?
+
+	return POKEMON_SUCCESS;
+}
+
+char* removeNonLetterChars(char* src) {
+	int new_length = 0;
+	char* dest = malloc(strlen(src) + 1);
+	if (NULL == dest) {
+		return NULL;
+	}
+	int i = 0;
+	for (i = 0; i < strlen(src); i++) {
+		char current_char = *(src + i);
+		if ((current_char >= FIRST_LOWERCASE_LETTER) && (current_char <= LAST_LOWERCASE_LETTER) ||
+			(current_char >= FIRST_UPPERCASE_LETTER) && (current_char <= LAST_UPPERCASE_LETTER)) {
+			*(dest + i) = current_char;
+		}
+	}
+	*(dest + i) = NULL_CHARACTER;
+	return dest;
+}
+
+PokemonResult pokemonPrintVoice(Pokemon pokemon, FILE* file) { //Q: pokemon name can be empty?? Q: file access checking?
+	if (NULL == pokemon || NULL == file) {
+		return POKEMON_NULL_ARG;
+	}
+	char* only_letters_name = removeNonLetterChars(pokemon->name);
+	if (NULL == only_letters_name) {
+		return POKEMON_OUT_OF_MEM;
+	}
+	int voice_half_length = strlen(only_letters_name);
+	if (voice_half_length >= 4) {
+		voice_half_length = voice_half_length / 2 + voice_half_length % 2;
+	}
+	int voice_length = voice_half_length * 2 + 1; // 2 halfs + seperation letter
+	char* pokemon_voice = malloc(voice_length + 1);
+	if (NULL == pokemon_voice) {
+		return POKEMON_OUT_OF_MEM;
+	}
+
+	memcpy(pokemon_voice, only_letters_name, voice_half_length);
+	memcpy(pokemon_voice + voice_half_length + 1, only_letters_name, voice_half_length);
+	pokemon_voice[voice_half_length] = SEPERATION_LETTER;
+	pokemon_voice[voice_length] = NULL_CHARACTER;
+	free(only_letters_name);
+	fputs(pokemon_voice, file); //Q: need to add \n ?
+
+	return POKEMON_SUCCESS;
+}
+
 int main() {
 	char *str ="";
 	char* dest;
-	Pokemon pokemon = pokemonCreate("Pika", TYPE_GRASS, 101, 30);
+	Pokemon pokemon = pokemonCreate("Hohoyobogo", TYPE_GRASS, 101, 30);
+	pokemonPrintVoice(pokemon, fopen("text.txt","w"));
+	printf("strlen %d\n",strlen(""));
 	printf("%d\n", pokemonGetLevel(pokemon));
 	printf("%d", pokemonTeachMove(pokemon, "Hit", TYPE_GRASS, 10, 3));
 	printf("%d", pokemonUnteachMove(pokemon, "Hit"));
