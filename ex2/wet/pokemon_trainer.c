@@ -3,22 +3,6 @@
 #include <stdlib.h>
 #include "pokemon_trainer.h"
 
-static Pokemon pokemonListGet(PokemonList base, int index) {
-    if (NULL == base) return NULL;
-    if (index < 1 || index > base->length) return NULL;
-
-    return base->list[index - 1];
-}
-
-static Pokemon pokemonListSet(PokemonList base, int index, Pokemon value) {
-    if (NULL == base) return NULL;
-    if (index < 1 || index > base->length) return NULL;
-
-    base->list[index - 1] = value;
-    return value;
-}
-
-
 static PokemonList pokemonListCreate(int max_length, int min_length) {
     PokemonList base;
 
@@ -46,8 +30,15 @@ static void pokemonListDestroy(PokemonList base) {
         pokemonDestroy(base->list[i]);
     }
     pokemonListShallowDestroy(base);
-    
 }
+
+static Pokemon pokemonListGet(PokemonList base, int index) {
+    if (NULL == base) return NULL;
+    if (index < 1 || index > base->length) return NULL;
+
+    return base->list[index - 1];
+}
+
 static int pokemonListMove(PokemonList dest, PokemonList source, int dest_offset, int source_offset) {
     if (dest_offset < 0 || dest_offset > dest->length) return dest->length;
     if (source_offset < 0 || source_offset > source->length) return dest->length;
