@@ -51,4 +51,12 @@ PokemonTrainerResult pokemonTrainerMakeMostRankedParty(PokemonTrainer trainer);
 PokemonTrainerResult pokemonTrainerPrintEnumeration(
 	PokemonTrainer trainer, FILE* file);
 
+PokemonList pokemonListCreate(int max_length, int min_length);
+void pokemonListShallowDestroy(PokemonList base);
+void pokemonListDestroy(PokemonList base);
+Pokemon pokemonListGet(PokemonList base, int index);
+int pokemonListMove(PokemonList dest, PokemonList source, int dest_offset, int source_offset);
+void pokemonListSort(PokemonList base);
+PokemonTrainerResult pokemonListAppend(PokemonList base, Pokemon pokemon);
+PokemonTrainerResult pokemonListRemove(PokemonList base, int index);
 #endif // POKEMON_TRAINER_H_
