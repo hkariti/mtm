@@ -115,8 +115,9 @@ Pokemon pokemonCopy(Pokemon pokemon) {
 		return NULL;
 	}
 	new_pokemon->health_points = pokemon->health_points;
-	new_pokemon->moves = pokemon->moves; //TODO: copy pokemon moves
-	new_pokemon->number_of_moves = pokemon->number_of_moves;
+    for (int i = 0; i < pokemon->number_of_moves; i++) {
+        pokemonTeachMove(new_pokemon, pokemon->moves[i]->name, pokemon->moves[i]->type, pokemon->moves[i]->max_power_points, pokemon->moves[i]->strength);
+    }
 	return new_pokemon;
 }	
 
