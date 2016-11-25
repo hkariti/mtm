@@ -5,6 +5,9 @@
 #include <stdbool.h>
 #include "pokemon.h"
 
+#define POKEMON_TRAINER_MIN_LENGTH_LOCAL 1
+#define POKEMON_TRAINER_MIN_LENGTH_REMOTE 0
+
 typedef enum {
 	POKEMON_TRAINER_SUCCESS,
 	POKEMON_TRAINER_NULL_ARG,
@@ -16,8 +19,17 @@ typedef enum {
 	POKEMON_TRAINER_DEPOSIT_FULL
 } PokemonTrainerResult;
 
+typedef struct pokemon_list_t {
+    Pokemon* list;
+    int length;
+    int max_length;
+    int min_length;
+} *PokemonList;
+
 typedef struct pokemon_trainer_t {
-	// TODO: Add fields here
+    char* name;
+    PokemonList local_pokemon;
+    PokemonList remote_pokemon;
 } *PokemonTrainer;
 
 PokemonTrainer pokemonTrainerCreate(char* name, Pokemon initial_pokemon,
