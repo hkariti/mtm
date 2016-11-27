@@ -65,7 +65,7 @@ void pokemonListMove(PokemonList dest, PokemonList source, int dest_offset, int 
         dest->list[dest_offset + i] = source->list[source_offset + i];
     }
     dest->length = target_length;
-    return target_length;
+    return;
 }
 
 void pokemonListSort(PokemonList base) {
@@ -106,10 +106,10 @@ PokemonTrainerResult pokemonListAppend(PokemonList base, Pokemon pokemon) {
 }
 
 PokemonTrainerResult pokemonListRemove(PokemonList base, int index) {
-    if (base->length <= base->min_length)
-        return POKEMON_TRAINER_REMOVE_LAST;
     if (index < 1 || index > base->length)
         return POKEMON_TRAINER_INVALID_INDEX;
+    if (base->length <= base->min_length)
+        return POKEMON_TRAINER_REMOVE_LAST;
 
     pokemonDestroy(base->list[index - 1]);
     for (int i=index; i < base->length; i++) {
@@ -122,7 +122,7 @@ PokemonTrainerResult pokemonListRemove(PokemonList base, int index) {
 
 PokemonTrainer pokemonTrainerCreate(char* name, Pokemon initial_pokemon, int max_num_local, int max_num_remote) {
     // Check arguments are valid
-    if ((NULL == name) || (NULL == initial_pokemon) || (max_num_local <= 0) || (max_num_remote <= 0)) return NULL;
+    if ((NULL == name) || (strcmp(name, "") == 0) || (NULL == initial_pokemon) || (max_num_local <= 0) || (max_num_remote <= 0)) return NULL;
 
     // Allocate memory
     PokemonTrainer trainer;
@@ -288,9 +288,10 @@ PokemonTrainerResult pokemonTrainerMakeMostRankedParty(PokemonTrainer trainer) {
     int combined_party_length = trainer->local_pokemon->length + trainer->remote_pokemon->length;
     PokemonList combined_party = pokemonListCreate(combined_party_length, 0);
     if (NULL == combined_party) return POKEMON_TRAINER_OUT_OF_MEM;
-
     pokemonListMove(combined_party, trainer->local_pokemon, 0, 0);
     pokemonListMove(combined_party, trainer->remote_pokemon, trainer->local_pokemon->length, 0);
+
+    // Sort
     pokemonListSort(combined_party);
 
     // Fill up the local_pokemon list up to the max

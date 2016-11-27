@@ -227,16 +227,16 @@ int pokemonGetRank(Pokemon pokemon) {
 }
 
 int getMoveAttackFactor(PokemonMove move, Pokemon attacked_pokemon) {
-	if (TYPE_WATER == move->type && TYPE_FIRE == attacked_pokemon) {
+	if (TYPE_WATER == move->type && TYPE_FIRE == attacked_pokemon->type) {
 		return CRITICAL_ATTACK_FACTOR;
 	}
-	if (TYPE_FIRE == move->type && TYPE_GRASS == attacked_pokemon) {
+	if (TYPE_FIRE == move->type && TYPE_GRASS == attacked_pokemon->type) {
 		return CRITICAL_ATTACK_FACTOR;
 	}
-	if (TYPE_GRASS == move->type && TYPE_WATER == attacked_pokemon) {
+	if (TYPE_GRASS == move->type && TYPE_WATER == attacked_pokemon->type) {
 		return CRITICAL_ATTACK_FACTOR;
 	}
-	if (TYPE_ELECTRIC == move->type && TYPE_WATER == attacked_pokemon) {
+	if (TYPE_ELECTRIC == move->type && TYPE_WATER == attacked_pokemon->type) {
 		return CRITICAL_ATTACK_FACTOR;
 	}
 	return NORMAL_ATTACK_FACTOR;
@@ -329,15 +329,16 @@ char* removeNonLetterChars(char* src) {
 	if (NULL == dest) {
 		return NULL;
 	}
-	int i = 0;
+	int i = 0, j = 0;
 	for (i = 0; i < strlen(src); i++) {
 		char current_char = *(src + i);
-		if ((current_char >= FIRST_LOWERCASE_LETTER) && (current_char <= LAST_LOWERCASE_LETTER) ||
-			(current_char >= FIRST_UPPERCASE_LETTER) && (current_char <= LAST_UPPERCASE_LETTER)) {
-			*(dest + i) = current_char;
+		if (((current_char >= FIRST_LOWERCASE_LETTER) && (current_char <= LAST_LOWERCASE_LETTER)) ||
+			((current_char >= FIRST_UPPERCASE_LETTER) && (current_char <= LAST_UPPERCASE_LETTER))) {
+			*(dest + j) = current_char;
+            j++;
 		}
 	}
-	*(dest + i) = NULL_CHARACTER;
+	*(dest + j) = NULL_CHARACTER;
 	return dest;
 }
 
@@ -363,8 +364,9 @@ PokemonResult pokemonPrintVoice(Pokemon pokemon, FILE* file) { //Q: pokemon name
 	memcpy(pokemon_voice + voice_half_length + 1, only_letters_name, voice_half_length);
 	pokemon_voice[voice_half_length] = SEPERATION_LETTER;
 	pokemon_voice[voice_length] = NULL_CHARACTER;
-	free(only_letters_name);
 	fputs(pokemon_voice, file); //Q: need to add \n ?
+    free(pokemon_voice);
+	free(only_letters_name);
 
 	return POKEMON_SUCCESS;
 }
