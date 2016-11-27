@@ -1,5 +1,6 @@
-#include "stdlib.h"
-#include "stdbool.h"
+#include <stdlib.h>
+#include <stdbool.h>
+#include <stdio.h>
 
 typedef struct node_t *Node;
 struct node_t {
@@ -27,19 +28,20 @@ void freeAllNodes(Node first_node) {
 	}
 }
 
-Node printList(Node first_node, int steps) {
+void printList(Node first_node, int steps) {
 	Node node_to_print = first_node;
-	int current_index = 0;
+    int current_index = 0;
 	while (node_to_print != NULL) {
 		if (0 == current_index % steps) {
 			printf("%d ", node_to_print->data);
+            current_index = 0;
 		}
 		node_to_print = node_to_print->next;
 		current_index++;
 	}
 }
 
-printCheckmarkOrdered(Node first_node) {
+bool printCheckmarkOrdered(Node first_node) {
 
 	if (NULL == first_node) {
 		return true;
@@ -70,6 +72,7 @@ printCheckmarkOrdered(Node first_node) {
 	printList(reversed_list_head, 1);
 
 	freeAllNodes(reversed_list_head);
+    return true;
 }
 
 int main() { //just tests
@@ -85,6 +88,6 @@ int main() { //just tests
 
 	printCheckmarkOrdered(first_node);
 
-	char *a;
-	scanf("%s", &a);
+//	char *a;
+//	scanf("%s", &a);
 }
