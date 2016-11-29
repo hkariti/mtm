@@ -12,6 +12,7 @@
 #define LAST_LOWERCASE_LETTER 'z'
 #define LAST_UPPERCASE_LETTER 'Z'
 #define SEPERATION_LETTER	'-'
+#define NULL_TERMINATION	'\0'
 
 /**
 * Checks if the supplied PokemonType is valid * 
@@ -80,7 +81,7 @@ char* onlyLettersString(char* src) {
 			j++;
 		}
 	}
-	*(dest + j) = NULL;
+	*(dest + j) = NULL_TERMINATION;
 	return dest;
 }
 
@@ -363,7 +364,7 @@ PokemonResult pokemonPrintVoice(Pokemon pokemon, FILE* file) {
 	memcpy(pokemon_voice + voice_half_length + 1, only_letters_name,
 		voice_half_length);
 	pokemon_voice[voice_half_length] = SEPERATION_LETTER;
-	pokemon_voice[voice_length] = NULL;
+	pokemon_voice[voice_length] = NULL_TERMINATION;
 	fputs(pokemon_voice, file);
     free(pokemon_voice);
 	free(only_letters_name);
