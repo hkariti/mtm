@@ -43,6 +43,35 @@ void pokemonListDestroy(PokemonList base) {
     pokemonListShallowDestroy(base);
 }
 
+PokemonTrainerResult pokemonListAppend(PokemonList base, Pokemon pokemon) {
+    // Boundry checks
+    if (base->length == base->max_length)
+        return POKEMON_TRAINER_PARTY_FULL;
+
+    // Add pokemon to list
+    base->length++;
+    base->list[base->length - 1] = pokemon;
+
+    return POKEMON_TRAINER_SUCCESS;
+}
+
+PokemonTrainerResult pokemonListRemove(PokemonList base, int index, bool keep) {
+    if (index < 1 || index > base->length)
+        return POKEMON_TRAINER_INVALID_INDEX;
+    if (base->length <= base->min_length)
+        return POKEMON_TRAINER_REMOVE_LAST;
+
+    if (!keep) {
+        pokemonDestroy(base->list[index -1]);
+    }
+    for (int i=index; i < base->length; i++) {
+        base->list[i - 1] = base->list[i];
+    }
+    base->length--;
+
+    return POKEMON_TRAINER_SUCCESS;
+}
+
 Pokemon pokemonListGet(PokemonList base, int index) {
     if (NULL == base) return NULL;
     if (index < 1 || index > base->length) return NULL;
@@ -115,35 +144,6 @@ void pokemonListSort(PokemonList base) {
             }
         }
     }
-}
-
-PokemonTrainerResult pokemonListAppend(PokemonList base, Pokemon pokemon) {
-    // Boundry checks
-    if (base->length == base->max_length)
-        return POKEMON_TRAINER_PARTY_FULL;
-
-    // Add pokemon to list
-    base->length++;
-    base->list[base->length - 1] = pokemon;
-
-    return POKEMON_TRAINER_SUCCESS;
-}
-
-PokemonTrainerResult pokemonListRemove(PokemonList base, int index, bool keep) {
-    if (index < 1 || index > base->length)
-        return POKEMON_TRAINER_INVALID_INDEX;
-    if (base->length <= base->min_length)
-        return POKEMON_TRAINER_REMOVE_LAST;
-
-    if (!keep) {
-        pokemonDestroy(base->list[index -1]);
-    }
-    for (int i=index; i < base->length; i++) {
-        base->list[i - 1] = base->list[i];
-    }
-    base->length--;
-
-    return POKEMON_TRAINER_SUCCESS;
 }
 
 PokemonTrainer pokemonTrainerCreate(char* name, Pokemon initial_pokemon,
@@ -273,9 +273,7 @@ PokemonTrainerResult pokemonTrainerDepositPokemon(PokemonTrainer trainer,
         // Undo the append above in case of error when removing from
         // local_pokemon list
         int last_pokemon = trainer->remote_pokemon->length;
-        PokemonTrainerResult undo_result = pokemonListRemove(
-                trainer->remote_pokemon, last_pokemon, true);
-        assert(undo_result == POKEMON_TRAINER_SUCCESS);
+        pokemonListRemove( trainer->remote_pokemon, last_pokemon, true);
         // Translate error codes for the deposit use case.
         if (result == POKEMON_TRAINER_REMOVE_LAST)
             return POKEMON_TRAINER_DEPOSIT_LAST;
@@ -303,9 +301,7 @@ PokemonTrainerResult pokemonTrainerWithdrawPokemon(PokemonTrainer trainer,
         // Undo the append above if there was an error removing from the
         // remote_pokemon list
         int last_pokemon = trainer->local_pokemon->length; 
-        PokemonTrainerResult undo_result = pokemonListRemove(
-                trainer->local_pokemon, last_pokemon, true);
-        assert(undo_result == POKEMON_TRAINER_SUCCESS);
+        pokemonListRemove(trainer->local_pokemon, last_pokemon, true);
     }
     return result;
 }
@@ -375,16 +371,12 @@ PokemonTrainerResult pokemonTrainerPrintEnumeration(PokemonTrainer trainer,
 
     for (int i = 1; i <= trainer->local_pokemon->length; i++) {
         Pokemon pokemon = pokemonListGet(trainer->local_pokemon, i);
-        PokemonResult result;
         fprintf(file, "%s: ", trainer->name);
-        result = pokemonPrintName(pokemon, file);
-        assert(result == POKEMON_SUCCESS);
+        pokemonPrintName(pokemon, file);
         fprintf(file, "\n");
-        result = pokemonPrintName(pokemon, file);
-        assert(result == POKEMON_SUCCESS);
+        pokemonPrintName(pokemon, file);
         fprintf(file, ": ");
-        result = pokemonPrintVoice(pokemon, file);
-        assert(result == POKEMON_SUCCESS);
+        pokemonPrintVoice(pokemon, file);
         fprintf(file, "\n");
     }
 
