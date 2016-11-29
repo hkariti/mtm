@@ -60,7 +60,6 @@ Pokemon pokemonCreate(char* name, PokemonType type, int experience,
 }
 
 void pokemonDestroy(Pokemon pokemon) {
-
 	if (NULL == pokemon) return;
 
 	free(pokemon->name);
@@ -72,7 +71,6 @@ void pokemonDestroy(Pokemon pokemon) {
 }
 
 Pokemon pokemonCopy(Pokemon pokemon) {
-
 	if (NULL == pokemon) return NULL;
 	Pokemon new_pokemon = pokemonCreate(pokemon->name, pokemon->type, pokemon->experience, pokemon->max_number_of_moves);
 	if (NULL == new_pokemon) return NULL;
@@ -85,7 +83,6 @@ Pokemon pokemonCopy(Pokemon pokemon) {
 
 // returns move's index in moves array. if doesn't exist returns -1
 int findMoveByName(Pokemon pokemon, char* move_name) {
-
 	for (int i = 0; i < pokemon->number_of_moves; i++) {
 		if (0 == strcmp(pokemon->moves[i]->name, move_name)) {
 			return i;
@@ -96,7 +93,6 @@ int findMoveByName(Pokemon pokemon, char* move_name) {
 
 // return's lower lexicographic move, if no moves available returns NULL
 PokemonMove getLowestLexicographicMove(Pokemon pokemon) {
-
 	if (pokemon->number_of_moves == 0) return NULL;
 
 	PokemonMove lowest_lexicographic_move = pokemon->moves[0];
@@ -145,13 +141,18 @@ PokemonResult pokemonUnteachMove(Pokemon pokemon, char* move_name) {
 	if (NULL == pokemon || NULL == move_name) return POKEMON_NULL_ARG;
 	if (strlen(move_name) == 0) return POKEMON_INVALID_MOVE_NAME;
 	int move_to_unteach_index = findMoveByName(pokemon, move_name);
-	if (INVALID_INDEX == move_to_unteach_index) return POKEMON_MOVE_DOES_NOT_EXIST;
+	if (INVALID_INDEX == move_to_unteach_index) {
+		return POKEMON_MOVE_DOES_NOT_EXIST;
+	}
 
 	free(pokemon->moves[move_to_unteach_index]->name);
 	free(pokemon->moves[move_to_unteach_index]);
-	// if move is not the last node in array
+
+	// If move is not the last node in array
 	if (move_to_unteach_index < pokemon->number_of_moves - 1) {
-		// squeeze the array by moving the last node to the node index we just removed.
+		//	Squeeze the array by moving the last node to the node index
+		//  we just removed.	we can do it (and not decrease all moves
+		//	indexes) because the moves order in the array is not important 
 		pokemon->moves[move_to_unteach_index] = pokemon->moves[pokemon->number_of_moves - 1];
 	}
 	pokemon->number_of_moves--;
@@ -197,16 +198,20 @@ int getMoveAttackFactor(PokemonMove move, Pokemon attacked_pokemon) {
 }
 
 PokemonResult pokemonUseMove(Pokemon pokemon, Pokemon opponent_pokemon, char* move_name) {
-	if (NULL == pokemon || NULL == opponent_pokemon || NULL == move_name) return POKEMON_NULL_ARG;
+	if (NULL == pokemon || NULL == opponent_pokemon || NULL == move_name) {
+		return POKEMON_NULL_ARG;
+	}
 	if (!strlen(move_name)) return POKEMON_INVALID_MOVE_NAME;
+	if (INVALID_INDEX == findMoveByName(pokemon, move_name)) {
+		return POKEMON_MOVE_DOES_NOT_EXIST;
+	}
 	PokemonMove move = pokemon->moves[findMoveByName(pokemon, move_name)];
-	if (NULL == move) return POKEMON_MOVE_DOES_NOT_EXIST;
 	if (0 == move->power_points) return POKEMON_NO_POWER_POINTS;
-	if (0 == pokemon->health_points || 0 == opponent_pokemon->health_points) {
+	if (0 >= pokemon->health_points || 0 >= opponent_pokemon->health_points) {
 		return POKEMON_NO_HEALTH_POINTS;
 	}
 	int factor = getMoveAttackFactor(move, opponent_pokemon);
-	int attack_points = factor * (pokemonGetLevel(pokemon) * 2 + move->strength);
+	int attack_points = factor*(pokemonGetLevel(pokemon)*2 + move->strength);
 	if (attack_points > opponent_pokemon->health_points) {
 		attack_points = opponent_pokemon->health_points;
 	}
@@ -231,15 +236,12 @@ PokemonResult pokemonHeal(Pokemon pokemon) { //Q: What if current hp is high eno
 PokemonResult pokemonEvolve(Pokemon pokemon, char* new_name) {
 	if (NULL == pokemon || NULL == new_name) return POKEMON_NULL_ARG;
 	if (!strlen(new_name)) return POKEMON_INVALID_NAME;
+	if (MAX_EXPERIENCE_VALUE <= pokemon->experience) return POKEMON_CANNOT_EVOLVE;
 
 	int prev_experience = pokemon->experience;
 	int previous_level = pokemonGetLevel(pokemon);
 	while (previous_level == pokemonGetLevel(pokemon)) {
 		pokemon->experience++;
-		if (MAX_EXPERIENCE_VALUE <= pokemon->experience) {
-			pokemon->experience = prev_experience;
-			return POKEMON_CANNOT_EVOLVE;
-		}
 	}
 
 	char* new_name_clone;
