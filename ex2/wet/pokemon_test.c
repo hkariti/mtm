@@ -28,7 +28,24 @@ static bool testCombo() {
 static bool testPokemonCreate() {
 	bool result = true;
 
-	// Complete your code here...
+	Pokemon charizard;
+	charizard = pokemonCreate("Charizard", (PokemonType)5, 9900, 10);
+	TEST_EQUALS(result, charizard, NULL);
+	charizard = pokemonCreate("Charizard", (PokemonType)-1, 9900, 10);
+	TEST_EQUALS(result, charizard, NULL);
+	charizard = pokemonCreate("Charizard", TYPE_FIRE, 9902, 10);
+	TEST_EQUALS(result, charizard, NULL);
+	charizard = pokemonCreate("Charizard", TYPE_FIRE, -1, 10);
+	TEST_EQUALS(result, charizard, NULL);
+	charizard = pokemonCreate("", TYPE_FIRE, 9900, 10);
+	TEST_EQUALS(result, charizard, NULL);
+	charizard = pokemonCreate(NULL, TYPE_FIRE, 9900, 10);
+	TEST_EQUALS(result, charizard, NULL);
+	charizard = pokemonCreate("Charizard", TYPE_FIRE, 9900, -1);
+	TEST_EQUALS(result, charizard, NULL);
+
+	charizard = pokemonCreate("Charizard", TYPE_FIRE, 9900, 10);
+	TEST_DIFFERENT(result, charizard, NULL);
 
 	return result;
 }
@@ -36,23 +53,53 @@ static bool testPokemonCreate() {
 static bool testPokemonDestroy() {
 	bool result = true;
 
-	// Complete your code here...
+	free(NULL);
+	Pokemon charizard = pokemonCreate("Charizard", TYPE_FIRE, 9900, 10);
+	Pokemon charizardClone = pokemonCopy(charizard);
+	pokemonTeachMove(charizard, "Fireball", TYPE_FIRE, 10, 5);
+
+	free(charizard);
+	free(charizardClone);
 
 	return result;
 }
 
 static bool testPokemonCopy() {
 	bool result = true;
+	PokemonResult pokemon_result;
 
-	// Complete your code here...
+	Pokemon charizard = pokemonCreate("Charizard", TYPE_FIRE, 9900, 10);
+	pokemonTeachMove(charizard, "Fireball", TYPE_FIRE, 10, 5);
+	Pokemon charizardClone = pokemonCopy(charizard);
+	TEST_DIFFERENT(result, charizardClone, NULL);
+	pokemon_result = pokemonUnteachMove(charizardClone, "Fireball");
+	TEST_EQUALS(result, pokemon_result, POKEMON_SUCCESS);
 
 	return result;
 }
 
 static bool testPokemonTeachMove() {
 	bool result = true;
-
-	// Complete your code here...
+	PokemonResult pokemon_result;
+	Pokemon charizard = pokemonCreate("Charizard", TYPE_FIRE, 9900, 10);
+	pokemon_result = pokemonTeachMove(charizard, "Fireball", TYPE_FIRE, 10, 5);
+	TEST_EQUALS(result, pokemon_result, POKEMON_SUCCESS);
+	pokemon_result = pokemonTeachMove(NULL, "", TYPE_GRASS, -10, -5);
+	TEST_EQUALS(result, pokemon_result, POKEMON_NULL_ARG);
+	pokemon_result = pokemonTeachMove(charizard, NULL, TYPE_GRASS, -10, -5);
+	TEST_EQUALS(result, pokemon_result, POKEMON_NULL_ARG);
+	pokemon_result = pokemonTeachMove(charizard, "", TYPE_GRASS, -10, -5);
+	TEST_EQUALS(result, pokemon_result, POKEMON_INVALID_MOVE_NAME);
+	pokemon_result = pokemonTeachMove(charizard, "Fireball", -1, -10, -5);
+	TEST_EQUALS(result, pokemon_result, POKEMON_INVALID_TYPE);
+	pokemon_result = pokemonTeachMove(charizard, "Fireball", TYPE_GRASS, 10, 5);
+	TEST_EQUALS(result, pokemon_result, POKEMON_INCOMPATIBLE_MOVE_TYPE);
+	pokemon_result = pokemonTeachMove(charizard, "Fireball", TYPE_NORMAL, -1, -5);
+	TEST_EQUALS(result, pokemon_result, POKEMON_INVALID_POWER_POINTS);
+	pokemon_result = pokemonTeachMove(charizard, "Fireball", TYPE_NORMAL, 10, -1);
+	TEST_EQUALS(result, pokemon_result, POKEMON_INVALID_STRENGTH);
+	pokemon_result = pokemonTeachMove(charizard, "Fireball", TYPE_FIRE, 10, 5);
+	TEST_EQUALS(result, pokemon_result, POKEMON_MOVE_ALREADY_EXISTS);
 
 	return result;
 }
