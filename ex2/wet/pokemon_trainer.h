@@ -61,5 +61,6 @@ void pokemonListSort(PokemonList base);
 PokemonTrainerResult pokemonListAppend(PokemonList base, Pokemon pokemon);
 PokemonTrainerResult pokemonListAppendAll(PokemonList base, Pokemon pokemon,
         int source_offset);
-PokemonTrainerResult pokemonListRemove(PokemonList base, int index);
+PokemonTrainerResult pokemonListRemove(PokemonList base, int index,
+        bool keep);
 #endif // POKEMON_TRAINER_H_
