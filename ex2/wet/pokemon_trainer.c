@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include "pokemon_trainer.h"
 
+#define POKEMON_TRAINER_MIN_LENGTH_LOCAL 1
+#define POKEMON_TRAINER_MIN_LENGTH_REMOTE 0
+
 PokemonList pokemonListCreate(int max_length, int min_length) {
     PokemonList base;
 

@@ -5,9 +5,6 @@
 #include <stdbool.h>
 #include "pokemon.h"
 
-#define POKEMON_TRAINER_MIN_LENGTH_LOCAL 1
-#define POKEMON_TRAINER_MIN_LENGTH_REMOTE 0
-
 typedef enum {
 	POKEMON_TRAINER_SUCCESS,
 	POKEMON_TRAINER_NULL_ARG,
@@ -50,17 +47,4 @@ Pokemon pokemonTrainerGetMostRankedPokemon(PokemonTrainer trainer);
 PokemonTrainerResult pokemonTrainerMakeMostRankedParty(PokemonTrainer trainer);
 PokemonTrainerResult pokemonTrainerPrintEnumeration(
 	PokemonTrainer trainer, FILE* file);
-
-PokemonList pokemonListCreate(int max_length, int min_length);
-void pokemonListShallowDestroy(PokemonList base);
-void pokemonListDestroy(PokemonList base);
-Pokemon pokemonListGet(PokemonList base, int index);
-void pokemonListMove(PokemonList dest, PokemonList source, int dest_offset,
-        int source_offset);
-void pokemonListSort(PokemonList base);
-PokemonTrainerResult pokemonListAppend(PokemonList base, Pokemon pokemon);
-PokemonTrainerResult pokemonListAppendAll(PokemonList base, Pokemon pokemon,
-        int source_offset);
-PokemonTrainerResult pokemonListRemove(PokemonList base, int index,
-        bool keep);
 #endif // POKEMON_TRAINER_H_
