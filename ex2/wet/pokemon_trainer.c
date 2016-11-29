@@ -3,23 +3,6 @@
 #include <stdlib.h>
 #include "pokemon_trainer.h"
 
-// Free several pointers if they're not NULL. Useful for cleanups after
-// failures.
-static void freeAll(void* arg1, void* arg2, void* arg3, void* arg4) {
-    if (NULL != arg1) {
-        free(arg1);
-    }
-    if (NULL != arg2) {
-        free(arg2);
-    }
-    if (NULL != arg3) {
-        free(arg3);
-    }
-    if (NULL != arg4) {
-        free(arg4);
-    }
-}
-
 PokemonList pokemonListCreate(int max_length, int min_length) {
     PokemonList base;
 
@@ -79,6 +62,7 @@ PokemonTrainerResult pokemonListCopy(PokemonList dest, PokemonList source,
         }
         append_result = pokemonListAppend(dest, current_copy);
         if (append_result != POKEMON_TRAINER_SUCCESS) {
+            pokemonDestroy(current_copy);
             return append_result;
         }
     }
@@ -175,8 +159,8 @@ PokemonTrainer pokemonTrainerCreate(char* name, Pokemon initial_pokemon,
             POKEMON_TRAINER_MIN_LENGTH_REMOTE);
     if ((NULL == trainer->name) || (NULL == trainer->local_pokemon) ||
             (NULL == trainer->remote_pokemon)) {
-        freeAll(trainer->name, trainer->local_pokemon, trainer->remote_pokemon,
-                trainer);
+        free(trainer->name);
+        free(trainer);
         return NULL;
     }
     // Fill trainer object
@@ -186,8 +170,8 @@ PokemonTrainer pokemonTrainerCreate(char* name, Pokemon initial_pokemon,
     initial_pokemon_copy = pokemonCopy(initial_pokemon);
     result = pokemonListAppend(trainer->local_pokemon, initial_pokemon_copy);
     if (result != POKEMON_TRAINER_SUCCESS) {
-        freeAll(trainer->name, trainer->local_pokemon, trainer->remote_pokemon,
-                trainer);
+        pokemonDestroy(initial_pokemon_copy);
+        pokemonTrainerDestroy(trainer);
         return NULL;
     } 
     return trainer;
