@@ -3,6 +3,23 @@
 #include <stdlib.h>
 #include "pokemon_trainer.h"
 
+// Free several pointers if they're not NULL. Useful for cleanups after
+// failures.
+static void freeAll(void* arg1, void* arg2, void* arg3, void* arg4) {
+    if (NULL != arg1) {
+        free(arg1);
+    }
+    if (NULL != arg2) {
+        free(arg2);
+    }
+    if (NULL != arg3) {
+        free(arg3);
+    }
+    if (NULL != arg4) {
+        free(arg4);
+    }
+}
+
 PokemonList pokemonListCreate(int max_length, int min_length) {
     PokemonList base;
 
@@ -12,7 +29,10 @@ PokemonList pokemonListCreate(int max_length, int min_length) {
     base = malloc(sizeof(struct pokemon_list_t));
     if (NULL == base) return NULL;
     base->list = malloc(max_length * sizeof(Pokemon*));
-    if (NULL == base->list) return NULL;
+    if (NULL == base->list) {
+        free(base);
+        return NULL;
+    }
     base->max_length = max_length;
     base->min_length = min_length;
     base->length = 0;
@@ -44,7 +64,8 @@ Pokemon pokemonListGet(PokemonList base, int index) {
     return base->list[index - 1];
 }
 
-void pokemonListMove(PokemonList dest, PokemonList source, int dest_offset, int source_offset) {
+void pokemonListMove(PokemonList dest, PokemonList source, int dest_offset,
+        int source_offset) {
     // Check for valid args and no-op cases
     if (dest_offset < 0 || dest_offset > dest->length) return;
     if (source_offset < 0 || source_offset > source->length) return;
@@ -120,25 +141,35 @@ PokemonTrainerResult pokemonListRemove(PokemonList base, int index) {
     return POKEMON_TRAINER_SUCCESS;
 }
 
-PokemonTrainer pokemonTrainerCreate(char* name, Pokemon initial_pokemon, int max_num_local, int max_num_remote) {
+PokemonTrainer pokemonTrainerCreate(char* name, Pokemon initial_pokemon,
+        int max_num_local, int max_num_remote) {
     // Check arguments are valid
-    if ((NULL == name) || (strcmp(name, "") == 0) || (NULL == initial_pokemon) || (max_num_local <= 0) || (max_num_remote <= 0)) return NULL;
-
+    if ((NULL == name) || (strcmp(name, "") == 0) || (NULL == initial_pokemon)
+            || (max_num_local <= 0) || (max_num_remote <= 0)) return NULL;
     // Allocate memory
     PokemonTrainer trainer;
     trainer = malloc(sizeof(struct pokemon_trainer_t));
     if (NULL == trainer) return NULL;
     trainer->name = malloc(strlen(name) + 1);
-    trainer->local_pokemon = pokemonListCreate(max_num_local, POKEMON_TRAINER_MIN_LENGTH_LOCAL);
-    trainer->remote_pokemon = pokemonListCreate(max_num_remote, POKEMON_TRAINER_MIN_LENGTH_REMOTE);
-    if ((NULL == trainer->name) || (NULL == trainer->local_pokemon) || (NULL == trainer->remote_pokemon)) return NULL;
-
+    trainer->local_pokemon = pokemonListCreate(max_num_local,
+            POKEMON_TRAINER_MIN_LENGTH_LOCAL);
+    trainer->remote_pokemon = pokemonListCreate(max_num_remote,
+            POKEMON_TRAINER_MIN_LENGTH_REMOTE);
+    if ((NULL == trainer->name) || (NULL == trainer->local_pokemon) ||
+            (NULL == trainer->remote_pokemon)) {
+        freeAll(trainer->name, trainer->local_pokemon, trainer->remote_pokemon,
+                trainer);
+        return NULL;
+    }
     // Fill trainer object
     PokemonTrainerResult result;
     strcpy(trainer->name, name);
     result = pokemonListAppend(trainer->local_pokemon, initial_pokemon);
-    if (result != POKEMON_TRAINER_SUCCESS) return NULL;
-
+    if (result != POKEMON_TRAINER_SUCCESS) {
+        freeAll(trainer->name, trainer->local_pokemon, trainer->remote_pokemon,
+                trainer);
+        return NULL;
+    } 
     return trainer;
 }
 
