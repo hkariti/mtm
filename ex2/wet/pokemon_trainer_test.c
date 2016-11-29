@@ -493,36 +493,26 @@ static bool testCombo() {
         Pokemon pikachu = newPokemon("Pikachu");
         PokemonTrainer trainer = pokemonTrainerCreate("Ash", pikachu, 6, 20);
         TEST_DIFFERENT(result, trainer, NULL);
-        printf("pokemonTrainerCreate: %d\n", result);
         pokemonDestroy(pikachu);
         PokemonTrainer trainer_copy = pokemonTrainerCopy(trainer);
         TEST_DIFFERENT(result, trainer_copy, NULL);
-        printf("pokemonTrainerCopy: %d\n", result);
         pokemonTrainerDestroy(trainer_copy);
         Pokemon squirtle = pokemonCreate("Squirtle", TYPE_WATER, 10, 4);
         TEST_EQUALS(result, pokemonTrainerAddPokemon(trainer, squirtle),
                 POKEMON_TRAINER_SUCCESS);
-        printf("pokemonTrainerAddPokemon: %d\n", result);
         pokemonDestroy(squirtle);
         TEST_EQUALS(result, pokemonTrainerGetNumberOfPokemons(trainer), 2);
-        printf("pokemonTrainerGetNumber: %d\n", result);
         TEST_DIFFERENT(result, pokemonTrainerGetPokemon(trainer, 2), NULL);
-        printf("pokemonTrainerGetPokemon: %d\n", result);
         TEST_EQUALS(result, pokemonTrainerDepositPokemon(trainer, 2),
                 POKEMON_TRAINER_SUCCESS);
-        printf("pokemonTrainerDeposit: %d\n", result);
         TEST_EQUALS(result, pokemonTrainerWithdrawPokemon(trainer, 1),
                 POKEMON_TRAINER_SUCCESS);
-        printf("pokemonTrainerWithdraw: %d\n", result);
         TEST_EQUALS(result, pokemonTrainerRemovePokemon(trainer, 2),
                 POKEMON_TRAINER_SUCCESS);
-        printf("pokemonTrainerRemove: %d\n", result);
         TEST_EQUALS(result, pokemonTrainerGetMostRankedPokemon(trainer),
                 pokemonTrainerGetPokemon(trainer, 1));
-        printf("pokemonTrainerGetMostRanked: %d\n", result);
         TEST_EQUALS(result, pokemonTrainerMakeMostRankedParty(trainer),
                 POKEMON_TRAINER_SUCCESS);
-        printf("pokemonTrainerMakeMostRankedParty: %d\n", result);
         pokemonTrainerDestroy(trainer);
         return result;
 }
