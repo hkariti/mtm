@@ -12,7 +12,6 @@
 #define LAST_LOWERCASE_LETTER 'z'
 #define LAST_UPPERCASE_LETTER 'Z'
 #define SEPERATION_LETTER	'-'
-#define NULL_CHARACTER	'\0'
 
 
 bool isTypeValid(PokemonType type) {
@@ -226,7 +225,7 @@ PokemonResult pokemonUseMove(Pokemon pokemon, Pokemon opponent_pokemon, char* mo
 
 PokemonResult pokemonHeal(Pokemon pokemon) { //Q: What if current hp is high enoguh??
 	if (NULL == pokemon) return POKEMON_NULL_ARG;
-	pokemon->health_points = (100 + pokemonGetLevel(pokemon)) * 10; //TOOD: defines?
+	pokemon->health_points = (100 + pokemonGetLevel(pokemon)) * 10;
 	for (int i = 0; i < pokemon->number_of_moves; i++) {
 		pokemon->moves[i]->power_points = pokemon->moves[i]->max_power_points;
 	}
@@ -236,7 +235,9 @@ PokemonResult pokemonHeal(Pokemon pokemon) { //Q: What if current hp is high eno
 PokemonResult pokemonEvolve(Pokemon pokemon, char* new_name) {
 	if (NULL == pokemon || NULL == new_name) return POKEMON_NULL_ARG;
 	if (!strlen(new_name)) return POKEMON_INVALID_NAME;
-	if (MAX_EXPERIENCE_VALUE <= pokemon->experience) return POKEMON_CANNOT_EVOLVE;
+	if (MAX_EXPERIENCE_VALUE <= pokemon->experience) {
+		return POKEMON_CANNOT_EVOLVE;
+	}
 
 	int prev_experience = pokemon->experience;
 	int previous_level = pokemonGetLevel(pokemon);
@@ -256,33 +257,36 @@ PokemonResult pokemonEvolve(Pokemon pokemon, char* new_name) {
 	return POKEMON_SUCCESS;
 }
 
-PokemonResult pokemonPrintName(Pokemon pokemon, FILE* file) {	//Q: need to check if file as write access?
+PokemonResult pokemonPrintName(Pokemon pokemon, FILE* file) {
 	if (NULL == pokemon || NULL == file) return POKEMON_NULL_ARG;
 
-	fputs(pokemon->name, file); //Q: need to add \n ?
+	fputs(pokemon->name, file); 
 
 	return POKEMON_SUCCESS;
 }
 
-char* removeNonLetterChars(char* src) {
+char* onlyLettersString(char* src) {
+	if (NULL == src) return NULL;
 	char* dest = malloc(strlen(src) + 1);
 	if (NULL == dest) return NULL;
 	unsigned int i = 0, j = 0;
 	for (i = 0; i < strlen(src); i++) {
 		char current_char = *(src + i);
-		if (((current_char >= FIRST_LOWERCASE_LETTER) && (current_char <= LAST_LOWERCASE_LETTER)) ||
-			((current_char >= FIRST_UPPERCASE_LETTER) && (current_char <= LAST_UPPERCASE_LETTER))) {
+		if (((current_char >= FIRST_LOWERCASE_LETTER) && 
+			(current_char <= LAST_LOWERCASE_LETTER)) ||
+			((current_char >= FIRST_UPPERCASE_LETTER) && 
+			(current_char <= LAST_UPPERCASE_LETTER))) {
 			*(dest + j) = current_char;
             j++;
 		}
 	}
-	*(dest + j) = NULL_CHARACTER;
+	*(dest + j) = NULL;
 	return dest;
 }
 
-PokemonResult pokemonPrintVoice(Pokemon pokemon, FILE* file) { //Q: pokemon name can be empty?? Q: file access checking?
+PokemonResult pokemonPrintVoice(Pokemon pokemon, FILE* file) {
 	if (NULL == pokemon || NULL == file) return POKEMON_NULL_ARG;
-	char* only_letters_name = removeNonLetterChars(pokemon->name);
+	char* only_letters_name = onlyLettersString(pokemon->name);
 	if (NULL == only_letters_name) {
 		return POKEMON_OUT_OF_MEM;
 	}
@@ -290,36 +294,21 @@ PokemonResult pokemonPrintVoice(Pokemon pokemon, FILE* file) { //Q: pokemon name
 	if (voice_half_length >= 4) {
 		voice_half_length = voice_half_length / 2 + voice_half_length % 2;
 	}
-	int voice_length = voice_half_length * 2 + 1; // 2 halfs + seperation letter
+	int voice_length = voice_half_length * 2 + 1; //2 halfs + seperation letter
 	char* pokemon_voice = malloc(voice_length + 1);
 	if (NULL == pokemon_voice) {
+		free(only_letters_name);
 		return POKEMON_OUT_OF_MEM;
 	}
 
 	memcpy(pokemon_voice, only_letters_name, voice_half_length);
-	memcpy(pokemon_voice + voice_half_length + 1, only_letters_name, voice_half_length);
+	memcpy(pokemon_voice + voice_half_length + 1, only_letters_name,
+		voice_half_length);
 	pokemon_voice[voice_half_length] = SEPERATION_LETTER;
-	pokemon_voice[voice_length] = NULL_CHARACTER;
-	fputs(pokemon_voice, file); //Q: need to add \n ?
+	pokemon_voice[voice_length] = NULL;
+	fputs(pokemon_voice, file);
     free(pokemon_voice);
 	free(only_letters_name);
 
 	return POKEMON_SUCCESS;
 }
-
-int main0() {
-	char *str ="";
-	char* dest;
-	Pokemon pokemon = pokemonCreate("Hohoyobogo", (PokemonType)10, 101, 30);
-	//Pokemon pokemon = pokemonCreate("Hohoyobogo", TYPE_GRASS, 101, 30);
-	pokemonPrintVoice(pokemon, fopen("text.txt","w"));
-	printf("strlen %d\n",strlen(""));
-	printf("%d\n", pokemonGetLevel(pokemon));
-	printf("%d", pokemonTeachMove(pokemon, "Hit", TYPE_GRASS, 10, 3));
-	printf("%d", pokemonUnteachMove(pokemon, "Hit"));
-	pokemonDestroy(pokemon);
-	printf("%d\n", stringInit(&str, &dest));
-	printf("strlen %d\n", strlen(str));
-	printf("string: %s\n", dest);
-	return 0;
- }
