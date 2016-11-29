@@ -64,6 +64,24 @@ Pokemon pokemonListGet(PokemonList base, int index) {
     return base->list[index - 1];
 }
 
+PokemonTrainerResult pokemonListAppendAll(PokemonList dest, PokemonList source,
+        int source_offset) {
+    int amount_to_copy;
+
+    amount_to_copy = source->length - source_offset;
+    for (int i=1; i <= amount_to_copy; i++) {
+        PokemonTrainerResult append_result;
+        Pokemon currentPokemon;
+        currentPokemon = pokemonListGet(source, i + source_offset);
+        append_result = pokemonListAppend(dest, currentPokemon);
+        if (append_result != POKEMON_TRAINER_SUCCESS) {
+            return append_result;
+        }
+    }
+
+    return POKEMON_TRAINER_SUCCESS;
+}
+
 void pokemonListMove(PokemonList dest, PokemonList source, int dest_offset,
         int source_offset) {
     // Check for valid args and no-op cases
@@ -144,7 +162,7 @@ PokemonTrainerResult pokemonListRemove(PokemonList base, int index) {
 PokemonTrainer pokemonTrainerCreate(char* name, Pokemon initial_pokemon,
         int max_num_local, int max_num_remote) {
     // Check arguments are valid
-    if ((NULL == name) || (strcmp(name, "") == 0) || (NULL == initial_pokemon)
+    if ((NULL == name) || (strlen(name) == 0) || (NULL == initial_pokemon)
             || (max_num_local <= 0) || (max_num_remote <= 0)) return NULL;
     // Allocate memory
     PokemonTrainer trainer;
@@ -187,29 +205,33 @@ PokemonTrainer pokemonTrainerCopy(PokemonTrainer trainer) {
     if (NULL == trainer) return NULL;
 
     // Create a trainer using the given trainer's first pokemon
-    PokemonTrainer new_trainer = pokemonTrainerCreate(trainer->name, pokemonListGet(trainer->local_pokemon, 1), trainer->local_pokemon->max_length, trainer->remote_pokemon->max_length);
+    PokemonTrainer new_trainer;
+    Pokemon first_pokemon;
+    int max_num_local, max_num_remote;
+    first_pokemon = pokemonListGet(trainer->local_pokemon, 1);
+    max_num_local = trainer->local_pokemon->max_length;
+    max_num_remote = trainer->remote_pokemon->max_length;
+    new_trainer  = pokemonTrainerCreate(trainer->name, first_pokemon,
+            max_num_local, max_num_remote);
     if (NULL == new_trainer) return NULL;
 
-    // Add the rest of the local pokemon
-    for (int i=2; i <= trainer->local_pokemon->length; i++) {
-        PokemonTrainerResult append_result;
-        append_result = pokemonListAppend(new_trainer->local_pokemon, pokemonListGet(trainer->local_pokemon, i));
-        if (append_result == POKEMON_TRAINER_OUT_OF_MEM) return NULL;
-        assert(append_result == POKEMON_TRAINER_SUCCESS);
-    }
-    // Add the remote pokemon
-    // TODO: code dedup?
-    for (int i=1; i <= trainer->remote_pokemon->length; i++) {
-        PokemonTrainerResult append_result;
-        append_result = pokemonListAppend(new_trainer->remote_pokemon, pokemonListGet(trainer->remote_pokemon, i));
-        if (append_result == POKEMON_TRAINER_OUT_OF_MEM) return NULL;
-        assert(append_result == POKEMON_TRAINER_SUCCESS);
+    // Add the rest of the pokemon
+    PokemonTrainerResult local_result, remote_result;
+    local_result = pokemonListAppendAll(new_trainer->local_pokemon,
+            trainer->local_pokemon, 1);
+    remote_result = pokemonListAppendAll(new_trainer->remote_pokemon,
+            trainer->remote_pokemon, 0);
+    if (local_result != POKEMON_TRAINER_SUCCESS ||
+            remote_result != POKEMON_TRAINER_SUCCESS) {
+        pokemonTrainerDestroy(new_trainer);
+        return NULL;
     }
 
     return new_trainer;
 }
 
-PokemonTrainerResult pokemonTrainerAddPokemon(PokemonTrainer trainer, Pokemon pokemon) {
+PokemonTrainerResult pokemonTrainerAddPokemon(PokemonTrainer trainer,
+        Pokemon pokemon) {
     // Check args
     if (NULL == trainer || NULL == pokemon) return POKEMON_TRAINER_NULL_ARG;
 
@@ -224,7 +246,8 @@ Pokemon pokemonTrainerGetPokemon(PokemonTrainer trainer, int pokemon_index) {
     return pokemonListGet(trainer->local_pokemon, pokemon_index);
 }
 
-PokemonTrainerResult pokemonTrainerRemovePokemon(PokemonTrainer trainer, int pokemon_index) {
+PokemonTrainerResult pokemonTrainerRemovePokemon(PokemonTrainer trainer,
+        int pokemon_index) {
     // Check args
     if (NULL == trainer) return POKEMON_TRAINER_NULL_ARG;
 
@@ -232,26 +255,32 @@ PokemonTrainerResult pokemonTrainerRemovePokemon(PokemonTrainer trainer, int pok
     return pokemonListRemove(trainer->local_pokemon, pokemon_index);
 }
 
-PokemonTrainerResult pokemonTrainerDepositPokemon(PokemonTrainer trainer, int pokemon_index) {
+PokemonTrainerResult pokemonTrainerDepositPokemon(PokemonTrainer trainer,
+        int pokemon_index) {
     if (NULL == trainer) return POKEMON_TRAINER_NULL_ARG;
 
-    Pokemon pokemon_to_deposit = pokemonListGet(trainer->local_pokemon, pokemon_index);
+    Pokemon pokemon_to_deposit;
     PokemonTrainerResult result;
-    
+
+    pokemon_to_deposit =  pokemonListGet(trainer->local_pokemon, pokemon_index);
     if (NULL == pokemon_to_deposit) return POKEMON_TRAINER_INVALID_INDEX;
     
+    // Perform the move via append from one list and remove from the other
     result = pokemonListAppend(trainer->remote_pokemon, pokemon_to_deposit);
-    // Translate error codes to the deposit use case. ugh.
     if (result != POKEMON_TRAINER_SUCCESS) {
+        // Translate error codes to the deposit use case.
         if (result == POKEMON_TRAINER_PARTY_FULL)
             return POKEMON_TRAINER_DEPOSIT_FULL;
         return result;
     }
-
     result = pokemonListRemove(trainer->local_pokemon, pokemon_index);
     if (result != POKEMON_TRAINER_SUCCESS) {
-        // Undo the append above in case of error when removing from local_pokemon list
-        pokemonListRemove(trainer->remote_pokemon, trainer->remote_pokemon->length);;
+        // Undo the append above in case of error when removing from
+        // local_pokemon list
+        int last_pokemon = trainer->remote_pokemon->length;
+        PokemonTrainerResult undo_result;
+        undo_result = pokemonListRemove(trainer->remote_pokemon, last_pokemon);
+        assert(undo_result == POKEMON_TRAINER_SUCCESS);
         // Translate error codes for the deposit use case. ugh again.
         if (result == POKEMON_TRAINER_REMOVE_LAST)
             return POKEMON_TRAINER_DEPOSIT_LAST;
@@ -260,23 +289,27 @@ PokemonTrainerResult pokemonTrainerDepositPokemon(PokemonTrainer trainer, int po
     return result;
 }
 
-PokemonTrainerResult pokemonTrainerWithdrawPokemon(PokemonTrainer trainer, int pokemon_index) {
+PokemonTrainerResult pokemonTrainerWithdrawPokemon(PokemonTrainer trainer,
+        int pokemon_index) {
     if (NULL == trainer) return POKEMON_TRAINER_NULL_ARG;
 
     Pokemon pokemon_to_withdraw;
     PokemonTrainerResult result;
 
-    pokemon_to_withdraw = pokemonListGet(trainer->remote_pokemon, pokemon_index);
+    pokemon_to_withdraw = pokemonListGet(trainer->remote_pokemon,
+            pokemon_index);
     if (NULL == pokemon_to_withdraw) return POKEMON_TRAINER_INVALID_INDEX;
     
+    // Perform the move via append from one list and remove from the other
     result = pokemonListAppend(trainer->local_pokemon, pokemon_to_withdraw);
     if (result != POKEMON_TRAINER_SUCCESS) return result;
-
     result = pokemonListRemove(trainer->remote_pokemon, pokemon_index);
     if (result != POKEMON_TRAINER_SUCCESS) {
-        // Undo the append above if there was an error removing from the remote_pokemon list
+        // Undo the append above if there was an error removing from the
+        // remote_pokemon list
+        int last_pokemon = trainer->local_pokemon->length; 
         PokemonTrainerResult undo_result;
-        undo_result = pokemonListRemove(trainer->local_pokemon, trainer->local_pokemon->length);
+        undo_result = pokemonListRemove(trainer->local_pokemon, last_pokemon);
         assert(undo_result == POKEMON_TRAINER_SUCCESS);
     }
     return result;
@@ -316,11 +349,14 @@ PokemonTrainerResult pokemonTrainerMakeMostRankedParty(PokemonTrainer trainer) {
     if (NULL == trainer) return POKEMON_TRAINER_NULL_ARG;
 
     // Create a combined list of local and remote pokemon, we'll sort that.
-    int combined_party_length = trainer->local_pokemon->length + trainer->remote_pokemon->length;
+    int combined_party_length, local_length, remote_length;
+    local_length = trainer->local_pokemon->length;
+    remote_length = trainer->remote_pokemon->length;
+    combined_party_length = local_length + remote_length;
     PokemonList combined_party = pokemonListCreate(combined_party_length, 0);
     if (NULL == combined_party) return POKEMON_TRAINER_OUT_OF_MEM;
     pokemonListMove(combined_party, trainer->local_pokemon, 0, 0);
-    pokemonListMove(combined_party, trainer->remote_pokemon, trainer->local_pokemon->length, 0);
+    pokemonListMove(combined_party, trainer->remote_pokemon, local_length, 0);
 
     // Sort
     pokemonListSort(combined_party);
@@ -329,15 +365,17 @@ PokemonTrainerResult pokemonTrainerMakeMostRankedParty(PokemonTrainer trainer) {
     pokemonListMove(trainer->local_pokemon, combined_party, 0, 0);
 
     // Put the remaining pokemon in the remote_pokemon list
-    pokemonListMove(trainer->remote_pokemon, combined_party, 0, trainer->local_pokemon->length);;
+    pokemonListMove(trainer->remote_pokemon, combined_party, 0, local_length);
 
-    // Free the combined_party list. Use ShallowDestroy because we didn't copy the actual pokemon while moving them.
+    // Free the combined_party list. Use ShallowDestroy because we didn't copy
+    // the actual pokemon while moving them.
     pokemonListShallowDestroy(combined_party);
 
     return POKEMON_TRAINER_SUCCESS;
 }
 
-PokemonTrainerResult pokemonTrainerPrintEnumeration(PokemonTrainer trainer, FILE* file) {
+PokemonTrainerResult pokemonTrainerPrintEnumeration(PokemonTrainer trainer,
+        FILE* file) {
     if (NULL == trainer || NULL == file) return POKEMON_TRAINER_NULL_ARG;
 
     for (int i = 1; i <= trainer->local_pokemon->length; i++) {

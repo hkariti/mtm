@@ -55,8 +55,11 @@ PokemonList pokemonListCreate(int max_length, int min_length);
 void pokemonListShallowDestroy(PokemonList base);
 void pokemonListDestroy(PokemonList base);
 Pokemon pokemonListGet(PokemonList base, int index);
-void pokemonListMove(PokemonList dest, PokemonList source, int dest_offset, int source_offset);
+void pokemonListMove(PokemonList dest, PokemonList source, int dest_offset,
+        int source_offset);
 void pokemonListSort(PokemonList base);
 PokemonTrainerResult pokemonListAppend(PokemonList base, Pokemon pokemon);
+PokemonTrainerResult pokemonListAppendAll(PokemonList base, Pokemon pokemon,
+        int source_offset);
 PokemonTrainerResult pokemonListRemove(PokemonList base, int index);
 #endif // POKEMON_TRAINER_H_
