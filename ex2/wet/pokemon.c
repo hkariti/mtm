@@ -16,88 +16,53 @@
 
 
 bool isTypeValid(PokemonType type) {
-	if (type < 0 || type > TYPE_ELECTRIC) { //UGLY: other way to check if type is ok??
-		return false;
-	}
+	if (type < 0 || type > TYPE_ELECTRIC) return false; //UGLY: other way to check if type is ok?
 	return true;
-}
-
-bool isNameValid(char* name) {
-	if (NULL == name) {
-		return false;
-	}
-	if (strlen(name) == 0) {
-		return false;
-	}
-	return true;
-}
-
-bool validatePokemonProperties(char* name, PokemonType type, int experience,
-	int max_number_of_moves) {
-	if (!isNameValid(name)) {
-		return false;
-	}
-	if (!isTypeValid(type)) {
-		return false;
-	}
-	if (experience > MAX_EXPERIENCE_VALUE || experience < 0) { // what about 0?
-		return false;
-	}
-	if (max_number_of_moves < 0) { // what about 0?
-		return false;
-	}
-	return true;
-}
-
-bool validateMoveProperties() {
-
 }
 
 PokemonResult stringInit(char** src, char** dest) {
-	if (NULL == src || NULL == dest || NULL == *src) {
-		return POKEMON_NULL_ARG;
-	}
-	int len = strlen(*src);
+	if (NULL == src || NULL == dest || NULL == *src) return POKEMON_NULL_ARG;
+
+	unsigned int len = strlen(*src);
 	*dest = malloc(len + 1);
 	if (NULL == *dest) {
 		return POKEMON_OUT_OF_MEM;
 	}
-	for (unsigned int i = 0; i <= len; i++) {
-		(*dest)[i] = (*src)[i];
-	}
+	strcpy(*dest, *src);
 	return POKEMON_SUCCESS;
 }
 
 Pokemon pokemonCreate(char* name, PokemonType type, int experience,
 	int max_number_of_moves) {
-	if (!validatePokemonProperties(name, type, experience, max_number_of_moves)) {
-		return NULL;
-	}
+
+	if (NULL == name) return NULL;
+	if (strlen(name) == 0) return NULL;
+	if (!isTypeValid(type)) return NULL;
+	if (experience > MAX_EXPERIENCE_VALUE || experience < 0) return NULL; // what about 0?
+	if (max_number_of_moves < 0) return NULL; // what about 0?
+
 	char* name_clone;
-	if (POKEMON_SUCCESS != stringInit(&name, &name_clone)) {
-		return NULL;
-	}
+	if (POKEMON_SUCCESS != stringInit(&name, &name_clone)) return NULL;
+
 	Pokemon created_pokemon = malloc(sizeof(struct pokemon_t));
-	if (NULL == created_pokemon) {
-		return NULL;
-	}
+	if (NULL == created_pokemon) return NULL;
+
 	created_pokemon->experience = experience;
 	created_pokemon->name = name_clone;
 	created_pokemon->max_number_of_moves = max_number_of_moves;
 	created_pokemon->type = type;
-	created_pokemon->health_points = 1; //TODO: Input health_points from pokemonHeal;
 	created_pokemon->number_of_moves = 0;
-	created_pokemon->moves = malloc(sizeof(PokemonMove)*max_number_of_moves);;
-	for (int i = 0; i < max_number_of_moves; i++) {
-		created_pokemon->moves[i] = NULL;
-	}
+	created_pokemon->moves = malloc(sizeof(PokemonMove)*max_number_of_moves);
+
+	pokemonHeal(created_pokemon);
+
 	return created_pokemon;
 }
 
 void pokemonDestroy(Pokemon pokemon) {
-	if (NULL == pokemon) {
-		return;
-	}
+
+	if (NULL == pokemon) return;
+
 	free(pokemon->name);
 	while (pokemon->number_of_moves > 0) {
 		pokemonUnteachMove(pokemon, pokemon->moves[0]->name);
@@ -107,13 +72,10 @@ void pokemonDestroy(Pokemon pokemon) {
 }
 
 Pokemon pokemonCopy(Pokemon pokemon) {
-	if (NULL == pokemon) {
-		return NULL;
-	}
+
+	if (NULL == pokemon) return NULL;
 	Pokemon new_pokemon = pokemonCreate(pokemon->name, pokemon->type, pokemon->experience, pokemon->max_number_of_moves);
-	if (NULL == new_pokemon) {
-		return NULL;
-	}
+	if (NULL == new_pokemon) return NULL;
 	new_pokemon->health_points = pokemon->health_points;
     for (int i = 0; i < pokemon->number_of_moves; i++) {
         pokemonTeachMove(new_pokemon, pokemon->moves[i]->name, pokemon->moves[i]->type, pokemon->moves[i]->max_power_points, pokemon->moves[i]->strength);
@@ -123,6 +85,7 @@ Pokemon pokemonCopy(Pokemon pokemon) {
 
 // returns move's index in moves array. if doesn't exist returns -1
 int findMoveByName(Pokemon pokemon, char* move_name) {
+
 	for (int i = 0; i < pokemon->number_of_moves; i++) {
 		if (0 == strcmp(pokemon->moves[i]->name, move_name)) {
 			return i;
@@ -131,68 +94,59 @@ int findMoveByName(Pokemon pokemon, char* move_name) {
 	return INVALID_INDEX;
 }
 
+// return's lower lexicographic move, if no moves available returns NULL
+PokemonMove getLowestLexicographicMove(Pokemon pokemon) {
+
+	if (pokemon->number_of_moves == 0) return NULL;
+
+	PokemonMove lowest_lexicographic_move = pokemon->moves[0];
+	for (unsigned int i = 1; i < pokemon->number_of_moves; i++) {
+		if (strcmp(lowest_lexicographic_move->name, pokemon->moves[i]->name) > 0) {
+			lowest_lexicographic_move = pokemon->moves[i];
+		}
+	}
+	return lowest_lexicographic_move;
+}
+
 PokemonResult pokemonTeachMove(Pokemon pokemon, char* move_name,
-	PokemonType type, int max_power_points, int strength) {
-	if (NULL == pokemon || NULL == move_name) {
-		return POKEMON_NULL_ARG;
-	}
-	if (!isNameValid(move_name)) {
-		return POKEMON_INVALID_MOVE_NAME;
-	}
-	if (!isTypeValid(type)) {
-		return POKEMON_INVALID_TYPE;
-	}
-	if (max_power_points < 0) { // what about 0?
-		return POKEMON_INVALID_POWER_POINTS;
-	}
-	if (strength < 0) { // what about 0?
-		return POKEMON_INVALID_STRENGTH;
-	}
+	PokemonType type, int max_power_points, int strength) { //TODO: if max_number_of_moves can be 0!??
+
+	if (NULL == pokemon || NULL == move_name) return POKEMON_NULL_ARG;
+	if (strlen(move_name) == 0) return POKEMON_INVALID_MOVE_NAME;
+	if (!isTypeValid(type)) return POKEMON_INVALID_TYPE;
+	if (max_power_points < 0) return POKEMON_INVALID_POWER_POINTS; //Q: what about 0??
+	if (strength < 0) return POKEMON_INVALID_STRENGTH; // what about 0?
 	if (TYPE_NORMAL != type && pokemon->type != type) {
 		return POKEMON_INCOMPATIBLE_MOVE_TYPE;
 	}
-	if (INVALID_INDEX  != findMoveByName(pokemon, move_name)) {
+	if (INVALID_INDEX != findMoveByName(pokemon, move_name)) {
 		return POKEMON_MOVE_ALREADY_EXISTS;
 	}
-
+	PokemonMove new_move = malloc(sizeof(struct pokemon_move_t));
+	if (NULL == new_move) return POKEMON_OUT_OF_MEM;
+	if (POKEMON_SUCCESS != stringInit(&move_name, &new_move->name)) {
+		free(new_move);
+		return POKEMON_OUT_OF_MEM;
+	}
+	new_move->max_power_points = max_power_points;
+	new_move->strength = strength;
+	new_move->type = type;
+	new_move->power_points = max_power_points;
 	if (pokemon->number_of_moves == pokemon->max_number_of_moves) {
-		PokemonMove lowest_lexicographic_move = pokemon->moves[0]; //TODO: if max_number_of_moves can be 0!??
-		for (int i = 1; i < pokemon->number_of_moves; i++) {
-			if (strcmp(lowest_lexicographic_move->name, pokemon->moves[i]->name) < 0) {
-				lowest_lexicographic_move = pokemon->moves[0];
-			}
-		}
-		pokemonUnteachMove(pokemon, lowest_lexicographic_move->name);
+		PokemonMove lowest_lexico_move = getLowestLexicographicMove(pokemon);
+		pokemonUnteachMove(pokemon, lowest_lexico_move->name);
 	}
-	pokemon->moves[pokemon->number_of_moves] = malloc(sizeof(struct pokemon_move_t));
-	if (NULL == pokemon->moves[pokemon->number_of_moves]) {
-		return POKEMON_OUT_OF_MEM;
-	}
-	if (POKEMON_SUCCESS != stringInit(&move_name, &pokemon->moves[pokemon->number_of_moves]->name)) {
-		free(pokemon->moves[pokemon->number_of_moves]);
-		return POKEMON_OUT_OF_MEM;
-	}
-	pokemon->moves[pokemon->number_of_moves]->max_power_points = max_power_points;
-	pokemon->moves[pokemon->number_of_moves]->strength = strength;
-	pokemon->moves[pokemon->number_of_moves]->type = type;
-	pokemon->moves[pokemon->number_of_moves]->power_points = max_power_points;
-
+	pokemon->moves[pokemon->number_of_moves] = new_move;
 	pokemon->number_of_moves++;
-
 	return POKEMON_SUCCESS;
 }
 
 PokemonResult pokemonUnteachMove(Pokemon pokemon, char* move_name) {
-	if (NULL == pokemon || NULL == move_name) {
-		return POKEMON_NULL_ARG;
-	}
-	if (!isNameValid(move_name)) {
-		return POKEMON_INVALID_NAME;
-	}
+	if (NULL == pokemon || NULL == move_name) return POKEMON_NULL_ARG;
+	if (strlen(move_name) == 0) return POKEMON_INVALID_MOVE_NAME;
 	int move_to_unteach_index = findMoveByName(pokemon, move_name);
-	if (INVALID_INDEX == move_to_unteach_index) {
-		return POKEMON_MOVE_DOES_NOT_EXIST;
-	}
+	if (INVALID_INDEX == move_to_unteach_index) return POKEMON_MOVE_DOES_NOT_EXIST;
+
 	free(pokemon->moves[move_to_unteach_index]->name);
 	free(pokemon->moves[move_to_unteach_index]);
 	// if move is not the last node in array
@@ -243,19 +197,11 @@ int getMoveAttackFactor(PokemonMove move, Pokemon attacked_pokemon) {
 }
 
 PokemonResult pokemonUseMove(Pokemon pokemon, Pokemon opponent_pokemon, char* move_name) {
-	if (NULL == pokemon || NULL == opponent_pokemon || NULL == move_name) {
-		return POKEMON_NULL_ARG;
-	}
-	if (!strlen(move_name)) {
-		return POKEMON_INVALID_MOVE_NAME;
-	}
-	PokemonMove move = findMoveByName(pokemon, move_name);
-	if (NULL == move) {
-		return POKEMON_MOVE_DOES_NOT_EXIST;
-	}
-	if (0 == move->power_points) {
-		return POKEMON_NO_POWER_POINTS;
-	}
+	if (NULL == pokemon || NULL == opponent_pokemon || NULL == move_name) return POKEMON_NULL_ARG;
+	if (!strlen(move_name)) return POKEMON_INVALID_MOVE_NAME;
+	PokemonMove move = pokemon->moves[findMoveByName(pokemon, move_name)];
+	if (NULL == move) return POKEMON_MOVE_DOES_NOT_EXIST;
+	if (0 == move->power_points) return POKEMON_NO_POWER_POINTS;
 	if (0 == pokemon->health_points || 0 == opponent_pokemon->health_points) {
 		return POKEMON_NO_HEALTH_POINTS;
 	}
@@ -274,9 +220,7 @@ PokemonResult pokemonUseMove(Pokemon pokemon, Pokemon opponent_pokemon, char* mo
 }
 
 PokemonResult pokemonHeal(Pokemon pokemon) { //Q: What if current hp is high enoguh??
-	if (NULL == pokemon) {
-		return POKEMON_NULL_ARG;
-	}
+	if (NULL == pokemon) return POKEMON_NULL_ARG;
 	pokemon->health_points = (100 + pokemonGetLevel(pokemon)) * 10; //TOOD: defines?
 	for (int i = 0; i < pokemon->number_of_moves; i++) {
 		pokemon->moves[i]->power_points = pokemon->moves[i]->max_power_points;
@@ -285,12 +229,8 @@ PokemonResult pokemonHeal(Pokemon pokemon) { //Q: What if current hp is high eno
 }
 
 PokemonResult pokemonEvolve(Pokemon pokemon, char* new_name) {
-	if (NULL == pokemon || NULL == new_name) {
-		return POKEMON_NULL_ARG;
-	}
-	if (!strlen(new_name)) {
-		return POKEMON_INVALID_NAME;
-	}
+	if (NULL == pokemon || NULL == new_name) return POKEMON_NULL_ARG;
+	if (!strlen(new_name)) return POKEMON_INVALID_NAME;
 
 	int prev_experience = pokemon->experience;
 	int previous_level = pokemonGetLevel(pokemon);
@@ -315,21 +255,17 @@ PokemonResult pokemonEvolve(Pokemon pokemon, char* new_name) {
 }
 
 PokemonResult pokemonPrintName(Pokemon pokemon, FILE* file) {	//Q: need to check if file as write access?
-	if (NULL == pokemon || NULL == file) {
-		return POKEMON_NULL_ARG;
-	}
+	if (NULL == pokemon || NULL == file) return POKEMON_NULL_ARG;
+
 	fputs(pokemon->name, file); //Q: need to add \n ?
 
 	return POKEMON_SUCCESS;
 }
 
 char* removeNonLetterChars(char* src) {
-	int new_length = 0;
 	char* dest = malloc(strlen(src) + 1);
-	if (NULL == dest) {
-		return NULL;
-	}
-	int i = 0, j = 0;
+	if (NULL == dest) return NULL;
+	unsigned int i = 0, j = 0;
 	for (i = 0; i < strlen(src); i++) {
 		char current_char = *(src + i);
 		if (((current_char >= FIRST_LOWERCASE_LETTER) && (current_char <= LAST_LOWERCASE_LETTER)) ||
@@ -343,9 +279,7 @@ char* removeNonLetterChars(char* src) {
 }
 
 PokemonResult pokemonPrintVoice(Pokemon pokemon, FILE* file) { //Q: pokemon name can be empty?? Q: file access checking?
-	if (NULL == pokemon || NULL == file) {
-		return POKEMON_NULL_ARG;
-	}
+	if (NULL == pokemon || NULL == file) return POKEMON_NULL_ARG;
 	char* only_letters_name = removeNonLetterChars(pokemon->name);
 	if (NULL == only_letters_name) {
 		return POKEMON_OUT_OF_MEM;
@@ -371,10 +305,11 @@ PokemonResult pokemonPrintVoice(Pokemon pokemon, FILE* file) { //Q: pokemon name
 	return POKEMON_SUCCESS;
 }
 
-int main() {
+int main0() {
 	char *str ="";
 	char* dest;
-	Pokemon pokemon = pokemonCreate("Hohoyobogo", TYPE_GRASS, 101, 30);
+	Pokemon pokemon = pokemonCreate("Hohoyobogo", (PokemonType)10, 101, 30);
+	//Pokemon pokemon = pokemonCreate("Hohoyobogo", TYPE_GRASS, 101, 30);
 	pokemonPrintVoice(pokemon, fopen("text.txt","w"));
 	printf("strlen %d\n",strlen(""));
 	printf("%d\n", pokemonGetLevel(pokemon));
@@ -384,5 +319,5 @@ int main() {
 	printf("%d\n", stringInit(&str, &dest));
 	printf("strlen %d\n", strlen(str));
 	printf("string: %s\n", dest);
-	scanf("%c", &str);
+	return 0;
  }
