@@ -435,12 +435,19 @@ static bool testPokemonTrainerMakeMostRankedParty() {
     pokemonTrainerDepositPokemon(trainer, 2);
     pokemonTrainerWithdrawPokemon(trainer, 1);
 
+    // Add some more pokemon, so the final list will have some deposited
+    fillPokemonList(trainer);
+
     // Now test
+    int pokemon_count_before, pokemon_count_after;
+    pokemon_count_before = pokemonTrainerGetNumberOfPokemons(trainer);
     ret = pokemonTrainerMakeMostRankedParty(trainer);
+    pokemon_count_after = pokemonTrainerGetNumberOfPokemons(trainer);
     TEST_EQUALS(result, ret, POKEMON_TRAINER_SUCCESS);
     for (int i = 0; i < TRAINER_MAX_LOCAL; i++) {
         TEST_EQUALS(result, pokemonTrainerGetPokemon(trainer, i+1), order[i]);
     }
+    TEST_EQUALS(result, pokemon_count_before, pokemon_count_after);
     pokemonTrainerDestroy(trainer);
     return result;
 }
