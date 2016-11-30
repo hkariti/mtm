@@ -13,12 +13,12 @@ test_debug: all_debug
 	./pokemon_test_debug
 	./pokemon_trainer_test_debug
 
-pokemon_test: pokemon.h pokemon.c
+pokemon_test: pokemon.h pokemon.c pokemon_test.c
 	gcc -o pokemon_test ${CFLAGS} -DNDEBUG pokemon.c pokemon_test.c
-pokemon_trainer_test: pokemon_trainer.c pokemon_trainer.h
+pokemon_trainer_test: pokemon_trainer.c pokemon_trainer.h pokemon_trainer_test.c
 	gcc -o pokemon_trainer_test ${CFLAGS} -DNDEBUG pokemon.c pokemon_trainer.c pokemon_trainer_test.c
 
-pokemon_test_debug: pokemon.h pokemon.c
+pokemon_test_debug: pokemon.h pokemon.c pokemon_trainer.c
 	gcc -o pokemon_test ${CLFAGS} -g pokemon.c pokemon_test.c
-pokemon_trainer_test_debug: pokemon_trainer.c pokemon_trainer.h
+pokemon_trainer_test_debug: pokemon_trainer.c pokemon_trainer.h pokemon_trainer_test.c
 	gcc -o pokemon_trainer_test ${CFLAGS} -g pokemon.c pokemon_trainer.c pokemon_trainer_test.c
