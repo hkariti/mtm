@@ -5,13 +5,20 @@
 #include "aux_macros.h"
 #include "pokemon_trainer.h"
 
+#define TRAINER_MAX_LOCAL 10
+#define TRAINER_MAX_REMOTE 10
+
 static Pokemon newPokemon(char* name) {
     return pokemonCreate(name, TYPE_ELECTRIC, 10, 4);
 }
 
+static void addMove(Pokemon pokemon, int strength) {
+    pokemonTeachMove(pokemon, "Move", TYPE_ELECTRIC, 10, strength);
+}
+
 static void fillWithdrawList(PokemonTrainer trainer) {
      char *name = malloc(15);
-     for (int i = 1; i <= trainer->remote_pokemon->max_length; i++) {
+     for (int i = 1; i <= TRAINER_MAX_REMOTE; i++) {
          snprintf(name, 15, "Remote%d", i);
          Pokemon pokemon = newPokemon(name);
          pokemonTrainerAddPokemon(trainer, pokemon);
@@ -23,7 +30,7 @@ static void fillWithdrawList(PokemonTrainer trainer) {
 
 static void fillPokemonList(PokemonTrainer trainer) {
      char *name = malloc(15);
-     for (int i = 2; i <= trainer->local_pokemon->max_length; i++) {
+     for (int i = 2; i <= TRAINER_MAX_LOCAL; i++) {
          snprintf(name, 15, "Local%d", i);
          Pokemon pokemon = newPokemon(name);
          pokemonTrainerAddPokemon(trainer, pokemon);
@@ -34,7 +41,7 @@ static void fillPokemonList(PokemonTrainer trainer) {
 
 static PokemonTrainer newTrainer() {
     Pokemon pikachu = newPokemon("Pikachu");
-    PokemonTrainer trainer = pokemonTrainerCreate("Ash", pikachu, 10, 10);
+    PokemonTrainer trainer = pokemonTrainerCreate("Ash", pikachu, TRAINER_MAX_LOCAL, TRAINER_MAX_REMOTE);
 
     pokemonDestroy(pikachu);
     return trainer;
@@ -58,14 +65,10 @@ static bool testPokemonTrainerCreate() {
     trainer = pokemonTrainerCreate(name, pikachu, 10, 0);
     TEST_EQUALS(result, trainer, NULL); 
 
-    // Verify internal fields
+    // Verify basic things
     trainer = pokemonTrainerCreate("Ash", pikachu, 10, 10);
-    TEST_EQUALS(result, strcmp(trainer->name, "Ash"), 0);
-    TEST_EQUALS(result, trainer->local_pokemon->length, 1);
-    TEST_EQUALS(result, trainer->remote_pokemon->length, 0);
-    TEST_EQUALS(result, trainer->local_pokemon->max_length, 10);
-    TEST_EQUALS(result, trainer->remote_pokemon->max_length, 10);
-    TEST_EQUALS(result, strcmp(trainer->local_pokemon->list[0]->name, pikachu->name), 0);
+    TEST_DIFFERENT(result, trainer, NULL);
+    TEST_EQUALS(result, pokemonTrainerGetNumberOfPokemons(trainer), 1);
 
     pokemonDestroy(pikachu);
     pokemonTrainerDestroy(trainer);
@@ -82,29 +85,33 @@ static bool testPokemonTrainerCopy() {
     trainer2 = pokemonTrainerCopy(NULL);
     TEST_EQUALS(result, trainer2, NULL);
 
-    // Check run copied everything
+    // Fill up pokemon list
+    fillWithdrawList(trainer1);
+    fillPokemonList(trainer1);
+
+    // Test basic things
     trainer2 = pokemonTrainerCopy(trainer1);
     TEST_DIFFERENT(result, trainer2, NULL);
-    TEST_DIFFERENT(result, trainer1->name, trainer2->name);
-    TEST_DIFFERENT(result, trainer1->local_pokemon, trainer2->local_pokemon);
-    TEST_DIFFERENT(result, trainer1->remote_pokemon, trainer2->remote_pokemon);
-    TEST_DIFFERENT(result, trainer1->local_pokemon->list, trainer2->local_pokemon->list);
-    TEST_DIFFERENT(result, trainer1->remote_pokemon->list, trainer2->remote_pokemon->list);
-    TEST_DIFFERENT(result, trainer1->local_pokemon->list[0], trainer2->local_pokemon->list[0]);
+    int pokemon_count1, pokemon_count2;
+    pokemon_count1 = pokemonTrainerGetNumberOfPokemons(trainer1);
+    pokemon_count2 = pokemonTrainerGetNumberOfPokemons(trainer2);
+    TEST_EQUALS(result, pokemon_count1, pokemon_count2);
 
-    // Check values are the same
-    TEST_EQUALS(result, strcmp(trainer1->name, trainer2->name), 0);
-    TEST_EQUALS(result, trainer1->local_pokemon->length, trainer2->local_pokemon->length);
-    TEST_EQUALS(result, trainer1->remote_pokemon->length, trainer2->remote_pokemon->length);
-    TEST_EQUALS(result, trainer1->local_pokemon->max_length, trainer2->local_pokemon->max_length);
-    TEST_EQUALS(result, trainer1->remote_pokemon->max_length, trainer2->remote_pokemon->max_length);
-    TEST_EQUALS(result, strcmp(trainer1->local_pokemon->list[0]->name, trainer2->local_pokemon->list[0]->name), 0);
+    // Test local pokemon exist and are copies of the originals
+    for (int i = 1; i <= TRAINER_MAX_LOCAL; i++) {
+        Pokemon pokemon1, pokemon2;
+        pokemon1 = pokemonTrainerGetPokemon(trainer1, i);
+        pokemon2 = pokemonTrainerGetPokemon(trainer2, i);
+        TEST_DIFFERENT(result, pokemon2, NULL);
+        TEST_DIFFERENT(result, pokemon1, pokemon2);
+    }
 
     pokemonTrainerDestroy(trainer1);
     pokemonTrainerDestroy(trainer2);
 
     return result;
 }
+
 static bool testPokemonTrainerAddPokemon() {
     bool result = true;
     PokemonTrainer trainer = newTrainer();
@@ -123,7 +130,7 @@ static bool testPokemonTrainerAddPokemon() {
     char *name = malloc(10);
     for (int i = 2; i <= 10; i++) {
         snprintf(name, 10, "Pikachu%d", i);
-        pikachu = pokemonCreate(name, TYPE_ELECTRIC, 20, 4);
+        pikachu = newPokemon(name);
         ret = pokemonTrainerAddPokemon(trainer, pikachu);
         TEST_EQUALS(result, ret, POKEMON_TRAINER_SUCCESS);
         // Test we added a copy
@@ -131,6 +138,7 @@ static bool testPokemonTrainerAddPokemon() {
         pokemonDestroy(pikachu);
     }
     free(name);
+
     // Test party full
     pikachu = pokemonCreate("Pikachu11", TYPE_ELECTRIC, 20, 4);
     ret = pokemonTrainerAddPokemon(trainer, pikachu);
@@ -144,8 +152,8 @@ static bool testPokemonTrainerAddPokemon() {
 static bool testPokemonTrainerRemovePokemon() {
     bool result = true;
     PokemonTrainer trainer = newTrainer();
-    Pokemon pikachu2;
     PokemonTrainerResult ret;
+    Pokemon pikachu2;
 
     // Test NULL trainer
     ret = pokemonTrainerRemovePokemon(NULL, 1);
@@ -161,20 +169,20 @@ static bool testPokemonTrainerRemovePokemon() {
     ret = pokemonTrainerRemovePokemon(trainer, 1);
     TEST_EQUALS(result, ret, POKEMON_TRAINER_REMOVE_LAST);
 
-    pikachu2 = pokemonCreate("Pikachu2", TYPE_ELECTRIC, 20, 4);
+    pikachu2 = newPokemon("Pikachu2");
     pokemonTrainerAddPokemon(trainer, pikachu2);
     pokemonDestroy(pikachu2);
 
-    // Check new out of bounds
+    // Test new out of bounds
     ret = pokemonTrainerRemovePokemon(trainer, 3);
     TEST_EQUALS(result, ret, POKEMON_TRAINER_INVALID_INDEX);
 
     // Check removal and compression
+    pikachu2 = pokemonTrainerGetPokemon(trainer, 2);
     ret = pokemonTrainerRemovePokemon(trainer, 1);
     TEST_EQUALS(result, ret, POKEMON_TRAINER_SUCCESS);
-    pikachu2 = pokemonTrainerGetPokemon(trainer, 1);
     TEST_EQUALS(result, pokemonTrainerGetNumberOfPokemons(trainer), 1);
-    TEST_EQUALS(result, strcmp(pikachu2->name, "Pikachu2"), 0);
+    TEST_EQUALS(result, pokemonTrainerGetPokemon(trainer, 1), pikachu2);
 
     pokemonTrainerDestroy(trainer);
 
@@ -184,13 +192,11 @@ static bool testPokemonTrainerRemovePokemon() {
 static bool testPokemonTrainerGetPokemon() {
     bool result = true;
     PokemonTrainer trainer = newTrainer();
-    Pokemon charmander = pokemonCreate("Charmander", TYPE_FIRE, 20, 4);
     Pokemon ret;
 
     // Test null trainer
     ret = pokemonTrainerGetPokemon(NULL, 1); 
     TEST_EQUALS(result, ret, NULL);
-
 
     // Check boundries
     ret = pokemonTrainerGetPokemon(trainer, 0);
@@ -200,13 +206,14 @@ static bool testPokemonTrainerGetPokemon() {
     
     // Fetch
     ret = pokemonTrainerGetPokemon(trainer, 1);
-    TEST_EQUALS(result, ret, trainer->local_pokemon->list[0]);
+    TEST_DIFFERENT(result, ret, NULL);
 
-    // Add another and fetch
-    pokemonTrainerAddPokemon(trainer, charmander);
-    pokemonDestroy(charmander);
+    // Fill pokemon list and fetch
+    fillPokemonList(trainer);
     ret = pokemonTrainerGetPokemon(trainer, 2);
-    TEST_EQUALS(result, ret, trainer->local_pokemon->list[1]);
+    TEST_DIFFERENT(result, ret, NULL);
+    ret = pokemonTrainerGetPokemon(trainer, TRAINER_MAX_LOCAL);
+    TEST_DIFFERENT(result, ret, NULL);
 
     pokemonTrainerDestroy(trainer);
     return result;
@@ -215,9 +222,9 @@ static bool testPokemonTrainerGetPokemon() {
 static bool testPokemonTrainerDepositPokemon() {
     bool result = true;
     PokemonTrainer trainer = newTrainer();
-    Pokemon charmander = newPokemon("Charmander");
-    Pokemon temp;
+    Pokemon charmander;
     PokemonTrainerResult ret;
+    int pokemon_count_before, pokemon_count_after;
 
     // Test null arg
     ret = pokemonTrainerDepositPokemon(NULL, 1); 
@@ -232,34 +239,43 @@ static bool testPokemonTrainerDepositPokemon() {
     // Test deposit last; no changes should have occured
     ret = pokemonTrainerDepositPokemon(trainer, 1);
     TEST_EQUALS(result, ret, POKEMON_TRAINER_DEPOSIT_LAST);
-    TEST_EQUALS(result, trainer->local_pokemon->length, 1);
-    TEST_EQUALS(result, trainer->remote_pokemon->length, 0);
+    TEST_EQUALS(result, pokemonTrainerGetNumberOfPokemons(trainer), 1);
 
     // Add another pokemon and deposit the first
+    charmander = newPokemon("Charmander");
     pokemonTrainerAddPokemon(trainer, charmander);
+    pokemonDestroy(charmander);
+    pokemon_count_before = pokemonTrainerGetNumberOfPokemons(trainer);
+    charmander = pokemonTrainerGetPokemon(trainer, 2);
     ret = pokemonTrainerDepositPokemon(trainer, 1);
+    pokemon_count_after = pokemonTrainerGetNumberOfPokemons(trainer);
     TEST_EQUALS(result, ret, POKEMON_TRAINER_SUCCESS);
-    temp = pokemonTrainerGetPokemon(trainer, 1);
-    TEST_EQUALS(result, strcmp(temp->name, charmander->name), 0);
-    temp = trainer->remote_pokemon->list[0];
-    TEST_EQUALS(result, strcmp(temp->name, "Pikachu"), 0);
-    pokemonDestroy(charmander);
+    TEST_EQUALS(result, pokemonTrainerGetPokemon(trainer, 1), charmander);
+    TEST_EQUALS(result, pokemon_count_before, pokemon_count_after);
 
+    // Fill remote list and try to deposit another; nothing should change
     fillWithdrawList(trainer);
-    charmander = newPokemon("RemoteFull");
+    charmander = newPokemon("CharmanderFull");
     pokemonTrainerAddPokemon(trainer, charmander);
-    ret = pokemonTrainerDepositPokemon(trainer, 1);
-    TEST_EQUALS(result, ret, POKEMON_TRAINER_DEPOSIT_FULL);
     pokemonDestroy(charmander);
+    pokemon_count_before = pokemonTrainerGetNumberOfPokemons(trainer);
+    charmander = pokemonTrainerGetPokemon(trainer, 2);
+    ret = pokemonTrainerDepositPokemon(trainer, 1);
+    pokemon_count_after = pokemonTrainerGetNumberOfPokemons(trainer);
+    TEST_EQUALS(result, ret, POKEMON_TRAINER_DEPOSIT_FULL);
+    TEST_EQUALS(result, pokemonTrainerGetPokemon(trainer, 2), charmander);
+    TEST_EQUALS(result, pokemon_count_before, pokemon_count_after);
 
     pokemonTrainerDestroy(trainer);
     return result;
 }
 
-static bool testPokemonTrainerWithdrawPokemonNull() {
+static bool testPokemonTrainerWithdrawPokemon() {
     bool result = true;
     PokemonTrainer trainer = newTrainer();
     PokemonTrainerResult ret;
+    Pokemon charmander;
+    int pokemon_count_before, pokemon_count_after;
     
     // Test null trainer
     ret = pokemonTrainerWithdrawPokemon(NULL, 1);
@@ -271,38 +287,32 @@ static bool testPokemonTrainerWithdrawPokemonNull() {
     ret = pokemonTrainerWithdrawPokemon(trainer, 1);
     TEST_EQUALS(result, ret, POKEMON_TRAINER_INVALID_INDEX);
 
-    pokemonTrainerDestroy(trainer);
-    return result;
-}
+    // Test basic usage
+    charmander = newPokemon("Charmander");
+    pokemonTrainerAddPokemon(trainer, charmander);
+    pokemonDestroy(charmander);
+    pokemonTrainerDepositPokemon(trainer, 2);
+    ret = pokemonTrainerWithdrawPokemon(trainer, 1);
+    TEST_EQUALS(result, ret, POKEMON_TRAINER_SUCCESS);
+    TEST_EQUALS(result, pokemonTrainerGetNumberOfPokemons(trainer), 2);
 
-static bool testPokemonTrainerWithdrawPokemonSingle() {
-    bool result = true;
-    PokemonTrainer trainer = newTrainer();
-    PokemonTrainerResult ret;
+    // Test withdraw and list compress
+    pokemonTrainerDepositPokemon(trainer, 2);
+    charmander = newPokemon("Charmander2");
+    pokemonTrainerAddPokemon(trainer, charmander);
+    pokemonDestroy(charmander);
+    pokemon_count_before = pokemonTrainerGetNumberOfPokemons(trainer);
+    charmander = pokemonTrainerGetPokemon(trainer, 2);
+    pokemonTrainerDepositPokemon(trainer, 2);
+    ret = pokemonTrainerWithdrawPokemon(trainer, 1);
+    TEST_EQUALS(result, ret, POKEMON_TRAINER_SUCCESS);
+    ret = pokemonTrainerWithdrawPokemon(trainer, 1);
+    TEST_EQUALS(result, ret, POKEMON_TRAINER_SUCCESS);
+    pokemon_count_after = pokemonTrainerGetNumberOfPokemons(trainer);
+    TEST_EQUALS(result, pokemonTrainerGetPokemon(trainer, 3), charmander);
+    TEST_EQUALS(result, pokemon_count_before, pokemon_count_after);
 
-    fillWithdrawList(trainer);
-
-     // Test withdraw and list compress
-     ret = pokemonTrainerWithdrawPokemon(trainer, 1);
-     TEST_EQUALS(result, ret, POKEMON_TRAINER_SUCCESS);
-     TEST_EQUALS(result, trainer->local_pokemon->length, 2);
-     TEST_EQUALS(result, trainer->remote_pokemon->length, trainer->remote_pokemon->max_length - 1);
-     char* name = malloc(15);
-     for (int i = 1; i <= trainer->remote_pokemon->length; i++) {
-         snprintf(name, 15, "Remote%d", i+1);
-         TEST_EQUALS(result, strcmp(trainer->remote_pokemon->list[i-1]->name, name), 0);
-     }
-    free(name);
-
-    pokemonTrainerDestroy(trainer);
-    return result;
-}
-
-static bool testPokemonTrainerWithdrawPokemonFull() {
-    bool result = true;
-    PokemonTrainer trainer = newTrainer();
-    PokemonTrainerResult ret;
-
+    // Test withdraw to full party
     fillWithdrawList(trainer);
     fillPokemonList(trainer);
 
@@ -313,10 +323,41 @@ static bool testPokemonTrainerWithdrawPokemonFull() {
     return result;
 }
 
-static bool testPokemonTrainerGetMostRankedEmpty() {
+static bool testPokemonTrainerGetNumberOfPokemons() {
     bool result = true;
     PokemonTrainer trainer = newTrainer();
-    Pokemon ret;
+    Pokemon pokemon;
+    int pokemon_count;
+
+    // Test value on init
+    pokemon_count = pokemonTrainerGetNumberOfPokemons(trainer);
+    TEST_EQUALS(result, pokemon_count, 1);
+
+    // Add one to local and remote
+    pokemon = newPokemon("Remote");
+    pokemonTrainerAddPokemon(trainer, pokemon);
+    pokemonDestroy(pokemon);
+    pokemonTrainerDepositPokemon(trainer, 2);
+    pokemon = newPokemon("Local");
+    pokemonTrainerAddPokemon(trainer, pokemon);
+    pokemonDestroy(pokemon);
+    pokemon_count = pokemonTrainerGetNumberOfPokemons(trainer);
+    TEST_EQUALS(result, pokemon_count, 3);
+
+    // Fill up both lists
+    fillWithdrawList(trainer);
+    fillPokemonList(trainer);
+    pokemon_count = pokemonTrainerGetNumberOfPokemons(trainer);
+    TEST_EQUALS(result, pokemon_count, TRAINER_MAX_REMOTE + TRAINER_MAX_LOCAL);
+
+    pokemonTrainerDestroy(trainer);
+    return result;
+}
+
+static bool testPokemonTrainerGetMostRankedPokemon() {
+    bool result = true;
+    PokemonTrainer trainer = newTrainer();
+    Pokemon ret, pokemon1, pokemon2;
 
     // Test null trainer
     ret = pokemonTrainerGetMostRankedPokemon(NULL);
@@ -326,151 +367,89 @@ static bool testPokemonTrainerGetMostRankedEmpty() {
     ret = pokemonTrainerGetMostRankedPokemon(trainer);
     TEST_EQUALS(result, ret, pokemonTrainerGetPokemon(trainer, 1));
 
-    pokemonTrainerDestroy(trainer);
-    return result;
-}
-
-static bool testPokemonTrainerGetMostRankedTie() {
-    bool result = true;
-    PokemonTrainer trainer = newTrainer();
-    Pokemon ret;
-
-    fillWithdrawList(trainer);
     fillPokemonList(trainer);
 
-    pokemonTeachMove(trainer->local_pokemon->list[0], "Move", TYPE_ELECTRIC, 10, 100);
-    pokemonTeachMove(trainer->remote_pokemon->list[0], "Move", TYPE_ELECTRIC, 10, 100);
+    // Test tie in local list
+    pokemon1 = pokemonTrainerGetPokemon(trainer, 1);
+    ret = pokemonTrainerGetMostRankedPokemon(trainer);
+    TEST_EQUALS(result, ret, pokemon1);
+
+    // Test tie with remote list
+    pokemon1 = pokemonTrainerGetPokemon(trainer, 1);
+    pokemon2 = pokemonTrainerGetPokemon(trainer, 2);
+    addMove(pokemon1, 100);
+    addMove(pokemon2, 100);
+    pokemonTrainerDepositPokemon(trainer, 2);
+    ret = pokemonTrainerGetMostRankedPokemon(trainer);
+    TEST_EQUALS(result, ret, pokemon1);
     
+    // Test tie in remote list, pokemon2 is now first
+    pokemonTrainerDepositPokemon(trainer, 1);
     ret = pokemonTrainerGetMostRankedPokemon(trainer);
-    TEST_EQUALS(result, ret, pokemonTrainerGetPokemon(trainer, 1));
+    TEST_EQUALS(result, ret, pokemon2);
 
-    pokemonTeachMove(trainer->local_pokemon->list[2], "Move", TYPE_ELECTRIC, 10, 200);
-    pokemonTeachMove(trainer->local_pokemon->list[3], "Move", TYPE_ELECTRIC, 10, 200);
-
+    // Test most ranked is in remote list.
+    pokemon1 = pokemonTrainerGetPokemon(trainer, 1);
+    addMove(pokemon1, 50);
     ret = pokemonTrainerGetMostRankedPokemon(trainer);
-    TEST_EQUALS(result, ret, pokemonTrainerGetPokemon(trainer, 3));
-
-    pokemonTeachMove(trainer->remote_pokemon->list[2], "Move", TYPE_ELECTRIC, 10, 300);
-    pokemonTeachMove(trainer->remote_pokemon->list[3], "Move", TYPE_ELECTRIC, 10, 300);
-
-    ret = pokemonTrainerGetMostRankedPokemon(trainer);
-    TEST_EQUALS(result, ret, trainer->remote_pokemon->list[2]);
+    TEST_EQUALS(result, ret, pokemon2);
 
     pokemonTrainerDestroy(trainer);
     return result;
 }
 
-static bool testPokemonTrainerGetMostRankedProf() {
+static bool testPokemonTrainerMakeMostRankedParty() {
     bool result = true;
     PokemonTrainer trainer = newTrainer();
-    Pokemon ret;
+    PokemonTrainerResult ret;
+    Pokemon order[TRAINER_MAX_LOCAL];
 
-    fillWithdrawList(trainer);
+    // Test null
+    ret = pokemonTrainerMakeMostRankedParty(NULL);
+    TEST_EQUALS(result, ret, POKEMON_TRAINER_NULL_ARG);
+
     fillPokemonList(trainer);
+    for (int i = 0; i < TRAINER_MAX_LOCAL; i++) {
+        order[i] = pokemonTrainerGetPokemon(trainer, i+1);
+    }
 
-    pokemonTeachMove(trainer->local_pokemon->list[0], "Move", TYPE_ELECTRIC, 10, 100);
-    pokemonTeachMove(trainer->remote_pokemon->list[0], "Move", TYPE_ELECTRIC, 10, 200);
-    
-    ret = pokemonTrainerGetMostRankedPokemon(trainer);
-    TEST_EQUALS(result, ret, trainer->remote_pokemon->list[0]);
+    // Test no-op
+    ret = pokemonTrainerMakeMostRankedParty(trainer);
+    TEST_EQUALS(result, ret, POKEMON_TRAINER_SUCCESS);
+    for (int i = 0; i < TRAINER_MAX_LOCAL; i++) {
+        TEST_EQUALS(result, pokemonTrainerGetPokemon(trainer, i+1), order[i]);
+    }
 
+    // Test specific order, across both lists:
+    // First set the desired order
+    addMove(order[0], 300);
+    addMove(order[1], 300);
+    addMove(order[2], 200);
+    addMove(order[3], 100);
+    addMove(order[4], 100);
+
+    // Then shuffle the pokemon around
+    pokemonTrainerDepositPokemon(trainer, 1);
+    pokemonTrainerDepositPokemon(trainer, 1);
+    pokemonTrainerDepositPokemon(trainer, 1);
+    pokemonTrainerDepositPokemon(trainer, 2);
+    pokemonTrainerWithdrawPokemon(trainer, 1);
+
+    // Now test
+    ret = pokemonTrainerMakeMostRankedParty(trainer);
+    TEST_EQUALS(result, ret, POKEMON_TRAINER_SUCCESS);
+    for (int i = 0; i < TRAINER_MAX_LOCAL; i++) {
+        TEST_EQUALS(result, pokemonTrainerGetPokemon(trainer, i+1), order[i]);
+    }
     pokemonTrainerDestroy(trainer);
     return result;
 }
-
-//static bool testPokemonTrainerMakeMostRankedPartyBase() {
-//    bool result = true;
-//    PokemonTrainer trainer = newTrainer();
-//    PokemonTrainerResult ret;
-//    PokemonList local_ref, remote_ref;
-//
-//    // Test null
-//    ret = pokemonTrainerMakeMostRankedParty(NULL);
-//    TEST_EQUALS(result, ret, POKEMON_TRAINER_NULL_ARG);
-//
-//    fillWithdrawList(trainer);
-//    fillPokemonList(trainer);
-//
-//    local_ref = pokemonListCreate(trainer->local_pokemon->length, 0);
-//    remote_ref = pokemonListCreate(trainer->remote_pokemon->length, 0);
-//
-//    // Test no-op
-//    pokemonListMove(local_ref, trainer->local_pokemon, 0, 0);
-//    pokemonListMove(remote_ref, trainer->remote_pokemon, 0, 0);
-//    ret = pokemonTrainerMakeMostRankedParty(trainer);
-//    TEST_EQUALS(result, ret, POKEMON_TRAINER_SUCCESS);
-//    for (int i = 0; i < trainer->local_pokemon->length; i++) {
-//        TEST_EQUALS(result, local_ref->list[i], trainer->local_pokemon->list[i]);
-//    }
-//    for (int i = 0; i < trainer->remote_pokemon->length; i++) {
-//        TEST_EQUALS(result, remote_ref->list[i], trainer->remote_pokemon->list[i]);
-//    }
-//
-//    pokemonListShallowDestroy(local_ref);
-//    pokemonListShallowDestroy(remote_ref);
-//    pokemonTrainerDestroy(trainer);
-//    return result;
-//}
-
-//static bool testPokemonTrainerMakeMostRankedPartyOrder() {
-//    bool result = true;
-//    PokemonTrainer trainer = newTrainer();
-//    PokemonTrainerResult ret;
-//    PokemonList local_ref, remote_ref;
-//
-//    fillWithdrawList(trainer);
-//    fillPokemonList(trainer);
-//
-//    local_ref = pokemonListCreate(trainer->local_pokemon->length, 0);
-//    remote_ref = pokemonListCreate(trainer->remote_pokemon->length, 0);
-//
-//    pokemonTeachMove(trainer->local_pokemon->list[0], "Move", TYPE_ELECTRIC, 10, 100);
-//    pokemonTeachMove(trainer->local_pokemon->list[1], "Move", TYPE_ELECTRIC, 10, 100);
-//    pokemonTeachMove(trainer->local_pokemon->list[2], "Move", TYPE_ELECTRIC, 10, 150);
-//    pokemonTeachMove(trainer->remote_pokemon->list[1], "Move", TYPE_ELECTRIC, 10, 200);
-//    pokemonTeachMove(trainer->remote_pokemon->list[2], "Move", TYPE_ELECTRIC, 10, 100);
-//    pokemonTeachMove(trainer->remote_pokemon->list[3], "Move", TYPE_ELECTRIC, 10, 150);
-//
-//    local_ref->list[0] = trainer->remote_pokemon->list[1];
-//    local_ref->list[1] = trainer->local_pokemon->list[2];
-//    local_ref->list[2] = trainer->remote_pokemon->list[3];
-//    local_ref->list[3] = trainer->local_pokemon->list[0];
-//    local_ref->list[4] = trainer->local_pokemon->list[1];
-//    local_ref->list[5] = trainer->remote_pokemon->list[2];
-//    local_ref->list[6] = trainer->local_pokemon->list[3];
-//    local_ref->list[7] = trainer->local_pokemon->list[4];
-//    local_ref->list[8] = trainer->local_pokemon->list[5];
-//    local_ref->list[9] = trainer->local_pokemon->list[6];
-//    remote_ref->list[0] = trainer->local_pokemon->list[7];
-//    remote_ref->list[1] = trainer->local_pokemon->list[8];
-//    remote_ref->list[2] = trainer->local_pokemon->list[9];
-//    remote_ref->list[3] = trainer->remote_pokemon->list[0];
-//    remote_ref->list[4] = trainer->remote_pokemon->list[4];
-//    remote_ref->list[5] = trainer->remote_pokemon->list[5];
-//    remote_ref->list[6] = trainer->remote_pokemon->list[6];
-//    remote_ref->list[7] = trainer->remote_pokemon->list[7];
-//    remote_ref->list[8] = trainer->remote_pokemon->list[8];
-//    remote_ref->list[9] = trainer->remote_pokemon->list[9];
-//    ret = pokemonTrainerMakeMostRankedParty(trainer);
-//    TEST_EQUALS(result, ret, POKEMON_TRAINER_SUCCESS);
-//    for (int i = 0; i < trainer->local_pokemon->length; i++) {
-//        TEST_EQUALS(result, local_ref->list[i], trainer->local_pokemon->list[i]);
-//    }
-//    for (int i = 0; i < trainer->remote_pokemon->length; i++) {
-//        TEST_EQUALS(result, remote_ref->list[i], trainer->remote_pokemon->list[i]);
-//    }
-//
-//    pokemonListShallowDestroy(local_ref);
-//    pokemonListShallowDestroy(remote_ref);
-//    pokemonTrainerDestroy(trainer);
-//    return result;
-//}
 
 static bool testPokemonTrainerPrintEnumeration() {
     bool result = true;
     PokemonTrainer trainer = newTrainer();
     PokemonTrainerResult ret;
-    FILE* file = fopen("/tmp/enumeration", "w");
+    FILE* file = (FILE*)1; // Dummy value
 
     // Test NULL
     ret = pokemonTrainerPrintEnumeration(NULL, file);
@@ -478,12 +457,6 @@ static bool testPokemonTrainerPrintEnumeration() {
     ret = pokemonTrainerPrintEnumeration(trainer, NULL);
     TEST_EQUALS(result, ret, POKEMON_TRAINER_NULL_ARG);
     
-    // Test success
-    fillPokemonList(trainer);
-    ret = pokemonTrainerPrintEnumeration(trainer, file);
-    TEST_EQUALS(result, ret, POKEMON_TRAINER_SUCCESS); 
-    fclose(file);
-
     pokemonTrainerDestroy(trainer);
     return result;
 }
@@ -525,14 +498,10 @@ int main() {
     RUN_TEST(testPokemonTrainerRemovePokemon);
     RUN_TEST(testPokemonTrainerGetPokemon);
     RUN_TEST(testPokemonTrainerDepositPokemon);
-    RUN_TEST(testPokemonTrainerWithdrawPokemonNull);
-    RUN_TEST(testPokemonTrainerWithdrawPokemonSingle);
-    RUN_TEST(testPokemonTrainerWithdrawPokemonFull);
-    RUN_TEST(testPokemonTrainerGetMostRankedEmpty);
-    RUN_TEST(testPokemonTrainerGetMostRankedTie);
-    RUN_TEST(testPokemonTrainerGetMostRankedProf);
-//    RUN_TEST(testPokemonTrainerMakeMostRankedPartyBase);
-//    RUN_TEST(testPokemonTrainerMakeMostRankedPartyOrder);
+    RUN_TEST(testPokemonTrainerWithdrawPokemon);
+    RUN_TEST(testPokemonTrainerGetNumberOfPokemons);
+    RUN_TEST(testPokemonTrainerGetMostRankedPokemon);
+    RUN_TEST(testPokemonTrainerMakeMostRankedParty);
     RUN_TEST(testPokemonTrainerPrintEnumeration);
 	return 0;
 }
