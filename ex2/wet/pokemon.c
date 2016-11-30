@@ -28,7 +28,7 @@
 * 	false if type is invalid.
 * 	true if type is valid
 */
-bool isTypeValid(PokemonType type) {
+static bool isTypeValid(PokemonType type) {
 	if (type < 0 || type > TYPE_ELECTRIC) return false;
 	return true;
 }
@@ -45,10 +45,10 @@ bool isTypeValid(PokemonType type) {
 * 	POKEMON_OUT_OF_MEM if dest memory allocation failed
 *	POKEMON_SUCCESS	when string initialization succeeded
 */
-PokemonResult stringInit(char** src, char** dest) {
+static PokemonResult stringInit(char** src, char** dest) {
 	if (NULL == src || NULL == dest || NULL == *src) return POKEMON_NULL_ARG;
 
-	unsigned int len = strlen(*src);
+	int len = strlen(*src);
 	*dest = malloc(len + 1);
 	if (NULL == *dest) {
 		return POKEMON_OUT_OF_MEM;
@@ -66,11 +66,11 @@ PokemonResult stringInit(char** src, char** dest) {
 * 	NULL if the source string is NULL or if allocation failed.
 * 	char* pointer to allocated non-letters string
 */
-char* onlyLettersString(char* src) {
+static char* onlyLettersString(char* src) {
 	if (NULL == src) return NULL;
 	char* dest = malloc(strlen(src) + 1);
 	if (NULL == dest) return NULL;
-	unsigned int i = 0, j = 0;
+	int i = 0, j = 0;
 	for (i = 0; i < strlen(src); i++) {
 		char current_char = *(src + i);
 		if (((current_char >= FIRST_LOWERCASE_LETTER) &&
@@ -94,7 +94,7 @@ char* onlyLettersString(char* src) {
 * 	INVALID_INDEX (==-1) if the pokemon doesn't have move with that name.
 * 	int (non-negative number)-the found move's index in the moves array
 */
-int findMoveByName(Pokemon pokemon, char* move_name) {
+static int findMoveByName(Pokemon pokemon, char* move_name) {
 	for (int i = 0; i < pokemon->number_of_moves; i++) {
 		if (0 == strcmp(pokemon->moves[i]->name, move_name)) {
 			return i;
@@ -114,11 +114,11 @@ int findMoveByName(Pokemon pokemon, char* move_name) {
 * 	PokemonMove the Lowest lexicographical-order move the pokemon knows
 */
 // return's lower lexicographic move, if no moves available returns NULL
-PokemonMove getLowestLexicographicMove(Pokemon pokemon) {
+static PokemonMove getLowestLexicographicMove(Pokemon pokemon) {
 	if (pokemon->number_of_moves == 0) return NULL;
 
 	PokemonMove lowest_lexi_move = pokemon->moves[0];
-	for (unsigned int i = 1; i < pokemon->number_of_moves; i++) {
+	for (int i = 1; i < pokemon->number_of_moves; i++) {
 		if (strcmp(lowest_lexi_move->name, pokemon->moves[i]->name) > 0) {
 			lowest_lexi_move = pokemon->moves[i];
 		}
@@ -126,7 +126,7 @@ PokemonMove getLowestLexicographicMove(Pokemon pokemon) {
 	return lowest_lexi_move;
 }
 
-int getMoveAttackFactor(PokemonMove move, Pokemon attacked_pokemon) {
+static int getMoveAttackFactor(PokemonMove move, Pokemon attacked_pokemon) {
 	if (TYPE_WATER == move->type && TYPE_FIRE == attacked_pokemon->type) {
 		return CRITICAL_ATTACK_FACTOR;
 	}
@@ -149,7 +149,7 @@ Pokemon pokemonCreate(char* name, PokemonType type, int experience,
 	if (NULL == name) return NULL;
 	if (strlen(name) == 0) return NULL;
 	if (!isTypeValid(type)) return NULL;
-	if (experience > MAX_EXPERIENCE_VALUE || experience <= 0) return NULL; 
+	if (experience > MAX_EXPERIENCE_VALUE || experience <= 0) return NULL;
 	if (max_number_of_moves <= 0) return NULL;
 
 	char* name_clone;
