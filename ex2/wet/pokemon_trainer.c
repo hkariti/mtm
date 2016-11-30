@@ -354,6 +354,7 @@ PokemonTrainerResult pokemonTrainerMakeMostRankedParty(PokemonTrainer trainer) {
 
     // Fill up the local_pokemon list up to the max
     pokemonListMove(trainer->local_pokemon, combined_party, 0, 0);
+    local_length = trainer->local_pokemon->length;
 
     // Put the remaining pokemon in the remote_pokemon list
     pokemonListMove(trainer->remote_pokemon, combined_party, 0, local_length);
