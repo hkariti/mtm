@@ -4,22 +4,19 @@
 #include <stdio.h>
 
 char* partialCopyString(char* str, bool copy_even, int* out_len) {
-    char* OUT;
+    char* out_str;
+    if (NULL == str || NULL == out_len) return NULL;
 	*out_len = strlen(str) / 2;
-    if (copy_even) {
-        OUT = malloc(*out_len + 1);
-        for (int i = 0; i < strlen(str); i += 2) {
-            OUT[i / 2] = str[i + 1];
-        }
-    } else {
-        *out_len += + strlen(str) % 2;
-        OUT = malloc(*out_len + 1);
-        for (int i = 0; i < strlen(str); i += 2) {
-            OUT[i / 2] = str[i];
-        }
+    if (!copy_even) {
+        *out_len += strlen(str) % 2;
     }
-	OUT[*out_len] = '\0';
-    return OUT;
+    out_str = malloc(*out_len + 1);
+    if (NULL == out_str) return NULL;
+    for (int i = 0; i < strlen(str); i += 2) {
+        out_str[i / 2] = str[i + (int)copy_even];
+    }
+	out_str[*out_len] = '\0';
+    return out_str;
 }
 
 int main(int argc, char **argv) {
