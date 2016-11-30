@@ -19,7 +19,7 @@ char* partialCopyString(char* str, bool copy_even, int* out_len) {
     return out_str;
 }
 
-int main(int argc, char **argv) {
+int main1(int argc, char **argv) {
     char *newstr;
     int len;
     bool copy_even;
