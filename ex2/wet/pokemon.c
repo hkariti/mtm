@@ -29,7 +29,7 @@
 * 	true if type is valid
 */
 bool isTypeValid(PokemonType type) {
-	if (type < 0 || type > TYPE_ELECTRIC) return false; //UGLY: other way to check if type is ok?
+	if (type < 0 || type > TYPE_ELECTRIC) return false;
 	return true;
 }
 
@@ -149,8 +149,8 @@ Pokemon pokemonCreate(char* name, PokemonType type, int experience,
 	if (NULL == name) return NULL;
 	if (strlen(name) == 0) return NULL;
 	if (!isTypeValid(type)) return NULL;
-	if (experience > MAX_EXPERIENCE_VALUE || experience < 0) return NULL; // what about 0?
-	if (max_number_of_moves < 0) return NULL; // what about 0?
+	if (experience > MAX_EXPERIENCE_VALUE || experience <= 0) return NULL; 
+	if (max_number_of_moves <= 0) return NULL;
 
 	char* name_clone;
 	if (POKEMON_SUCCESS != stringInit(&name, &name_clone)) return NULL;
@@ -196,13 +196,13 @@ Pokemon pokemonCopy(Pokemon pokemon) {
 }	
 
 PokemonResult pokemonTeachMove(Pokemon pokemon, char* move_name,
-	PokemonType type, int max_power_points, int strength) { //TODO: if max_number_of_moves can be 0!??
+	PokemonType type, int max_power_points, int strength) { 
 
 	if (NULL == pokemon || NULL == move_name) return POKEMON_NULL_ARG;
 	if (strlen(move_name) == 0) return POKEMON_INVALID_MOVE_NAME;
 	if (!isTypeValid(type)) return POKEMON_INVALID_TYPE;
-	if (max_power_points < 0) return POKEMON_INVALID_POWER_POINTS; //Q: what about 0??
-	if (strength < 0) return POKEMON_INVALID_STRENGTH; // what about 0?
+	if (max_power_points <= 0) return POKEMON_INVALID_POWER_POINTS;
+	if (strength <= 0) return POKEMON_INVALID_STRENGTH;
 	if (TYPE_NORMAL != type && pokemon->type != type) {
 		return POKEMON_INCOMPATIBLE_MOVE_TYPE;
 	}
@@ -302,7 +302,7 @@ PokemonResult pokemonUseMove(Pokemon pokemon, Pokemon opponent_pokemon,
 	return POKEMON_SUCCESS;
 }
 
-PokemonResult pokemonHeal(Pokemon pokemon) { //Q: What if current hp is high enoguh??
+PokemonResult pokemonHeal(Pokemon pokemon) {
 	if (NULL == pokemon) return POKEMON_NULL_ARG;
 	pokemon->health_points = (100 + pokemonGetLevel(pokemon)) * 10;
 	for (int i = 0; i < pokemon->number_of_moves; i++) {
