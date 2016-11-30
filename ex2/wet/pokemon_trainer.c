@@ -162,8 +162,7 @@ PokemonTrainer pokemonTrainerCreate(char* name, Pokemon initial_pokemon,
             POKEMON_TRAINER_MIN_LENGTH_REMOTE);
     if ((NULL == trainer->name) || (NULL == trainer->local_pokemon) ||
             (NULL == trainer->remote_pokemon)) {
-        free(trainer->name);
-        free(trainer);
+        pokemonTrainerDestroy(trainer);
         return NULL;
     }
     // Fill trainer object
@@ -183,7 +182,9 @@ PokemonTrainer pokemonTrainerCreate(char* name, Pokemon initial_pokemon,
 void pokemonTrainerDestroy(PokemonTrainer trainer) {
     if (NULL == trainer) return;
 
-    free(trainer->name);
+    if (NULL != trainer->name) {
+        free(trainer->name);
+    }
     pokemonListDestroy(trainer->local_pokemon);
     pokemonListDestroy(trainer->remote_pokemon);
     free(trainer);
