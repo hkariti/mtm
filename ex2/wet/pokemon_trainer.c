@@ -6,6 +6,15 @@
 #define POKEMON_TRAINER_MIN_LENGTH_LOCAL 1
 #define POKEMON_TRAINER_MIN_LENGTH_REMOTE 0
 
+/**
+ * Create an empty PokemonList, with the given max and min length properties.
+ *   The min property is only enforced by pokemonListRemove, so the list can
+ *   have length lower than that until enough pokemon are added.
+ *
+ * @returns:
+ *  PokemonList object. if max_length or min_length aren't positive or a
+ *    memory allocation occured, return NULL.
+ */
 PokemonList pokemonListCreate(int max_length, int min_length) {
     PokemonList base;
 
@@ -26,6 +35,13 @@ PokemonList pokemonListCreate(int max_length, int min_length) {
     return base;
 }
 
+/**
+ * Destroy a list without destroying the pokemon within. You shouldn't normally
+ * use this, use pokemonListDestroy unless you're absolutely sure you won't
+ * be leaking memory.
+ *
+ * If the given list is NULL, no action is taken.
+ */
 void pokemonListShallowDestroy(PokemonList base) {
     if (NULL == base) return;
 
@@ -33,6 +49,9 @@ void pokemonListShallowDestroy(PokemonList base) {
     free(base);
 }
 
+/**
+ * Destroy a list and its pokemon.
+ */
 void pokemonListDestroy(PokemonList base) {
     if (NULL == base) return;
 
@@ -43,6 +62,14 @@ void pokemonListDestroy(PokemonList base) {
     pokemonListShallowDestroy(base);
 }
 
+/**
+ * Append a pokemon to the given list, unless the list is full. The pokemon
+ * is NOT copied, so don't destroy it yourself.
+ *
+ * @returns:
+ *  POKEMON_TRAINER_SUCCESS - successful run
+ *  POKEMON_TRAINER_PARTY_FULL - list's length is already max_length
+ */
 PokemonTrainerResult pokemonListAppend(PokemonList base, Pokemon pokemon) {
     // Boundry checks
     if (base->length == base->max_length)
@@ -55,6 +82,18 @@ PokemonTrainerResult pokemonListAppend(PokemonList base, Pokemon pokemon) {
     return POKEMON_TRAINER_SUCCESS;
 }
 
+/**
+ * Remove a pokemon from the list, given its _one-based_ index, and move all
+ * pokemon with a higher index one index back. Unless keep is true, the pokemon
+ * will be destroyed. The pokemon won't be removed if the list is already at
+ * its min_length.
+ *
+ * @returns:
+ *   POKEMON_TRAINER_SUCCESS - successful run
+ *   POKEMON_TRAINER_INVALID_INDEX - given index is not-positive or more than
+ *     the current list's length.
+ *   POKEMON_TRAINER_REMOVE_LAST - trying to shrink the list past its min length
+ */
 PokemonTrainerResult pokemonListRemove(PokemonList base, int index, bool keep) {
     if (index < 1 || index > base->length)
         return POKEMON_TRAINER_INVALID_INDEX;
@@ -72,6 +111,12 @@ PokemonTrainerResult pokemonListRemove(PokemonList base, int index, bool keep) {
     return POKEMON_TRAINER_SUCCESS;
 }
 
+/**
+ * Returns the pokemon at the requested index. Index is one based.
+ *
+ * @returns:
+ *   Pokemon object. If given list is NULL or index is invalid, return NULL.
+ */
 Pokemon pokemonListGet(PokemonList base, int index) {
     if (NULL == base) return NULL;
     if (index < 1 || index > base->length) return NULL;
@@ -79,6 +124,14 @@ Pokemon pokemonListGet(PokemonList base, int index) {
     return base->list[index - 1];
 }
 
+/**
+ * Copy and append all pokemon from the source list (starting from
+ * source_offset) to the dest list. Note that pokemon are copied here.
+ *
+ * @returns:
+ *   POKEMON_TRAINER_SUCCESS - successful run
+ *   POKEMON_TRAINER_OUT_OF_MEM - memory allocation error
+ */
 PokemonTrainerResult pokemonListCopy(PokemonList dest, PokemonList source,
         int source_offset) {
     int amount_to_copy;
@@ -102,6 +155,17 @@ PokemonTrainerResult pokemonListCopy(PokemonList dest, PokemonList source,
     return POKEMON_TRAINER_SUCCESS;
 }
 
+/**
+ * Overwrite the dest list, starting from dest_offset, with pokemon from
+ * source list, starting from source_offset, until either dest is full or
+ * we've reached the end of source. Don't use this function unless you know
+ * what you're doing! Pokemon are moved, so you'll probably need to use
+ * shallowDestroy on one of the lists. Also dest can lose some pokemon, so
+ * there's danger of memory leaks.
+ *
+ * If source_offset or dest_offset are negative or go beyong their respective
+ * list's length, do nothing.
+ */
 void pokemonListMove(PokemonList dest, PokemonList source, int dest_offset,
         int source_offset) {
     // Check for valid args and no-op cases
@@ -127,6 +191,9 @@ void pokemonListMove(PokemonList dest, PokemonList source, int dest_offset,
     return;
 }
 
+/**
+ * Sort the list based on pokemon rank. Lower indexes are preferred to higher.
+ */
 void pokemonListSort(PokemonList base) {
     bool sorted = false;
     while (!sorted) {
