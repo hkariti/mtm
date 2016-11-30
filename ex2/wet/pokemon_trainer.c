@@ -15,7 +15,7 @@
  *  PokemonList object. if max_length or min_length aren't positive or a
  *    memory allocation occured, return NULL.
  */
-PokemonList pokemonListCreate(int max_length, int min_length) {
+static PokemonList pokemonListCreate(int max_length, int min_length) {
     PokemonList base;
 
     if (max_length < min_length || min_length < 0 || max_length <= 0)
@@ -42,7 +42,7 @@ PokemonList pokemonListCreate(int max_length, int min_length) {
  *
  * If the given list is NULL, no action is taken.
  */
-void pokemonListShallowDestroy(PokemonList base) {
+static void pokemonListShallowDestroy(PokemonList base) {
     if (NULL == base) return;
 
     free(base->list);
@@ -52,7 +52,7 @@ void pokemonListShallowDestroy(PokemonList base) {
 /**
  * Destroy a list and its pokemon.
  */
-void pokemonListDestroy(PokemonList base) {
+static void pokemonListDestroy(PokemonList base) {
     if (NULL == base) return;
 
     // Free all of the trainer's pokemon
@@ -70,7 +70,8 @@ void pokemonListDestroy(PokemonList base) {
  *  POKEMON_TRAINER_SUCCESS - successful run
  *  POKEMON_TRAINER_PARTY_FULL - list's length is already max_length
  */
-PokemonTrainerResult pokemonListAppend(PokemonList base, Pokemon pokemon) {
+static PokemonTrainerResult pokemonListAppend(PokemonList base,
+        Pokemon pokemon) {
     // Boundry checks
     if (base->length == base->max_length)
         return POKEMON_TRAINER_PARTY_FULL;
@@ -94,7 +95,8 @@ PokemonTrainerResult pokemonListAppend(PokemonList base, Pokemon pokemon) {
  *     the current list's length.
  *   POKEMON_TRAINER_REMOVE_LAST - trying to shrink the list past its min length
  */
-PokemonTrainerResult pokemonListRemove(PokemonList base, int index, bool keep) {
+static PokemonTrainerResult pokemonListRemove(PokemonList base, int index,
+        bool keep) {
     if (index < 1 || index > base->length)
         return POKEMON_TRAINER_INVALID_INDEX;
     if (base->length <= base->min_length)
@@ -117,7 +119,7 @@ PokemonTrainerResult pokemonListRemove(PokemonList base, int index, bool keep) {
  * @returns:
  *   Pokemon object. If given list is NULL or index is invalid, return NULL.
  */
-Pokemon pokemonListGet(PokemonList base, int index) {
+static Pokemon pokemonListGet(PokemonList base, int index) {
     if (NULL == base) return NULL;
     if (index < 1 || index > base->length) return NULL;
 
@@ -132,8 +134,8 @@ Pokemon pokemonListGet(PokemonList base, int index) {
  *   POKEMON_TRAINER_SUCCESS - successful run
  *   POKEMON_TRAINER_OUT_OF_MEM - memory allocation error
  */
-PokemonTrainerResult pokemonListCopy(PokemonList dest, PokemonList source,
-        int source_offset) {
+static PokemonTrainerResult pokemonListCopy(PokemonList dest,
+        PokemonList source, int source_offset) {
     int amount_to_copy;
 
     amount_to_copy = source->length - source_offset;
@@ -166,8 +168,8 @@ PokemonTrainerResult pokemonListCopy(PokemonList dest, PokemonList source,
  * If source_offset or dest_offset are negative or go beyong their respective
  * list's length, do nothing.
  */
-void pokemonListMove(PokemonList dest, PokemonList source, int dest_offset,
-        int source_offset) {
+static void pokemonListMove(PokemonList dest, PokemonList source,
+        int dest_offset, int source_offset) {
     // Check for valid args and no-op cases
     if (dest_offset < 0 || dest_offset > dest->length) return;
     if (source_offset < 0 || source_offset > source->length) return;
@@ -194,7 +196,7 @@ void pokemonListMove(PokemonList dest, PokemonList source, int dest_offset,
 /**
  * Sort the list based on pokemon rank. Lower indexes are preferred to higher.
  */
-void pokemonListSort(PokemonList base) {
+static void pokemonListSort(PokemonList base) {
     bool sorted = false;
     while (!sorted) {
         sorted = true;
