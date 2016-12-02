@@ -75,6 +75,24 @@ static bool testPokemonTrainerCreate() {
     return result;
 }
 
+static bool testPokemonTrainerDestroy() {
+    bool result = true;
+    PokemonTrainer trainer = newTrainer();
+    PokemonTrainer trainer_copy = pokemonTrainerCopy(trainer);
+    Pokemon charmander = newPokemon("Charmander");
+
+    // Test all memory is freed, no double frees
+    pokemonTrainerAddPokemon(trainer, charmander);
+    pokemonTrainerAddPokemon(trainer_copy, charmander);
+    pokemonDestroy(charmander);
+
+    pokemonTrainerDestroy(NULL);
+    pokemonTrainerDestroy(trainer);
+    pokemonTrainerDestroy(trainer_copy);
+
+    return result;
+}
+
 static bool testPokemonTrainerCopy() {
     bool result = true;
 
@@ -499,6 +517,7 @@ static bool testCombo() {
 int main() {
     RUN_TEST(testCombo);
     RUN_TEST(testPokemonTrainerCreate);
+    RUN_TEST(testPokemonTrainerDestroy);
     RUN_TEST(testPokemonTrainerCopy);
     RUN_TEST(testPokemonTrainerAddPokemon);
     RUN_TEST(testPokemonTrainerRemovePokemon);
