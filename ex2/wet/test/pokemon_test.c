@@ -225,6 +225,7 @@ static bool testPokemonHeal() {
 	TEST_EQUALS(result, pokemon_result, POKEMON_SUCCESS);
 
 	pokemonDestroy(charizard);
+	pokemonDestroy(blastoise);
 
 	return result;
 }
@@ -263,6 +264,7 @@ static bool testPokemonPrintName() {
 	pokemon_result = pokemonPrintName(NULL, NULL);
 	TEST_EQUALS(result, pokemon_result, POKEMON_NULL_ARG);
 
+    pokemonDestroy(charmander);
 	return result;
 }
 
@@ -276,6 +278,7 @@ static bool testPokemonPrintVoice() {
 	pokemon_result = pokemonPrintVoice(NULL, NULL);
 	TEST_EQUALS(result, pokemon_result, POKEMON_NULL_ARG);
 
+    pokemonDestroy(charmander);
 	return result;
 }
 
