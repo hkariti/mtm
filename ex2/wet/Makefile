@@ -1,6 +1,6 @@
 .PHONY: all all_debug test test_debug
 
-CFLAGS:=--std=c99 -Wall -pedantic-errors -Werror -I.
+CFLAGS:=--std=c99 -Wall -I.
 
 all: pokemon_test pokemon_trainer_test
 all_debug: pokemon_test_debug pokemon_trainer_test_debug
