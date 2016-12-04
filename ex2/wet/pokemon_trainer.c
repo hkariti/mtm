@@ -440,14 +440,19 @@ PokemonTrainerResult pokemonTrainerPrintEnumeration(PokemonTrainer trainer,
         FILE* file) {
     if (NULL == trainer || NULL == file) return POKEMON_TRAINER_NULL_ARG;
 
+    PokemonResult ret;
+
     for (int i = 1; i <= trainer->local_pokemon->length; i++) {
         Pokemon pokemon = pokemonListGet(trainer->local_pokemon, i);
         fprintf(file, "%s: ", trainer->name);
-        pokemonPrintName(pokemon, file);
+        ret = pokemonPrintName(pokemon, file);
+        if (POKEMON_OUT_OF_MEM == ret) return POKEMON_TRAINER_OUT_OF_MEM;
         fprintf(file, "\n");
-        pokemonPrintName(pokemon, file);
+        ret = pokemonPrintName(pokemon, file);
+        if (POKEMON_OUT_OF_MEM == ret) return POKEMON_TRAINER_OUT_OF_MEM;
         fprintf(file, ": ");
-        pokemonPrintVoice(pokemon, file);
+        ret = pokemonPrintVoice(pokemon, file);
+        if (POKEMON_OUT_OF_MEM == ret) return POKEMON_TRAINER_OUT_OF_MEM;
         fprintf(file, "\n");
     }
 
