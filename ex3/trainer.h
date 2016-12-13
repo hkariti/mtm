@@ -5,6 +5,7 @@
 #include "item.h"
 #include "pokemon.h"
 #include "location.h"
+#include "store.h"
 #include "print_utils.h"
 
 typedef struct Trainer_t *Trainer;
@@ -28,7 +29,7 @@ MtmErrorCode trainerHealPokemon(Trainer trainer, int pokemon_id);
 MtmErrorCode trainerTrainPokemon(Trainer trainer, int pokemon_id);
 MtmErrorCode trainersBattle(Trainer trainer_1, int pokemon_1_id, Trainer trainer_2, int pokemon_2_id);
 MtmErrorCode tarinerGoToLocation(Trainer trainer, char* location_name);
-MtmErrorCode trainerBuyItem(Trainer trainer, ItemType type, int value); // who should convert type string to enum?
+MtmErrorCode trainerBuyItem(Trainer trainer, Store store, ItemType type, int value); // who should convert type string to enum?
 
 char* getTrainerName(Trainer trainer);
 double getTrainerXP(Trainer trainer);
