@@ -9,32 +9,44 @@ store:
     addItem()
     list of items
     removeItem()
-    printStock()
+    print()
     getItem()
 
 item:
     type
     value
+    quantity
     create() and destroy() methods. maybe copy()
+    copy()
     getPrice() method
+    incQuantity()
+    decQuantity()
+    isOver()
+    resetQuantity()
+    print()
 
 pokemon:
     species
-    hp
+    hp - double
     cp
     cp_extra - gained by candies
     level
-    types list
+    types set
     pokemon_id, -1 if free
     create() - gets list of evolutions
     getCP() - effective cp after candies
+    getHP()
+    getLevel()
+    getSpecies()
     giveCandy()
     givePotion()
     battle() - gets target trainer and target pokemon. returns if pokemon is dead/evolved/etc
     getXpWorth()  - how much xp is gained by capturing
+    isDead()
+    print()
 
 trainer:
-    xp
+    xp - double
     list of pokemon
     list of items
     money
@@ -44,9 +56,12 @@ trainer:
     healPokemon()
     trainPokemon()
     printTrainerDetails()
+    battle()
     go()
     buyItem()
     getName()
+    getXP()
+    print()
 
 locations:
     name
@@ -57,6 +72,7 @@ locations:
     addNeighbor()
     getName()
     getNeighbor() 
+    print()
 
 game:
     locations dict
