@@ -1,0 +1,74 @@
+objects:
+- store
+- pokemon
+- location
+- trainer
+- item
+
+store:
+    addItem()
+    list of items
+    removeItem()
+    printStock()
+    getItem()
+
+item:
+    type
+    value
+    create() and destroy() methods. maybe copy()
+    getPrice() method
+
+pokemon:
+    species
+    hp
+    cp
+    cp_extra - gained by candies
+    level
+    types list
+    pokemon_id, -1 if free
+    create() - gets list of evolutions
+    getCP() - effective cp after candies
+    giveCandy()
+    givePotion()
+    battle() - gets target trainer and target pokemon. returns if pokemon is dead/evolved/etc
+    getXpWorth()  - how much xp is gained by capturing
+
+trainer:
+    xp
+    list of pokemon
+    list of items
+    money
+    current_location
+    addPokemon()
+    getPokemonById()
+    healPokemon()
+    trainPokemon()
+    printTrainerDetails()
+    go()
+    buyItem()
+    getName()
+
+locations:
+    name
+    next_locations
+    pokemon list
+    pushPokemon()
+    popPokemon()
+    addNeighbor()
+    getName()
+    getNeighbor() 
+
+game:
+    locations dict
+    store pointer
+    trainers dict
+    trainerAdd()
+    trainerGo()
+    storeAdd()
+    trainerPurchase()
+    battleFight()
+    pokemonHeal()
+    pokemonTrain()
+    reportTrainer()
+    reportLocations()
+    reportStock()
