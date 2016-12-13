@@ -1,0 +1,12 @@
+trainer add Ash 100 berlin
+trainer add Clemont 150 london
+trainer add Serena 30 sydney
+trainer add Bonnie -10 madrid
+trainer go Ash london
+trainer go Ash paris
+trainer go Serena madrid
+trainer go Clemont paris
+trainer go Bonnie paris
+battle fight Ash Clemont 1 2
+report trainer Clemont
+report trainer Ash

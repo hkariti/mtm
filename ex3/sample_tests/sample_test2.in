@@ -1,0 +1,21 @@
+trainer add Ash 100 paris
+trainer add Clemont 150 london
+store add candy 10 1
+store add potion 20 2
+store add candy 20 1
+store add candy 200 1
+report stock
+trainer purchase Ash candy 10
+trainer purchase Clemont candy 10
+trainer purchase Clemont candy 20
+trainer purchase Ash candy 20
+trainer purchase Ash candy 200
+report trainer Ash
+report trainer Clemont
+battle fight Ash Clemont 1 1
+pokemon train Ash 1
+pokemon heal Ash 1
+trainer purchase Ash potion 20
+pokemon heal Ash 1
+report trainer Ash
+report stock

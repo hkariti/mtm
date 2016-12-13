@@ -1,0 +1,22 @@
+bulbasaur 10 GRASS POISON
+ivysaur 20 GRASS POISON
+venusaur 40 GRASS POISON
+charmander 15 FIRE
+charmeleon 35 FIRE
+charizard 50 FIRE FLYING
+squirtle 10 WATER
+wartortle 25 WATER
+blastoise 40 WATER
+caterpie 10 BUG
+metapod 20 BUG
+butterfree 45 BUG FLYING
+weedle 10 BUG POISON
+kakuna 15 BUG POISON
+beedrill 30 BUG POISON
+pidgey 20 NORMAL FLYING
+pidgeotto 40 NORMAL FLYING
+pidgeot 50 NORMAL FLYING
+rattata 15 NORMAL
+raticate 20 NORMAL
+pikachu 30 ELECTRIC
+raichu 60 ELECTRIC

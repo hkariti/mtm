@@ -1,0 +1,14 @@
+bulbasaur ivysaur 3
+ivysaur venusaur 6
+charmanader charmeleon 3
+charmeleon charizard 8
+squirtle wartortle 2
+wartortle blastoise 4
+caterpie metapod 3
+metapod butterfree 5
+weedle kakuna 4
+kakuna beedrill 6
+pidgey pidgeotto 4
+pidgeotto pidgeot 8
+rattata raticate 5
+pikachu raichu 8
