@@ -3,6 +3,17 @@
 
 typedef struct Item_t *Item;
 
+enum ItemType {
+	Potion,
+	Candy
+};
+
+struct Item_t { //TODO: move to .c file
+	ItemType type;
+	int value;
+	int quantity;
+};
+
 Item createItem(char* type, int value, int quantity);
 void destroyITem(Item item);
 Item copyItem(Item item);
