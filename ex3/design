@@ -34,13 +34,14 @@ pokemon:
     types set
     pokemon_id, -1 if free
     create() - gets list of evolutions
+    destroy()
     getCP() - effective cp after candies
     getHP()
     getLevel()
     getSpecies()
     giveCandy()
     givePotion()
-    battle() - gets target trainer and target pokemon. returns if pokemon is dead/evolved/etc
+    battle() - gets target trainer and target pokemon
     getXpWorth()  - how much xp is gained by capturing
     isDead()
     print()
@@ -61,7 +62,6 @@ trainer:
     buyItem()
     getName()
     getXP()
-    print()
 
 locations:
     name
