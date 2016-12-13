@@ -5,6 +5,7 @@
 #include "list.h"
 #include "item.h"
 #include "trainer.h"
+#include "print_utils.h"
 
 typedef struct Pokemon_t *Pokemon;
 
@@ -28,8 +29,8 @@ int getPokemonLevel(Pokemon pokemon);
 char* getPokemonSpecie(Pokemon pokemon);
 double getPokemonXPValue(Pokemon pokemon);
 
-void giveCandy(Pokemon pokemon, Item candy);
-void givePotion(Pokemon pokemon, Item potion);
+void pokemonGiveCandy(Pokemon pokemon, Item candy);
+void pokemonGivePotion(Pokemon pokemon, Item potion);
 
 bool isPokemonDead(Pokemon pokemon);
 

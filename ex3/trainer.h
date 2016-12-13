@@ -27,7 +27,7 @@ Pokemon getTrainerPokemon(Trainer trainer, int pokemon_id); //do we really need 
 MtmErrorCode trainerHealPokemon(Trainer trainer, int pokemon_id);
 MtmErrorCode trainerTrainPokemon(Trainer trainer, int pokemon_id);
 MtmErrorCode trainersBattle(Trainer trainer_1, int pokemon_1_id, Trainer trainer_2, int pokemon_2_id);
-MtmErrorCode toToLocation(Trainer trainer, char* location_name);
+MtmErrorCode tarinerGoToLocation(Trainer trainer, char* location_name);
 MtmErrorCode trainerBuyItem(Trainer trainer, ItemType type, int value); // who should convert type string to enum?
 
 char* getTrainerName(Trainer trainer);
