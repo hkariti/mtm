@@ -11,14 +11,16 @@ enum ItemType {
 };
 
 struct Item_t { //TODO: move to .c file
-	ItemType type;
 	int value;
 	int quantity;
+	ItemType type;
 };
 
-Item createItem(char* type, int value, int quantity);
+Item createItem(ItemType type, int value, int quantity);
 void destroyITem(Item item);
 Item copyItem(Item item);
+int itemCompareByValue(Item item_1, Item item_2);
+
 void printItem(Item item);
 int getItemPrice(Item item);
 void itemIncreaseQuantity(Item item);
