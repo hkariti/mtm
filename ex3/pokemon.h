@@ -3,7 +3,6 @@
 
 #include "set.h"
 #include "list.h"
-#include "item.h"
 #include "trainer.h"
 #include "print_utils.h"
 #include "pokedex.h"
@@ -32,8 +31,8 @@ int getPokemonLevel(Pokemon pokemon);
 char* getPokemonSpecie(Pokemon pokemon);
 double getPokemonXPValue(Pokemon pokemon);
 
-void pokemonGiveCandy(Pokemon pokemon, Item candy);
-void pokemonGivePotion(Pokemon pokemon, Item potion);
+void pokemonGiveCandy(Pokemon pokemon, int candy_value);
+void pokemonGivePotion(Pokemon pokemon, int potion_value);
 
 bool isPokemonDead(Pokemon pokemon);
 

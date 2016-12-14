@@ -2,7 +2,6 @@
 #define TRAINER_H_
 
 #include "list.h"
-#include "item.h"
 #include "pokemon.h"
 #include "location.h"
 #include "store.h"
@@ -14,8 +13,8 @@ struct Trainer_t { //TODO: move to .c file
 	char* name;
 	Location current_location;
 	List pokemons;
-	List potions;
-	List candies;
+	Inventory potions;
+	Inventory candies;
 	int money;
 	double xp;
 };
@@ -30,7 +29,7 @@ MtmErrorCode trainerHealPokemon(Trainer trainer, int pokemon_id);
 MtmErrorCode trainerTrainPokemon(Trainer trainer, int pokemon_id);
 MtmErrorCode trainersBattle(Trainer trainer_1, int pokemon_1_id, Trainer trainer_2, int pokemon_2_id);
 MtmErrorCode tarinerGoToLocation(Trainer trainer, char* location_name);
-MtmErrorCode trainerBuyItem(Trainer trainer, Store store, ItemType type, int value); // who should convert type string to enum?
+MtmErrorCode trainerBuyItem(Trainer trainer, Store store, char* type, int value); // who should convert type string to enum?
 
 char* getTrainerName(Trainer trainer);
 double getTrainerXP(Trainer trainer);
