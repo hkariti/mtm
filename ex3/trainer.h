@@ -14,7 +14,8 @@ struct Trainer_t { //TODO: move to .c file
 	char* name;
 	Location current_location;
 	List pokemons;
-	List items;
+	List potions;
+	List candies;
 	int money;
 	double xp;
 };
