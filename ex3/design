@@ -46,6 +46,16 @@ pokemon:
     isDead()
     print()
 
+pokedex:
+    pokedex_entry
+    create()
+    add()
+    get()
+    destroy()
+
+evolutions:
+    evolution_entry
+
 trainer:
     xp - double
     list of pokemon
@@ -75,6 +85,8 @@ locations:
     print()
 
 game:
+    pokedex dict
+    evolutions dict
     locations dict
     store pointer
     trainers dict
