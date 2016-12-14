@@ -6,22 +6,25 @@
 #include "item.h"
 #include "trainer.h"
 #include "print_utils.h"
+#include "pokedex.h"
+#include "evolutions.h"
 
 typedef struct Pokemon_t *Pokemon;
 
 struct Pokemon_t { //TODO: move to .c file
-	char* specie;
+	Map evolutions;
+	PokedexEntry pokemon_info;
 	double hp;
-	int cp;
 	int cp_extra;
 	int level;
-	Set types;
 	int id;
 };
 
 Pokemon createPokemon(char* specie, int cp, Set types, List* evolutions_list); //evolutions may be set?
 void destroyPokemon(Pokemon pokemon);
 void printPokemon(Pokemon pokemon);
+
+int pokemonCompareByID(Pokemon pokemon_1, Pokemon pokemon_2);
 
 int getPokemonCP(Pokemon pokemon);
 double getPokemonHP(Pokemon pokemon);
