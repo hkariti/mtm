@@ -1,6 +1,6 @@
 #include <stdlib.h>
-#include <string.h>
 #include "evolutions.h"
+#include "utils.h"
 
 struct EvolutionEntry_t {
 	PokedexEntry evolved_pokemon;
@@ -33,25 +33,13 @@ static EvolutionEntry evolutionEntryCopy(EvolutionEntry original_entry) {
   return new_entry;
 }
 
-static char* evolutionsKeyCopy(char* key) {
-  int length = strlen(key);
-  char* key_copy = malloc(length + 1);
-  if (NULL == key_copy) return NULL;
-  strcpy(key_copy, key);
-  return key_copy;
-}
-
-static int evolutionsKeyCmp(MapKeyElement str1, MapKeyElement str2) {
-  return strcmp((char*)str1, (char*)str2);
-}
-
 Evolutions createEvolutions() {
   Map evolutions;
-  evolutions = mapCreate((copyMapKeyElements)evolutionsKeyCopy,
+  evolutions = mapCreate((copyMapKeyElements)stringCopy,
                          (copyMapDataElements)evolutionEntryCopy,
-                         free,
-                         free,
-                         evolutionsKeyCmp);
+                         (freeMapKeyElements)free,
+                         (freeMapDataElements)evolutionEntryDestroy,
+                         (compareMapKeyElements)strcmp);
 
   return evolutions;
 }
