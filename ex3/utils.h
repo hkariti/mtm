@@ -1,1 +1,0 @@
-char* stringCopy(char* string);
