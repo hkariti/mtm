@@ -11,8 +11,13 @@ typedef Inventory Candies;
 Inventory createInventory();
 void destroyInventory(Inventory inventory);
 Inventory copyInventory(Inventory inventory);
-MtmErrorCode inventoryAddItem(int value);
-bool inventoryPopItem(int value); // return true if exist or false if out of stock
-void printInventory(char* inventory_type);
+MapResult inventoryAddItem(Inventory inventory, int value);
+ // return true if exist or false if out of stock
+bool inventoryPopItem(Inventory inventory, int value);
 
-#endif 
+void printInventory(Inventory inventory, char* inventory_type,
+                    FILE* output_channel);
+
+#define INVENTORY_FOREACH(iterator, inventory) MAP_FOREACH(int*, iterator, \
+                                                           inventory)
+#endif
