@@ -15,6 +15,7 @@ bool testCreateEvolutions() {
   Evolutions evolutions = createEvolutions();
 
   ASSERT_TEST(evolutions != NULL);
+  destroyEvolutions(evolutions);
   return true;
 }
 

@@ -1,6 +1,6 @@
-#include <pokedex.h>
 #include <string.h>
 #include <stdlib.h>
+#include <pokedex.h>
 #include "test_utilities.h"
 
 Set demoTypes() {
