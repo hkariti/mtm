@@ -50,6 +50,9 @@ void destroyEvolutions(Evolutions evolutions) {
 
 MapResult evolutionsAddEntry(Evolutions evolutions, char* pokemon_to_evolve,
                              unsigned int level, PokedexEntry evolved_pokemon) {
+  if (NULL == evolutions || NULL == pokemon_to_evolve || NULL == evolved_pokemon) {
+    return MAP_NULL_ARGUMENT;
+  }
   EvolutionEntry entry = evolutionEntryCreate(evolved_pokemon, level);
   if (NULL == entry) return MAP_OUT_OF_MEMORY;
   MapResult put_result = mapPut(evolutions, pokemon_to_evolve, entry);
@@ -59,6 +62,7 @@ MapResult evolutionsAddEntry(Evolutions evolutions, char* pokemon_to_evolve,
 
 PokedexEntry getEvolution(Evolutions evolutions, char* pokemon_to_evolve,
                           unsigned int level) {
+  if (NULL == evolutions || NULL == pokemon_to_evolve) return NULL;
   EvolutionEntry evolution_entry = mapGet(evolutions, pokemon_to_evolve);
   if (NULL == evolution_entry || level < evolution_entry->level) return NULL;
   return evolution_entry->evolved_pokemon;
