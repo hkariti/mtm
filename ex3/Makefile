@@ -2,7 +2,7 @@ CFLAGS=-Wall -pedantic-errors -Werror -DNDEBUG --std=c99
 LDFLAGS=-L. -lmtm -lm
 modules=pokedex evolutions
 objects=$(foreach mod,$(modules), $(mod).o)
-tests=$(foreach mod,$(modules), test_$(mod))
+tests=$(foreach mod,$(modules), $(mod)_test)
 
 evolutions.o: map.h pokedex.h set.h
 pokedex.o: map.h set.h
