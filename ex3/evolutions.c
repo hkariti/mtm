@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "evolutions.h"
+#include "utils.h"
 
 struct EvolutionEntry_t {
 	PokedexEntry evolved_pokemon;
@@ -35,7 +36,7 @@ static EvolutionEntry evolutionEntryCopy(EvolutionEntry original_entry) {
 
 Evolutions createEvolutions() {
   Map evolutions;
-  evolutions = mapCreate((copyMapKeyElements)strdup,
+  evolutions = mapCreate((copyMapKeyElements)stringCopy,
                          (copyMapDataElements)evolutionEntryCopy,
                          (freeMapKeyElements)free,
                          (freeMapDataElements)evolutionEntryDestroy,

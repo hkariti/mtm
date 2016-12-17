@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "pokedex.h"
 #include "map.h"
+#include "utils.h"
 
 static void pokedexEntryDestroy(PokedexEntry entry) {
   if (NULL == entry) return;
@@ -15,7 +16,7 @@ static PokedexEntry pokedexEntryCreate(char* species, unsigned int cp,
   if (NULL == species || NULL == types) return NULL;
   PokedexEntry entry = malloc(sizeof(struct PokedexEntry_t));
   if (NULL == entry) return NULL;
-  char *species_copy = strdup(species);
+  char *species_copy = stringCopy(species);
   Set types_copy = setCopy(types);
   entry->species = species_copy;
   entry->cp = cp;
@@ -37,7 +38,7 @@ static PokedexEntry pokedexEntryCopy(PokedexEntry original_entry) {
 
 Pokedex createPokedex() {
   Map pokedex;
-  pokedex = mapCreate((copyMapKeyElements)strdup,
+  pokedex = mapCreate((copyMapKeyElements)stringCopy,
                       (copyMapDataElements)pokedexEntryCopy,
                       (freeMapKeyElements)free,
                       (freeMapDataElements)pokedexEntryDestroy,
