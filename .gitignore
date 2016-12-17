@@ -1,6 +1,8 @@
 *.zip
 .*.swp
 *.out
+*.clang_complete
+*.o
 
 
 ## Ignore Visual Studio temporary files, build results, and
