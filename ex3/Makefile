@@ -1,4 +1,5 @@
-LDFLAGS=-L libmtm/mac -lmtm
+CFLAGS=-Wall -pedantic-errors -Werror -DNDEBUG --std=c99
+LDFLAGS=-L. -lmtm -lm
 modules=pokedex evolutions
 objects=$(foreach mod,$(modules), $(mod).o)
 tests=$(foreach mod,$(modules), test_$(mod))
