@@ -1,12 +1,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <pokedex.h>
+#include <utils.h>
 #include "test_utilities.h"
 
 Set demoTypes() {
   Set types;
 
-  types = setCreate((copySetElements)strdup, (freeSetElements)free, (compareSetElements)strcmp);
+  types = setCreate((copySetElements)stringCopy, (freeSetElements)free, (compareSetElements)strcmp);
   setAdd(types, "Fire");
   setAdd(types, "Electric");
 
