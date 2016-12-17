@@ -7,7 +7,7 @@
 struct PokedexEntry_t {
 	char* species;
 	unsigned int cp;
-	Set types;
+	Set types; //TODO: Abstract this in a TypesSet?
 };
 
 typedef struct PokedexEntry_t *PokedexEntry;
