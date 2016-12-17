@@ -7,8 +7,8 @@ tests=$(foreach mod,$(modules), test_$(mod))
 evolutions.o: map.h pokedex.h set.h
 pokedex.o: map.h set.h
 
-test_%: CFLAGS+=-I. -g
-test_%: tests/test_%.c %.o utils.o
+%_test: CFLAGS+=-I. -g
+%_test: tests/%_test.c %.o utils.o
 	gcc ${CFLAGS} -o $@ $^ ${LDFLAGS}
 	
 tests: $(tests)
