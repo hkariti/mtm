@@ -5,11 +5,11 @@
 
 struct EvolutionEntry_t {
 	PokedexEntry evolved_pokemon;
-	unsigned int level;
+	int level;
 };
 
 static EvolutionEntry evolutionEntryCreate(PokedexEntry evolved_pokemon,
-                                           unsigned int level) {
+                                           int level) {
   if (NULL == evolved_pokemon) return NULL;
   EvolutionEntry entry;
   entry = malloc(sizeof(struct EvolutionEntry_t));
@@ -50,7 +50,7 @@ void destroyEvolutions(Evolutions evolutions) {
 }
 
 MapResult evolutionsAddEntry(Evolutions evolutions, char* pokemon_to_evolve,
-                             unsigned int level, PokedexEntry evolved_pokemon) {
+                             int level, PokedexEntry evolved_pokemon) {
   if (NULL == evolutions || NULL == pokemon_to_evolve || NULL == evolved_pokemon) {
     return MAP_NULL_ARGUMENT;
   }
@@ -62,7 +62,7 @@ MapResult evolutionsAddEntry(Evolutions evolutions, char* pokemon_to_evolve,
 }
 
 PokedexEntry getEvolution(Evolutions evolutions, char* pokemon_to_evolve,
-                          unsigned int level) {
+                          int level) {
   if (NULL == evolutions || NULL == pokemon_to_evolve) return NULL;
   EvolutionEntry evolution_entry = mapGet(evolutions, pokemon_to_evolve);
   if (NULL == evolution_entry || level < evolution_entry->level) return NULL;

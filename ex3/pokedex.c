@@ -11,7 +11,7 @@ static void pokedexEntryDestroy(PokedexEntry entry) {
   free(entry);
 }
 
-static PokedexEntry pokedexEntryCreate(char* species, unsigned int cp,
+static PokedexEntry pokedexEntryCreate(char* species, int cp,
                                        Set types) {
   if (NULL == species || NULL == types) return NULL;
   PokedexEntry entry = malloc(sizeof(struct PokedexEntry_t));
@@ -50,7 +50,7 @@ void destroyPokedex(Pokedex pokedex) {
   mapDestroy(pokedex);
 }
 
-MapResult pokedexAddPokemon(Pokedex pokedex, char* species, unsigned int cp,
+MapResult pokedexAddPokemon(Pokedex pokedex, char* species, int cp,
                             Set types) {
   if (NULL == pokedex || NULL == species || NULL == types) {
     return MAP_NULL_ARGUMENT;

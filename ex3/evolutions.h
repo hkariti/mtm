@@ -11,9 +11,9 @@ typedef Map Evolutions;
 Evolutions createEvolutions();
 void destroyEvolutions(Evolutions evolutions);
 MapResult evolutionsAddEntry(Evolutions evolutions, char* pokemon_to_evolve,
-                        unsigned int level, PokedexEntry evolved_pokemon);
+                        int level, PokedexEntry evolved_pokemon);
 // return NULL if no evolution exist or level is too low
 PokedexEntry getEvolution(Evolutions evolutions, char* pokemon_to_evolve,
-                          unsigned int level);
+                          int level);
 
 #endif

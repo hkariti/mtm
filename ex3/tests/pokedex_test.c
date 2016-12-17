@@ -106,7 +106,7 @@ bool testPokedexGetPokemonInfo() {
 bool testPokedexEntryStruct() {
   Pokedex pokedex = createPokedex();
   char* name = "magikarp";
-  unsigned int cp = 0;
+  int cp = 0;
   Set types = demoTypes();
   PokedexEntry entry;
 
