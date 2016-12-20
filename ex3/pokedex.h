@@ -20,4 +20,8 @@ MapResult pokedexAddPokemon(Pokedex pokedex, char* species, int cp,
                             Set types);
 PokedexEntry pokedexGetPokemonInfo(Pokedex pokedex, char* species);
 
+char* pokedexEntryGetSpecies(PokedexEntry entry);
+int pokedexEntryGetCp(PokedexEntry entry);
+Set pokedexEntryGetTypes(PokedexEntry entry);
+
 #endif

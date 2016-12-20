@@ -104,24 +104,56 @@ bool testPokedexGetPokemonInfo() {
   return true;
 }
 
-bool testPokedexEntryStruct() {
-  Pokedex pokedex = createPokedex();
-  char* name = "magikarp";
-  int cp = 0;
-  Set types = demoTypes();
-  PokedexEntry entry;
+bool testPokedexEntryGetSpecies() {
+  Pokedex pokedex = demoPokedex();
+  PokedexEntry entry = pokedexGetPokemonInfo(pokedex, "pikachu");
+  char* species;
 
-  pokedexAddPokemon(pokedex, name, cp, types);
-  entry = pokedexGetPokemonInfo(pokedex, name);
+  // Test NULL argument
+  species = pokedexEntryGetSpecies(NULL);
+  ASSERT_TEST(NULL == species);
 
-  ASSERT_TEST(strcmp(entry->species, name) == 0);
-  ASSERT_TEST(entry->cp == cp);
-  ASSERT_TEST(setGetSize(types) == setGetSize(entry->types));
-  SET_FOREACH(char*, type, types) {
-    ASSERT_TEST(setIsIn(entry->types, type));
-  }
 
+  // Valid input
+  species = pokedexEntryGetSpecies(entry);
+  ASSERT_TEST(NULL != species);
+  free(species);
+
+  destroyPokedex(pokedex);
+  return true;
+}
+
+bool testPokedexEntryGetCp() {
+  Pokedex pokedex = demoPokedex();
+  PokedexEntry entry = pokedexGetPokemonInfo(pokedex, "pikachu");
+  int cp;
+
+  // Test NULL argument
+  cp = pokedexEntryGetCp(NULL);
+  ASSERT_TEST(-1 == cp);
+
+  // Valid input
+  cp = pokedexEntryGetCp(entry);
+  ASSERT_TEST(cp >= 0);
+
+  destroyPokedex(pokedex);
+  return true;
+}
+
+bool testPokedexEntryGetTypes() {
+  Pokedex pokedex = demoPokedex();
+  PokedexEntry entry = pokedexGetPokemonInfo(pokedex, "pikachu");
+  Set types;
+
+  // Test NULL argument
+  types = pokedexEntryGetTypes(NULL);
+  ASSERT_TEST(NULL == types);
+
+  // Valid input
+  types = pokedexEntryGetTypes(entry);
+  ASSERT_TEST(NULL != types);
   setDestroy(types);
+
   destroyPokedex(pokedex);
   return true;
 }
@@ -131,7 +163,9 @@ int main() {
   RUN_TEST(testDestroyPokedex);
   RUN_TEST(testPokedexAddPokemon);
   RUN_TEST(testPokedexGetPokemonInfo);
-  RUN_TEST(testPokedexEntryStruct);
+  RUN_TEST(testPokedexEntryGetSpecies);
+  RUN_TEST(testPokedexEntryGetCp);
+  RUN_TEST(testPokedexEntryGetTypes);
 
   return 0;
 }

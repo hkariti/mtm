@@ -68,3 +68,18 @@ PokedexEntry pokedexGetPokemonInfo(Pokedex pokedex, char* species) {
   if (NULL == pokedex || NULL == species) return NULL;
   return mapGet(pokedex, species);
 }
+
+char* pokedexEntryGetSpecies(PokedexEntry entry) {
+  if (NULL == entry) return NULL;
+  return stringCopy(entry->species);
+}
+
+int pokedexEntryGetCp(PokedexEntry entry) {
+  if (NULL == entry) return -1;
+  return entry->cp;
+}
+
+Set pokedexEntryGetTypes(PokedexEntry entry) {
+  if (NULL == entry) return NULL;
+  return setCopy(entry->types);
+}
