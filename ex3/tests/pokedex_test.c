@@ -7,7 +7,8 @@
 Set demoTypes() {
   Set types;
 
-  types = setCreate((copySetElements)stringCopy, (freeSetElements)free, (compareSetElements)strcmp);
+  types = setCreate((copySetElements)stringCopy, (freeSetElements)free,
+                    (compareSetElements)strcmp);
   setAdd(types, "Fire");
   setAdd(types, "Electric");
 
