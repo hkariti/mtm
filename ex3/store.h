@@ -3,13 +3,20 @@
 #include "map.h"
 #include "inventory.h"
 
-typedef Map Store;
+typedef struct store_t *Store;
+
+typedef enum {
+  STORE_SUCCESS,
+  STORE_INVALID_ARGUMENT,
+  STORE_ITEM_OUT_OF_STOCK,
+  STORE_OUT_OF_MEMORY
+} StoreErrorCode;
 
 Store storeCreate();
 void storeDestroy(Store store);
-MtmErrorCode storeAddItem(Store store, char* type, int value);
-MtmErrorCode storeBuytem(Store store, char* type, int value);
-int storeGetItemPrice(Store store, char* type, int value); //returns -1 if item doesnt exist
-void storePrintStock(Store store);
+StoreErrorCode storeAddItem(Store store, char* type, int value);
+StoreErrorCode storeBuyItem(Store store, char* type, int value);
+StoreErrorCode storeGetItemPrice(Store store, char* type, int value, int* price); //returns -1 if item doesnt exist
+void storePrintStock(Store store, FILE* output_channel);
 
 #endif

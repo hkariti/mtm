@@ -6,6 +6,7 @@ tests=$(foreach mod,$(modules), $(mod)_test)
 
 evolutions.o: map.h pokedex.h set.h
 pokedex.o: map.h set.h
+store_test: inventory.o
 
 %_test: CFLAGS+=-I. -g
 %_test: tests/%_test.c %.o utils.o

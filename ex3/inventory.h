@@ -5,8 +5,6 @@
 #include "map.h"
 
 typedef Map Inventory;
-typedef Inventory Potions;
-typedef Inventory Candies;
 
 Inventory createInventory();
 void destroyInventory(Inventory inventory);
