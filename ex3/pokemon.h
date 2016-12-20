@@ -36,6 +36,8 @@ void pokemonGivePotion(Pokemon pokemon, int potion_value);
 
 bool isPokemonDead(Pokemon pokemon);
 
+void pokemonCaught(int new_pokemon_id);
+
 void BattlePokemon(Trainer trainer_opponent, Pokemon pokemon_opponent); //dont think we can include trainer, maybe just get xp as param
 
 #endif
