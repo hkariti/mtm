@@ -3,7 +3,7 @@
 
 #include "list.h"
 #include "map.h"
-#include "pokemon.h"
+#include "pokedex.h"
 #include "print_utils.h"
 
 typedef struct Location_t *Location;
@@ -20,8 +20,8 @@ void printLocation(Location location);
 
 char* locationGetName(Location location);
 
-void locationPushPokemon(Location location, Pokemon pokemon);
-Pokemon locationPopPokemon(Location location);
+void locationPushPokemon(Location location, PokedexEntry pokemon);
+PokedexEntry locationPopPokemon(Location location);
 
 Location locationGetNeighour(Location location, char* neighour_name);
 void locationAddNeighbor(Location location, Location neighbor);
