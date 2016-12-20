@@ -17,6 +17,7 @@ struct Trainer_t { //TODO: move to .c file
 	Inventory candies;
 	int money;
 	double xp;
+	int total_pokemon_caught;
 };
 
 Trainer createTrainer(char* name, int budget, Location start_location);
@@ -28,7 +29,7 @@ Pokemon getTrainerPokemon(Trainer trainer, int pokemon_id); //do we really need 
 MtmErrorCode trainerHealPokemon(Trainer trainer, int pokemon_id);
 MtmErrorCode trainerTrainPokemon(Trainer trainer, int pokemon_id);
 MtmErrorCode trainersBattle(Trainer trainer_1, int pokemon_1_id, Trainer trainer_2, int pokemon_2_id);
-MtmErrorCode tarinerGoToLocation(Trainer trainer, char* location_name);
+MtmErrorCode tarinerGoToLocation(Trainer trainer, Location location);
 MtmErrorCode trainerBuyItem(Trainer trainer, Store store, char* type, int value); // who should convert type string to enum?
 
 char* getTrainerName(Trainer trainer);
