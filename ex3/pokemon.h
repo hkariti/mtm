@@ -21,6 +21,7 @@ typedef struct Pokemon_t *Pokemon;
 Pokemon createPokemon(PokedexEntry pokemon_info, Evolutions evolutions_list); //evolutions may be set?
 void destroyPokemon(Pokemon pokemon);
 void printPokemon(Pokemon pokemon, FILE* output_file);
+Pokemon copyPokemon(Pokemon pokemon);
 
 int pokemonCompareByID(Pokemon pokemon_1, Pokemon pokemon_2);
 

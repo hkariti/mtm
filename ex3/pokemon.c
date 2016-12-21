@@ -16,7 +16,7 @@ struct Pokemon_t {
 Pokemon createPokemon(PokedexEntry pokemon_info, Evolutions evolutions_list)
 {
 	if (NULL == pokemon_info || NULL == evolutions_list) return NULL;
-	Pokemon pokemon = malloc(sizeof(struct Pokemon_t));
+	Pokemon pokemon = malloc(sizeof(*pokemon));
 	if (NULL == pokemon) return NULL;
 	pokemon->pokemon_info = pokemon_info;
 	pokemon->evolutions_list = evolutions_list;
@@ -30,6 +30,19 @@ Pokemon createPokemon(PokedexEntry pokemon_info, Evolutions evolutions_list)
 void destroyPokemon(Pokemon pokemon)
 {
 	free(pokemon);
+}
+
+Pokemon copyPokemon(Pokemon pokemon) {
+	if (NULL == pokemon) return NULL;
+	Pokemon new_pokemon = malloc(sizeof(*new_pokemon));
+	if (NULL == new_pokemon) return NULL;
+	new_pokemon->cp_extra = pokemon->cp_extra;
+	new_pokemon->evolutions_list = pokemon->evolutions_list;
+	new_pokemon->hp = pokemon->hp;
+	new_pokemon->id = pokemon->id;
+	new_pokemon->level = pokemon->level;
+	new_pokemon->pokemon_info = pokemon->pokemon_info;
+	return new_pokemon;
 }
 
 void printPokemon(Pokemon pokemon, FILE* output_file)
