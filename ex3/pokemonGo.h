@@ -25,7 +25,7 @@ MtmErrorCode storeAdd(char* item_type, int value, int quantity);
 MtmErrorCode trainerPurchase(char* trainer_name, char* item_type, int value);
 MtmErrorCode battleFight(char* trainer1_name, char* trainer2_name, int pokemon1_id, int pokemon2_id);
 MtmErrorCode pokemonHeal(char* trainer_name, int pokemon_id);
-MtmErrorCode pokemonTrain(char* trainer_name, int pokemon_id).
+MtmErrorCode pokemonTrain(char* trainer_name, int pokemon_id);
 MtmErrorCode reportTrainer(char* trainer_name);
 MtmErrorCode reportLocations();
 MtmErrorCode reportStock();
