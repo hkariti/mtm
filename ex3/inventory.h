@@ -14,6 +14,7 @@ Inventory copyInventory(Inventory inventory);
 MapResult inventoryAddItem(Inventory inventory, int value);
  // return true if exist or false if out of stock
 bool inventoryPopItem(Inventory inventory, int value);
+bool inventoryContains(Inventory inventory, int value);
 
 void printInventory(Inventory inventory, char* inventory_type,
                     FILE* output_channel);

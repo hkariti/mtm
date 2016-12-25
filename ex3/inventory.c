@@ -52,7 +52,11 @@ MapResult inventoryAddItem(Inventory inventory, int value) {
   }
 
   return mapPut(inventory, &value, amount);
-  
+
+}
+
+bool inventoryContains(Inventory inventory, int value) {
+  return mapContains(inventory, &value);
 }
 
 bool inventoryPopItem(Inventory inventory, int value) {

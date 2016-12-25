@@ -72,6 +72,15 @@ bool testInventoryAddItem() {
   return true;
 }
 
+bool testInventoryContains() {
+  Inventory inventory = demoInventory();
+
+  ASSERT_TEST(inventoryContains(inventory, 1) == true);
+  ASSERT_TEST(inventoryContains(inventory, 1337) == false);
+
+  destroyInventory(inventory);
+  return true;
+}
 bool testInventoryPopItem() {
   Inventory inventory = demoInventory();
   bool pop_result;
@@ -123,6 +132,7 @@ int main() {
   RUN_TEST(testDestroyInventory);
   RUN_TEST(testCopyInventory);
   RUN_TEST(testInventoryAddItem);
+  RUN_TEST(testInventoryContains);
   RUN_TEST(testInventoryPopItem);
   RUN_TEST(testPrintInventory);
   RUN_TEST(testInventoryForeach);
