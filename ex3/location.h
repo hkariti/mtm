@@ -27,14 +27,14 @@ char* locationGetName(Location location);
 // errors: LOCATION_INVALID_ARGUMENT, LOCATION_OUT_OF_MEMORY
 LocationErrorCode locationPushPokemon(Location location, Pokemon pokemon);
 
-// return null if null arg or if empty list
+// return null if null arg or if empty list or out of memory
 Pokemon locationPopPokemon(Location location);
 
 // return true if location is empty
 bool locationIsEmpty(Location location);
 
-// return null if null arg or neighbour doesn't exist
-Location locationGetNeighour(Location location, char* neighour_name);
+// return false if null arg or not neighbor
+bool locationIsNeighour(Location location, Location neighbour);
 
 // errors: LOCATION_INVALID_ARGUMENT, LOCATION_OUT_OF_MEMORY
 LocationErrorCode locationAddNeighbor(Location location, Location neighbor);

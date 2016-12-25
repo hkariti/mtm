@@ -26,6 +26,7 @@ typedef enum {
 
 Trainer createTrainer(char* name, int budget, Location start_location);
 void destroyTrainer(Trainer trainer);
+Trainer trainerCopy(Trainer trainer);
 void printTrainer(Trainer trainer, FILE* output_channel);
 
 // NULL is pokemon doesn't exist or null arg
