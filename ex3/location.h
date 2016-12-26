@@ -3,27 +3,22 @@
 
 #include "list.h"
 #include "map.h"
-#include "pokedex.h"
+#include "pokemon.h"
 #include "print_utils.h"
 
 typedef struct Location_t *Location;
 
-struct Location_t { //TODO: move to .c file
-	char* name;
-	Map neighbors;
-	List pokemons;
-};
-
 Location createLocation(char* name);
 void destroyLocation(Location location);
-void printLocation(Location location);
+void printLocation(Location location, FILE* output_file);
+Location copyLocation(Location location);
 
 char* locationGetName(Location location);
 
-void locationPushPokemon(Location location, PokedexEntry pokemon);
-PokedexEntry locationPopPokemon(Location location);
+ListResult locationPushPokemon(Location location, Pokemon pokemon);
+Pokemon locationPopPokemon(Location location);
 
 Location locationGetNeighour(Location location, char* neighour_name);
-void locationAddNeighbor(Location location, Location neighbor);
+MapResult locationAddNeighbor(Location location, Location neighbor);
 
 #endif
