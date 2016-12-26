@@ -70,17 +70,17 @@ Location copyLocation(Location location)
 }
 
 
-void printLocation(Location location, FILE * output_file)
+void printLocation(Location location, FILE * output_channel)
 {
 	assert(location);
-	assert(output_file);
+	assert(output_channel);
 
 	Pokemon first_pokemon = listGetFirst(location->pokemons);
 	char* pokemon_species = NULL;;
 	if (NULL != first_pokemon) {
 		char* pokemon_species = pokemonGetSpecies(first_pokemon); //what happens if copy fails?
 	}
-	mtmPrintLocation(output_file, location->name, pokemon_species);
+	mtmPrintLocation(output_channel, location->name, pokemon_species);
 	free(pokemon_species);
 }
 

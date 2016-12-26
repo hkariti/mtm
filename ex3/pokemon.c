@@ -45,12 +45,14 @@ Pokemon copyPokemon(Pokemon pokemon) {
 	return new_pokemon;
 }
 
-void printPokemon(Pokemon pokemon, FILE* output_file)
+void printPokemon(Pokemon pokemon, FILE* output_channel)
 {
 	assert(pokemon);
-	assert(output_file);
-	mtmPrintPokemon(output_file, pokemon->id, pokedexEntryGetSpecies(pokemon->pokemon_info),
+	assert(output_channel);
+	char* pokemon_species = pokedexEntryGetSpecies(pokemon->pokemon_info);
+	mtmPrintPokemon(output_channel, pokemon->id, pokemon_species,
 		pokemon->hp, pokemonGetCP(pokemon), pokemon->level);
+	free(pokemon_species);
 }
 
 int pokemonCompareByID(Pokemon pokemon_1, Pokemon pokemon_2)
@@ -113,7 +115,7 @@ MtmErrorCode pokemonGivePotion(Pokemon pokemon, int potion_value)
 	return MTM_SUCCESS;
 }
 
-int pokemonPokecoinsValue(Pokemon pokemon) { // private function
+static int pokemonPokecoinsValue(Pokemon pokemon) { // need to verify all types are lowercase
 	assert(pokemon);
 
 	Set types = pokedexEntryGetTypes(pokemon->pokemon_info);
@@ -123,6 +125,7 @@ int pokemonPokecoinsValue(Pokemon pokemon) { // private function
 			0 == strcmp(current_type, "flying") ||
 			0 == strcmp(current_type, "poison"))
 		{
+			setDestroy(types);
 			return DOUBLE_STAR_TYPE_POKECOINS;
 		}
 		else if (0 == strcmp(current_type, "rock") ||
@@ -134,6 +137,7 @@ int pokemonPokecoinsValue(Pokemon pokemon) { // private function
 			pokecoins_value = ONE_STAR_TYPE_POKECOINS;
 		}
 	}
+	setDestroy(types);
 	return pokecoins_value;
 }
 
@@ -168,8 +172,10 @@ void pokemonBattle(Pokemon pokemon, Pokemon opponent_pokemon, double opponent_tr
 		pokemon->hp = 0;
 	}
 
+	char* pokemon_spceies = pokedexEntryGetSpecies(pokemon->pokemon_info);
 	PokedexEntry evolved_pokemon_info = getEvolution(pokemon->evolutions_list,
-		pokedexEntryGetSpecies(pokemon->pokemon_info), pokemon->level);
+		pokemon_spceies, pokemon->level);
+	free(pokemon_spceies);
 	if (evolved_pokemon_info != NULL) {
 		pokemon->pokemon_info = evolved_pokemon_info;
 	}

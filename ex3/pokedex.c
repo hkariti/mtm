@@ -4,6 +4,12 @@
 #include "map.h"
 #include "utils.h"
 
+struct PokedexEntry_t {
+	char* species;
+	int cp;
+	Set types;
+};
+
 static void pokedexEntryDestroy(PokedexEntry entry) {
   if (NULL == entry) return;
   setDestroy(entry->types);

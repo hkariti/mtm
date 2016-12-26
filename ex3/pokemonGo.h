@@ -15,10 +15,10 @@ struct PokemonGo_t { //TODO: move to .c file
 	Map locations;
 	Map trainers;
 	Store store;
-	FILE* output_file;
+	FILE* output_channel;
 };
 
-PokemonGo createPokemonGo(Pokedex pokedex, Evolutions evolutions, Map locations, FILE* output_file);
+PokemonGo createPokemonGo(Pokedex pokedex, Evolutions evolutions, Map locations, FILE* output_channel);
 MtmErrorCode trainerAdd(PokemonGo pokemon_go, char* trainer_name, int budget, char* start_location);
 MtmErrorCode trainerGo(char* trainer_name, char* new_location);
 MtmErrorCode storeAdd(char* item_type, int value, int quantity);

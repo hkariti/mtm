@@ -4,17 +4,33 @@
 #include "print_utils.h"
 #include "map.h"
 
+typedef enum {
+	INVENTORY_SUCCESS,
+	INVENTORY_INVALID_ARGUMENT,
+	INVENTORY_OUT_OF_MEMORY,
+	INVENTORY_OUT_OF_STOCK,
+	INVENTORY_POKEMON_NOT_EXIST,
+} InventoryErrorCode;
+
+
+//TODO: implement invntory.c using new struct
+typedef struct Inventory_t { //TODO: move to .c file
+	Map Inventory;
+	char* type;
+} *Inventory;
+
 typedef Map Inventory;
 
-Inventory createInventory();
+Inventory createInventory(char* type);
 void destroyInventory(Inventory inventory);
 Inventory copyInventory(Inventory inventory);
-MapResult inventoryAddItem(Inventory inventory, int value);
- // return true if exist or false if out of stock
-bool inventoryPopItem(Inventory inventory, int value);
+InventoryErrorCode inventoryAddItem(Inventory inventory, int value);
+InventoryErrorCode inventoryRemoveItem(Inventory inventory, int value);
+
+// return false if null arg
 bool inventoryContains(Inventory inventory, int value);
 
-void printInventory(Inventory inventory, char* inventory_type,
+void printInventory(Inventory inventory,
                     FILE* output_channel);
 
 #define INVENTORY_FOREACH(iterator, inventory) MAP_FOREACH(int*, iterator, \

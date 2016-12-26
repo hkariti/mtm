@@ -6,19 +6,29 @@
 #include "pokemon.h"
 #include "print_utils.h"
 
+typedef enum {
+	LOCATION_SUCCESS,
+	LOCATION_INVALID_ARGUMENT,
+	LOCATION_OUT_OF_MEMORY,
+} LocationErrorCode;
+
 typedef struct Location_t *Location;
 
 Location createLocation(char* name);
 void destroyLocation(Location location);
-void printLocation(Location location, FILE* output_file);
+void printLocation(Location location, FILE* output_channel);
 Location copyLocation(Location location);
 
+// return null if null arg
 char* locationGetName(Location location);
 
-ListResult locationPushPokemon(Location location, Pokemon pokemon);
+LocationErrorCode locationPushPokemon(Location location, Pokemon pokemon);
+
+// return null if null arg or if empty list
 Pokemon locationPopPokemon(Location location);
 
+// return null if null arg or neighbour doesn't exist
 Location locationGetNeighour(Location location, char* neighour_name);
-MapResult locationAddNeighbor(Location location, Location neighbor);
+LocationErrorCode locationAddNeighbor(Location location, Location neighbor);
 
 #endif
