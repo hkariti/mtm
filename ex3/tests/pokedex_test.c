@@ -56,26 +56,26 @@ bool testDestroyPokedex() {
 
 bool testPokedexAddPokemon() {
   Pokedex pokedex = createPokedex();
-  MapResult add_result;
+  PokedexErrorCode add_result;
   Set types = demoTypes();
 
   // Test NULL argument
   add_result = pokedexAddPokemon(NULL, "pikachu", 1, types);
-  ASSERT_TEST(MAP_NULL_ARGUMENT == add_result);
+  ASSERT_TEST(POKEDEX_INVALID_ARGUMENT == add_result);
   add_result = pokedexAddPokemon(pokedex, NULL, 1, types);
-  ASSERT_TEST(MAP_NULL_ARGUMENT == add_result);
+  ASSERT_TEST(POKEDEX_INVALID_ARGUMENT == add_result);
   add_result = pokedexAddPokemon(pokedex, "pikachu", 1, NULL);
-  ASSERT_TEST(MAP_NULL_ARGUMENT == add_result);
+  ASSERT_TEST(POKEDEX_INVALID_ARGUMENT == add_result);
 
   // Test new entry
   add_result = pokedexAddPokemon(pokedex, "pikachu", 1, types);
-  ASSERT_TEST(MAP_SUCCESS == add_result);
+  ASSERT_TEST(POKEDEX_SUCCESS == add_result);
   add_result = pokedexAddPokemon(pokedex, "raichu", 1, types);
-  ASSERT_TEST(MAP_SUCCESS == add_result);
+  ASSERT_TEST(POKEDEX_SUCCESS == add_result);
 
   // Test existing entry
   add_result = pokedexAddPokemon(pokedex, "pikachu", 2, types);
-  ASSERT_TEST(MAP_SUCCESS == add_result);
+  ASSERT_TEST(POKEDEX_SUCCESS == add_result);
 
   setDestroy(types);
   destroyPokedex(pokedex);

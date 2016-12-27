@@ -11,16 +11,9 @@ typedef enum {
 	INVENTORY_OUT_OF_STOCK,
 } InventoryErrorCode;
 
-
-//TODO: implement invntory.c using new struct
-typedef struct Inventory_t { //TODO: move to .c file
-	Map Inventory;
-	char* type;
-} *Inventory;
-
 typedef Map Inventory;
 
-Inventory createInventory(char* type);
+Inventory createInventory();
 void destroyInventory(Inventory inventory);
 // NULL if alloc error
 Inventory copyInventory(Inventory inventory);
@@ -32,7 +25,7 @@ InventoryErrorCode inventoryRemoveItem(Inventory inventory, int value);
 // return false if null arg
 bool inventoryContains(Inventory inventory, int value);
 
-void printInventory(Inventory inventory,
+void printInventory(Inventory inventory, char* type,
                     FILE* output_channel);
 
 #define INVENTORY_FOREACH(iterator, inventory) MAP_FOREACH(int*, iterator, \

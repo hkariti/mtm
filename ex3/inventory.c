@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <assert.h>
 #include <inventory.h>
 
 static int uintCompare(int* a, int* b) {
@@ -37,45 +38,49 @@ Inventory copyInventory(Inventory inventory) {
   return mapCopy(inventory);
 }
 
-MapResult inventoryAddItem(Inventory inventory, int value) {
-  if (NULL == inventory) return MAP_NULL_ARGUMENT;
-  int *amount;
+InventoryErrorCode inventoryAddItem(Inventory inventory, int value) {
+  if (NULL == inventory) return INVENTORY_INVALID_ARGUMENT;
+  int *amount, *new_amount;
+  new_amount = malloc(sizeof(int));
+  if (NULL == new_amount) return INVENTORY_OUT_OF_MEMORY;
   amount = mapGet(inventory, &value);
   if (NULL == amount) {
     // Item not in inventory, add a new item
-    amount = malloc(sizeof(int));
-    if (NULL == amount) return MAP_OUT_OF_MEMORY;
-    *amount = 1;
+    *new_amount = 1;
   } else {
     // Item in inventory, increase its quantity by one
-    *amount = *amount + 1;
+    *new_amount = *amount + 1;
   }
 
-  // TODO: Free amount, possible memory leak here
-  return mapPut(inventory, &value, amount);
-
+  MapResult put_result = mapPut(inventory, &value, new_amount);
+  free(new_amount);
+  assert(put_result != MAP_NULL_ARGUMENT);
+  if (MAP_OUT_OF_MEMORY == put_result) return INVENTORY_OUT_OF_MEMORY;
+  return INVENTORY_SUCCESS;
 }
 
 bool inventoryContains(Inventory inventory, int value) {
   return mapContains(inventory, &value);
 }
 
-bool inventoryPopItem(Inventory inventory, int value) {
-  if (NULL == inventory) return false;
+InventoryErrorCode inventoryRemoveItem(Inventory inventory, int value) {
+  if (NULL == inventory) return INVENTORY_INVALID_ARGUMENT;
   int *amount;
 
   amount = mapGet(inventory, &value);
-  // Return false if item isn't in stock
-  if (NULL == amount) return false;
+  // Check if item is out of stock
+  if (NULL == amount) return INVENTORY_OUT_OF_STOCK;
   // Decrease item's quantity
   *amount = *amount - 1;
   // Remove item from inventory if it's run out
   if (*amount == 0) {
     mapRemove(inventory, &value);
   } else {
-    mapPut(inventory, &value, amount);
+    MapResult put_result = mapPut(inventory, &value, amount);
+    assert(put_result != MAP_NULL_ARGUMENT);
+    if (MAP_OUT_OF_MEMORY == put_result) return INVENTORY_OUT_OF_MEMORY;
   }
-  return true;
+  return INVENTORY_SUCCESS;
 }
 
 void printInventory(Inventory inventory, char* inventory_type,

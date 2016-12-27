@@ -8,7 +8,7 @@ Inventory demoInventory() {
   inventoryAddItem(inventory, 1);
   inventoryAddItem(inventory, 1);
   inventoryAddItem(inventory, 1);
- 
+
   inventoryAddItem(inventory, 2);
   inventoryAddItem(inventory, 2);
 
@@ -55,52 +55,58 @@ bool testCopyInventory() {
 
 bool testInventoryAddItem() {
   Inventory inventory = createInventory();
-  MapResult add_result;
+  InventoryErrorCode add_result;
 
   // NULL input
   add_result = inventoryAddItem(NULL, 1);
-  ASSERT_TEST(MAP_NULL_ARGUMENT == add_result);
+  ASSERT_TEST(INVENTORY_INVALID_ARGUMENT == add_result);
 
   // New item
   add_result = inventoryAddItem(inventory, 1);
-  ASSERT_TEST(MAP_SUCCESS == add_result);
+  ASSERT_TEST(INVENTORY_SUCCESS == add_result);
 
   // Existing item
   add_result = inventoryAddItem(inventory, 1);
-  ASSERT_TEST(MAP_SUCCESS == add_result);
+  ASSERT_TEST(INVENTORY_SUCCESS == add_result);
 
+  destroyInventory(inventory);
   return true;
 }
 
 bool testInventoryContains() {
   Inventory inventory = demoInventory();
 
+  // NULL input
+  ASSERT_TEST(inventoryContains(NULL, 1) == false);
+
+  // Valid input
   ASSERT_TEST(inventoryContains(inventory, 1) == true);
   ASSERT_TEST(inventoryContains(inventory, 1337) == false);
 
   destroyInventory(inventory);
   return true;
 }
-bool testInventoryPopItem() {
+
+bool testInventoryRemoveItem() {
   Inventory inventory = demoInventory();
-  bool pop_result;
+  InventoryErrorCode remove_result;
 
   // NULL input
-  pop_result = inventoryPopItem(NULL, 1);
-  ASSERT_TEST(false == pop_result);
+  remove_result = inventoryRemoveItem(NULL, 1);
+  ASSERT_TEST(INVENTORY_INVALID_ARGUMENT == remove_result);
 
   // Item not in stock
-  pop_result = inventoryPopItem(inventory, 1337);
-  ASSERT_TEST(false == pop_result);
+  remove_result = inventoryRemoveItem(inventory, 1337);
+  ASSERT_TEST(INVENTORY_OUT_OF_STOCK == remove_result);
 
   // Successful input; "2" exists twice in our demo inventory
-  pop_result = inventoryPopItem(inventory, 2);
-  ASSERT_TEST(true == pop_result);
-  pop_result = inventoryPopItem(inventory, 2);
-  ASSERT_TEST(true == pop_result);
+  remove_result = inventoryRemoveItem(inventory, 2);
+  ASSERT_TEST(INVENTORY_SUCCESS == remove_result);
+  remove_result = inventoryRemoveItem(inventory, 2);
+  ASSERT_TEST(INVENTORY_SUCCESS == remove_result);
   // Item has run out now
-  pop_result = inventoryPopItem(inventory, 2);
-  ASSERT_TEST(false == pop_result);
+  remove_result = inventoryRemoveItem(inventory, 2);
+  ASSERT_TEST(INVENTORY_OUT_OF_STOCK == remove_result);
 
   destroyInventory(inventory);
   return true;
@@ -124,6 +130,8 @@ bool testInventoryForeach() {
   INVENTORY_FOREACH(i, inventory) {
     ASSERT_TEST(*i > 0);
   }
+
+  destroyInventory(inventory);
   return true;
 }
 
@@ -133,7 +141,7 @@ int main() {
   RUN_TEST(testCopyInventory);
   RUN_TEST(testInventoryAddItem);
   RUN_TEST(testInventoryContains);
-  RUN_TEST(testInventoryPopItem);
+  RUN_TEST(testInventoryRemoveItem);
   RUN_TEST(testPrintInventory);
   RUN_TEST(testInventoryForeach);
 

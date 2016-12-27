@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "pokedex.h"
 #include "map.h"
 #include "utils.h"
@@ -56,18 +57,20 @@ void destroyPokedex(Pokedex pokedex) {
   mapDestroy(pokedex);
 }
 
-MapResult pokedexAddPokemon(Pokedex pokedex, char* species, int cp,
+PokedexErrorCode pokedexAddPokemon(Pokedex pokedex, char* species, int cp,
                             Set types) {
   if (NULL == pokedex || NULL == species || NULL == types) {
-    return MAP_NULL_ARGUMENT;
+    return POKEDEX_INVALID_ARGUMENT;
   }
   PokedexEntry entry;
   MapResult put_result;
   entry = pokedexEntryCreate(species, cp, types);
-  if (NULL == entry) return MAP_OUT_OF_MEMORY;
+  if (NULL == entry) return POKEDEX_OUT_OF_MEMORY;
   put_result = mapPut(pokedex, species, entry);
+  assert(put_result != MAP_NULL_ARGUMENT);
   pokedexEntryDestroy(entry);
-  return put_result;
+  if (MAP_OUT_OF_MEMORY == put_result) return POKEDEX_OUT_OF_MEMORY;
+  return POKEDEX_SUCCESS;
 }
 
 PokedexEntry pokedexGetPokemonInfo(Pokedex pokedex, char* species) {
