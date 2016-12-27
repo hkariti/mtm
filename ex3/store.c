@@ -41,42 +41,38 @@ void storeDestroy(Store store) {
 }
 
 StoreErrorCode storeAddItem(Store store, char* type, int value) {
-  assert(store != NULL);
-  assert(type != NULL);
-  if (value <= 0) return STORE_INVALID_ARGUMENT;
+  if (NULL == store || NULL == type || value <= 0) return STORE_INVALID_ARGUMENT;
 
   Inventory chosen_inventory;
-  MapResult add_item_result;
+  InventoryErrorCode add_item_result;
   chosen_inventory = storeGetInventoryByType(store, type);
   if (NULL == chosen_inventory) return STORE_INVALID_ARGUMENT;
   add_item_result = inventoryAddItem(chosen_inventory, value);
-  assert(add_item_result != MAP_NULL_ARGUMENT);
-  if (add_item_result == MAP_OUT_OF_MEMORY) return STORE_OUT_OF_MEMORY;
+  assert(add_item_result != INVENTORY_INVALID_ARGUMENT);
+  if (add_item_result == INVENTORY_OUT_OF_MEMORY) return STORE_OUT_OF_MEMORY;
   return STORE_SUCCESS;
 }
 
 StoreErrorCode storeBuyItem(Store store, char* type, int value) {
-  assert(store != NULL);
-  assert(type != NULL);
-  if (value <= 0) return STORE_INVALID_ARGUMENT;
+  if (NULL == store || NULL == type || value <= 0) return STORE_INVALID_ARGUMENT;
 
   Inventory chosen_inventory;
-  bool pop_result;
+  InventoryErrorCode remove_result;
   chosen_inventory = storeGetInventoryByType(store, type);
   if (NULL == chosen_inventory) return STORE_INVALID_ARGUMENT;
-  pop_result = inventoryPopItem(chosen_inventory, value);
-  if (!pop_result) return STORE_ITEM_OUT_OF_STOCK;
+  remove_result = inventoryRemoveItem(chosen_inventory, value);
+  if (INVENTORY_OUT_OF_MEMORY == remove_result) return STORE_OUT_OF_MEMORY;
+  if (INVENTORY_OUT_OF_STOCK == remove_result) return STORE_ITEM_OUT_OF_STOCK;
   return STORE_SUCCESS;
 }
 
-StoreErrorCode storeGetItemPrice(Store store, char* type, int value, int* price)
-                              {
-  assert(store != NULL);
-  assert(type != NULL);
-  assert(price != NULL);
+StoreErrorCode storeGetItemPrice(Store store, char* type, int value,
+                                 int* price) {
+  if (NULL == store || NULL == type || NULL == price || value < 0) {
+    return STORE_INVALID_ARGUMENT;
+  }
   Inventory chosen_inventory;
   int price_per_value;
-  if (value < 0) return STORE_INVALID_ARGUMENT;
   if (strcmp(type, "candy") == 0) {
     chosen_inventory = store->candies;
     price_per_value = 2;
