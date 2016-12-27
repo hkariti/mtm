@@ -52,7 +52,7 @@ PokemonErrorCode isPokemonDead(Pokemon pokemon, bool* is_dead);
 // return -1 if null arg
 int pokemonCaught(Pokemon pokemon, int new_pokemon_id); //returns how many pokecoins earned
 
-// return battleDelta calculated, return -1 if arg is null
-double pokemonBattle(Pokemon pokemon, Pokemon opponent_pokemon, double opponent_trainer_xp);
+// errors POKEMON_INVALID_ARGUMENT, 
+PokemonErrorCode pokemonBattle(Pokemon pokemon, Pokemon opponent_pokemon, double battle_delta);
 
 #endif

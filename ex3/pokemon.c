@@ -152,24 +152,15 @@ int pokemonCaught(Pokemon pokemon, int new_pokemon_id)
 	return pokemonPokecoinsValue(pokemon);
 }
 
-double calculateBattleDelta(Pokemon pokemon, Pokemon opponent_pokemon, double opponent_trainer_xp) {
-	assert(pokemon);
-	assert(opponent_pokemon);
-	assert(opponent_trainer_xp > 0);
-
-	return opponent_trainer_xp * pokemonGetCP(opponent_pokemon) * (1 + opponent_pokemon->hp / 200);
-}
-
-void pokemonBattle(Pokemon pokemon, Pokemon opponent_pokemon, double opponent_trainer_xp)
+PokemonErrorCode pokemonBattle(Pokemon pokemon, Pokemon opponent_pokemon, double battle_delta)
 {
-	assert(pokemon);
-	assert(opponent_pokemon);
-	assert(opponent_trainer_xp > 0);
+	if (NULL == pokemon || NULL == opponent_pokemon) return POKEMON_INVALID_ARGUMENT;
+	if (battle_delta < 0) return POKEMON_INVALID_ARGUMENT;
 
 	pokemon->level += (pokemon->level + opponent_pokemon->level) / 4 +
 		((pokemon->level + opponent_pokemon->level) % 4 != 0);
 
-	pokemon->hp -= calculateBattleDelta(pokemon, opponent_pokemon, opponent_trainer_xp);
+	pokemon->hp -= battle_delta;
 	if (pokemon->hp < 0) {
 		pokemon->hp = 0;
 	}
@@ -177,9 +168,10 @@ void pokemonBattle(Pokemon pokemon, Pokemon opponent_pokemon, double opponent_tr
 	char* pokemon_spceies = pokedexEntryGetSpecies(pokemon->pokemon_info);
 	PokedexEntry evolved_pokemon_info = getEvolution(pokemon->evolutions_map,
 		pokemon_spceies, pokemon->level);
-	free(pokemon_spceies);
-	if (evolved_pokemon_info != NULL) {
+	while (evolved_pokemon_info != NULL) {
 		pokemon->pokemon_info = evolved_pokemon_info;
+		evolved_pokemon_info = getEvolution(pokemon->evolutions_map,
+			pokemon_spceies, pokemon->level);
 	}
 }
 
