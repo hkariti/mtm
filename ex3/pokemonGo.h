@@ -7,27 +7,36 @@
 #include "pokedex.h"
 #include "evolutions.h"
 
+typedef enum {
+	POKEMONGO_SUCCESS,
+	POKEMONGO_OUT_OF_MEMORY, // You should exit program after this error.
+	POKEMONGO_INVALID_ARGUMENT,
+	POKEMONGO_TRAINER_NAME_ALREADY_EXISTS,
+	POKEMONGO_TRAINER_DOES_NOT_EXIST,
+	POKEMONGO_LOCATION_DOES_NOT_EXIST,
+	POKEMONGO_POKEMON_DOES_NOT_EXIST,
+	POKEMONGO_ITEM_OUT_OF_STOCK,
+	POKEMONGO_BUDGET_IS_NOT_SUFFICIENT,
+	POKEMONGO_HP_IS_AT_MAX,
+	POKEMONGO_NO_AVAILABLE_ITEM_FOUND,
+	POKEMONGO_LOCATION_IS_NOT_REACHABLE,
+	POKEMONGO_TRAINER_ALREADY_IN_LOCATION
+} PokemonGoErrorCode;
+
 typedef struct PokemonGo_t *PokemonGo;
 
-struct PokemonGo_t { //TODO: move to .c file
-	Evolutions evolutions;
-	Pokedex pokedex;
-	Map locations;
-	Map trainers;
-	Store store;
-	FILE* output_channel;
-};
-
 PokemonGo createPokemonGo(Pokedex pokedex, Evolutions evolutions, Map locations, FILE* output_channel);
-MtmErrorCode trainerAdd(PokemonGo pokemon_go, char* trainer_name, int budget, char* start_location);
-MtmErrorCode trainerGo(char* trainer_name, char* new_location);
-MtmErrorCode storeAdd(char* item_type, int value, int quantity);
-MtmErrorCode trainerPurchase(char* trainer_name, char* item_type, int value);
-MtmErrorCode battleFight(char* trainer1_name, char* trainer2_name, int pokemon1_id, int pokemon2_id);
-MtmErrorCode pokemonHeal(char* trainer_name, int pokemon_id);
-MtmErrorCode pokemonTrain(char* trainer_name, int pokemon_id);
-MtmErrorCode reportTrainer(char* trainer_name);
-MtmErrorCode reportLocations();
-MtmErrorCode reportStock();
+void pokemongoDestroy(PokemonGo pokemon_go);
+
+PokemonGoErrorCode pokemongoTrainerAdd(PokemonGo pokemon_go, char* trainer_name, int budget, char* start_location);
+PokemonGoErrorCode pokemongoTrainerGo(PokemonGo pokemon_go, char* trainer_name, char* new_location);
+PokemonGoErrorCode pokemongoStoreAdd(PokemonGo pokemon_go, char* item_type, int value, int quantity);
+PokemonGoErrorCode pokemongoTrainerPurchase(PokemonGo pokemon_go, char* trainer_name, char* item_type, int value);
+PokemonGoErrorCode pokemongoBattleFight(PokemonGo pokemon_go, char* trainer1_name, char* trainer2_name, int pokemon1_id, int pokemon2_id);
+PokemonGoErrorCode pokemongoPokemonHeal(PokemonGo pokemon_go, char* trainer_name, int pokemon_id);
+PokemonGoErrorCode pokemongoPokemonTrain(PokemonGo pokemon_go, char* trainer_name, int pokemon_id);
+PokemonGoErrorCode pokemongoReportTrainer(PokemonGo pokemon_go, char* trainer_name);
+PokemonGoErrorCode pokemongoReportLocations(PokemonGo pokemon_go);
+PokemonGoErrorCode pokemongoReportStock(PokemonGo pokemon_go);
 
 #endif
