@@ -1,6 +1,6 @@
 CFLAGS=-Wall -pedantic-errors -Werror -DNDEBUG --std=c99
 LDFLAGS=-L. -lmtm -lm
-modules=pokedex evolutions
+modules=pokedex evolutions inventory store
 objects=$(foreach mod,$(modules), $(mod).o)
 tests=$(foreach mod,$(modules), $(mod)_test)
 
