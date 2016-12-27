@@ -1,30 +1,15 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <inventory.h>
-
-static int uintCompare(int* a, int* b) {
-  return *a - *b;
-}
-
-static int* uintCopy(int *key) {
-  int *key_copy;
-  key_copy = malloc(sizeof(int));
-  if (NULL == key_copy) return NULL;
-  *key_copy = *key;
-  return key_copy;
-}
-
-static void uintDestroy(int *key) {
-  free(key);
-}
+#include <utils.h>
 
 Inventory createInventory() {
   Map inventory;
-  inventory = mapCreate((copyMapKeyElements)uintCopy,
-                        (copyMapDataElements)uintCopy,
-                        (freeMapKeyElements)uintDestroy,
-                        (freeMapDataElements)uintDestroy,
-                        (compareMapKeyElements)uintCompare);
+  inventory = mapCreate((copyMapKeyElements)intCopy,
+                        (copyMapDataElements)intCopy,
+                        (freeMapKeyElements)intDestroy,
+                        (freeMapDataElements)intDestroy,
+                        (compareMapKeyElements)intCompare);
 
   return inventory;
 }
