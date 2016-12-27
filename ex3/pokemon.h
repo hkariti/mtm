@@ -3,7 +3,6 @@
 
 #include "set.h"
 #include "list.h"
-#include "trainer.h"
 #include "print_utils.h"
 #include "pokedex.h"
 #include "evolutions.h"
@@ -24,7 +23,7 @@ typedef enum {
 	POKEMON_POKEMON_NOT_EXIST,
 } PokemonErrorCode;
 
-typedef struct Pokemon_t * Pokemon;
+typedef struct Pokemon_t *Pokemon;
 
 Pokemon createPokemon(PokedexEntry pokemon_info, Evolutions evolutions_map);
 void destroyPokemon(Pokemon pokemon);
