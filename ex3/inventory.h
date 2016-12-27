@@ -19,7 +19,7 @@ void destroyInventory(Inventory inventory);
 Inventory copyInventory(Inventory inventory);
 // errors: INVENTORY_INVALID_ARGUMENT, OUT_OF_MEMORY
 InventoryErrorCode inventoryAddItem(Inventory inventory, int value);
-// errors:  INVALID_ARGUMENT, OUT_OF_STOCK
+// errors:  INVALID_ARGUMENT, OUT_OF_STOCK, OUT_OF_MEMORY
 InventoryErrorCode inventoryRemoveItem(Inventory inventory, int value);
 
 // return false if null arg

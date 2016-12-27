@@ -16,7 +16,7 @@ Store storeCreate();
 void storeDestroy(Store store);
 // errors: INVALID_ARGUMENT, OUT_OF_MEMORY
 StoreErrorCode storeAddItem(Store store, char* type, int value);
-// errors: INVALID_ARGUMENT, ITEM_OUT_OF_STOCK
+// errors: INVALID_ARGUMENT, OUT_OF_MEMORY, ITEM_OUT_OF_STOCK
 StoreErrorCode storeBuyItem(Store store, char* type, int value);
 // errors: INVALID_ARGUMENT, ITEM_OUT_OF_STOCK
 StoreErrorCode storeGetItemPrice(Store store, char* type, int value, int* price); //returns -1 if item doesnt exist
