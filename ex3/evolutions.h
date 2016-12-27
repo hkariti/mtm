@@ -15,8 +15,12 @@ typedef struct EvolutionEntry_t *EvolutionEntry;
 
 typedef Map Evolutions;
 
+// Returns NULL if alloc error
 Evolutions evolutionsCreate();
+
 void evolutionsDestroy(Evolutions evolutions);
+
+// errors: EVOLUTIONS_INVALID_ARGUMENT if null arg, OUT_OF_MEM
 EvolutionsErrorCode evolutionsAddEntry(Evolutions evolutions, char* pokemon_to_evolve,
                         int level, PokedexEntry evolved_pokemon);
 

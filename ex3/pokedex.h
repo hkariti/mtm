@@ -18,9 +18,11 @@ typedef Map Pokedex;
 
 Pokedex pokedexCreate();
 void pokedexDestroy(Pokedex pokedex);
+// errors: POKEDEX_INVALID_ARGUMENT, OUT_OF_MEMORY
 PokedexErrorCode pokedexAddPokemon(Pokedex pokedex, char* species, int cp,
                             Set types);
-PokedexErrorCode pokedexGetPokemonInfo(Pokedex pokedex, char* species);
+// return NULL if null arg
+PokedexEntry pokedexGetPokemonInfo(Pokedex pokedex, char* species);
 
 // pokedexEntry funcs return -1 if null_arg
 char* pokedexEntryGetSpecies(PokedexEntry entry);

@@ -51,6 +51,7 @@ MapResult inventoryAddItem(Inventory inventory, int value) {
     *amount = *amount + 1;
   }
 
+  // TODO: Free amount, possible memory leak here
   return mapPut(inventory, &value, amount);
 
 }

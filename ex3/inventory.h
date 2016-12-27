@@ -9,7 +9,6 @@ typedef enum {
 	INVENTORY_INVALID_ARGUMENT,
 	INVENTORY_OUT_OF_MEMORY,
 	INVENTORY_OUT_OF_STOCK,
-	INVENTORY_POKEMON_NOT_EXIST,
 } InventoryErrorCode;
 
 
@@ -23,8 +22,11 @@ typedef Map Inventory;
 
 Inventory createInventory(char* type);
 void destroyInventory(Inventory inventory);
+// NULL if alloc error
 Inventory copyInventory(Inventory inventory);
+// errors: INVENTORY_INVALID_ARGUMENT, OUT_OF_MEMORY
 InventoryErrorCode inventoryAddItem(Inventory inventory, int value);
+// errors:  INVALID_ARGUMENT, OUT_OF_STOCK
 InventoryErrorCode inventoryRemoveItem(Inventory inventory, int value);
 
 // return false if null arg
