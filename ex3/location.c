@@ -125,7 +125,7 @@ Pokemon locationPopPokemon(Location location)
 	if (NULL == pokemon) return NULL;
 
 	pokemon = copyPokemon(pokemon);
-	if (NULL == pokemon) return LOCATION_OUT_OF_MEMORY;
+	if (NULL == pokemon) return NULL;
 
 	listRemoveCurrent(location->pokemons);
 	return pokemon;
