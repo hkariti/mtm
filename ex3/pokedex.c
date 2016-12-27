@@ -80,7 +80,7 @@ PokedexEntry pokedexGetPokemonInfo(Pokedex pokedex, char* species) {
 
 char* pokedexEntryGetSpecies(PokedexEntry entry) {
   if (NULL == entry) return NULL;
-  return stringCopy(entry->species);
+  return entry->species;
 }
 
 int pokedexEntryGetCp(PokedexEntry entry) {
@@ -90,5 +90,5 @@ int pokedexEntryGetCp(PokedexEntry entry) {
 
 Set pokedexEntryGetTypes(PokedexEntry entry) {
   if (NULL == entry) return NULL;
-  return setCopy(entry->types);
+  return entry->types;
 }
