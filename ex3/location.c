@@ -4,12 +4,20 @@
 #include <string.h>
 #include <assert.h>
 
-
 struct Location_t {
 	char* name;
 	Map neighbors;
 	List pokemons;
 };
+
+Location copyLocationPointer(Location location) {
+	assert(location);
+	return location;
+}
+
+void destroyLocationPointer(Location location) {
+	return;
+}
 
 Location createLocation(char * name)
 {
@@ -21,7 +29,7 @@ Location createLocation(char * name)
 		free(location);
 		return NULL;
 	}
-	location->neighbors = mapCreate(stringCopy, copyLocation, free, destroyLocation, strcmp);
+	location->neighbors = mapCreate(stringCopy, copyLocationPointer, free, destroyLocationPointer, strcmp);
 	if (NULL == location->neighbors) {
 		free(location->name);
 		free(location);
@@ -30,7 +38,7 @@ Location createLocation(char * name)
 	location->pokemons = listCreate(copyPokemon, destroyPokemon);
 	if (NULL == location->pokemons) {
 		free(location->name);
-		free(location->neighbors);
+		mapDestroy(location->neighbors);
 		free(location);
 		return NULL;
 	}
@@ -69,6 +77,12 @@ Location copyLocation(Location location)
 	return new_location;
 }
 
+int locationCompare(Location location_1, Location location_2) {
+	assert(location_1);
+	assert(location_2);
+
+	return strcmp(location_1->name, location_2->name);
+}
 
 void printLocation(Location location, FILE * output_channel)
 {
@@ -78,51 +92,74 @@ void printLocation(Location location, FILE * output_channel)
 	Pokemon first_pokemon = listGetFirst(location->pokemons);
 	char* pokemon_species = NULL;;
 	if (NULL != first_pokemon) {
-		char* pokemon_species = pokemonGetSpecies(first_pokemon); //what happens if copy fails?
+		pokemon_species = pokemonGetSpecies(first_pokemon);
 	}
 	mtmPrintLocation(output_channel, location->name, pokemon_species);
-	free(pokemon_species);
 }
 
-char* locationGetName(Location location) //what happened when malloc fails? no name?
+char* locationGetName(Location location)
 {
-	assert(location);
+	if (NULL == location) return NULL;
 
-	return stringCopy(location->name);
+	return location->name;
 }
 
-ListResult locationPushPokemon(Location location, Pokemon pokemon) {
-	assert(location);
-	assert(pokemon);
+LocationErrorCode locationPushPokemon(Location location, Pokemon pokemon) {
+	if (NULL == location) return LOCATION_INVALID_ARGUMENT;
+	if (NULL == pokemon) return LOCATION_INVALID_ARGUMENT;
 
-	return listInsertFirst(location->pokemons, pokemon);
+	ListResult result = listInsertFirst(location->pokemons, pokemon);
+
+	if (result == LIST_NULL_ARGUMENT) return LOCATION_INVALID_ARGUMENT;
+	if (result == LIST_OUT_OF_MEMORY) return LOCATION_OUT_OF_MEMORY;
+
+	return LOCATION_SUCCESS;
 }
 
 Pokemon locationPopPokemon(Location location)
 {
 	assert(location);
+	if (NULL == location) return NULL;
 
 	Pokemon pokemon = listGetFirst(location->pokemons);
-	if (pokemon != NULL) {
-		listRemoveCurrent(location->pokemons);
-	}
+	if (NULL == pokemon) return NULL;
+
+	pokemon = copyPokemon(pokemon);
+	if (NULL == pokemon) return LOCATION_OUT_OF_MEMORY;
+
+	listRemoveCurrent(location->pokemons);
 	return pokemon;
 }
+
+bool locationIsEmpty(Location location) {
+	assert(location);
+
+	return listGetSize(location->pokemons) == 0;
+}
+
 
 Location locationGetNeighour(Location location, char * neighour_name)
 {
 	assert(location);
 	assert(neighour_name);
 
+	if (NULL == location || NULL == neighour_name) return NULL;
+
 	return mapGet(location->neighbors, neighour_name);
 }
 
-MapResult locationAddNeighbor(Location location, Location neighbor)
+LocationErrorCode locationAddNeighbor(Location location, Location neighbor)
 {
 	assert(location);
 	assert(neighbor);
 
-	return mapPut(location->neighbors, neighbor->name, neighbor);
+	if (NULL == location || NULL == neighbor) return LOCATION_INVALID_ARGUMENT;
+
+	MapResult result = mapPut(location->neighbors, neighbor->name, neighbor);
+	if (result == MAP_NULL_ARGUMENT) return LOCATION_INVALID_ARGUMENT;
+	if (result == MAP_OUT_OF_MEMORY) return LOCATION_OUT_OF_MEMORY;
+
+	return LOCATION_SUCCESS;
 }
 
 
