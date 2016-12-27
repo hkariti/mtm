@@ -65,19 +65,22 @@ bool inventoryContains(Inventory inventory, int value) {
 
 InventoryErrorCode inventoryRemoveItem(Inventory inventory, int value) {
   if (NULL == inventory) return INVENTORY_INVALID_ARGUMENT;
-  int *amount;
+  int *amount, *new_amount;
 
   amount = mapGet(inventory, &value);
   // Check if item is out of stock
   if (NULL == amount) return INVENTORY_OUT_OF_STOCK;
-  // Decrease item's quantity
-  *amount = *amount - 1;
-  // Remove item from inventory if it's run out
-  if (*amount == 0) {
+  // Remove item from inventory if it's run out now
+  if (*amount == 1) {
     mapRemove(inventory, &value);
   } else {
-    MapResult put_result = mapPut(inventory, &value, amount);
+    // Decrease item's quantity.
+    new_amount = malloc(sizeof(int));
+    if (NULL == new_amount) return INVENTORY_OUT_OF_MEMORY;
+    *new_amount = *amount - 1;
+    MapResult put_result = mapPut(inventory, &value, new_amount);
     assert(put_result != MAP_NULL_ARGUMENT);
+    free(new_amount);
     if (MAP_OUT_OF_MEMORY == put_result) return INVENTORY_OUT_OF_MEMORY;
   }
   return INVENTORY_SUCCESS;
