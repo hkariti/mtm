@@ -26,7 +26,7 @@ typedef enum {
 
 typedef struct Pokemon_t * Pokemon;
 
-Pokemon createPokemon(PokedexEntry pokemon_info, Evolutions evolutions_list); //evolutions may be set?
+Pokemon createPokemon(PokedexEntry pokemon_info, Evolutions evolutions_map);
 void destroyPokemon(Pokemon pokemon);
 void printPokemon(Pokemon pokemon, FILE* output_channel);
 Pokemon copyPokemon(Pokemon pokemon);
@@ -37,13 +37,17 @@ int pokemonCompareByID(Pokemon pokemon_1, Pokemon pokemon_2);
 int pokemonGetCP(Pokemon pokemon);
 double pokemonGetHP(Pokemon pokemon);
 int pokemonGetLevel(Pokemon pokemon);
+// return null if null arg
 char* pokemonGetSpecies(Pokemon pokemon);
 
+// return POKEMON_INVALID_ARGUMENT if pokemon is null or candy_value<=0
 PokemonErrorCode pokemonGiveCandy(Pokemon pokemon, int candy_value);
+// return POKEMON_INVALID_ARGUMENT if pokemon is null or potion_value<=0
 PokemonErrorCode pokemonGivePotion(Pokemon pokemon, int potion_value);
 
 // output is written to isDead bool pointer
-PokemonErrorCode isPokemonDead(Pokemon pokemon, bool* isDead);
+// errors: POKEMON_INVALID_ARGUMENT if pokemon or isDead bool are NULL
+PokemonErrorCode isPokemonDead(Pokemon pokemon, bool* is_dead);
 
 // return -1 if null arg
 int pokemonCaught(Pokemon pokemon, int new_pokemon_id); //returns how many pokecoins earned
