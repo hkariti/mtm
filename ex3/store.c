@@ -38,6 +38,7 @@ void storeDestroy(Store store) {
   if (NULL == store) return;
   destroyInventory(store->candies);
   destroyInventory(store->potions);
+  free(store);
 }
 
 StoreErrorCode storeAddItem(Store store, char* type, int value) {
@@ -68,7 +69,7 @@ StoreErrorCode storeBuyItem(Store store, char* type, int value) {
 
 StoreErrorCode storeGetItemPrice(Store store, char* type, int value,
                                  int* price) {
-  if (NULL == store || NULL == type || NULL == price || value < 0) {
+  if (NULL == store || NULL == type || NULL == price || value <= 0) {
     return STORE_INVALID_ARGUMENT;
   }
   Inventory chosen_inventory;
