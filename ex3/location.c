@@ -29,14 +29,19 @@ Location createLocation(char * name)
 		free(location);
 		return NULL;
 	}
-	location->neighbors = mapCreate(stringCopy, copyLocationPointer, free, destroyLocationPointer, strcmp);
-	if (NULL == location->neighbors) {
+  location->neighbors = mapCreate((copyMapKeyElements)stringCopy,
+                                  (copyMapDataElements)copyLocationPointer,
+                                  (freeMapKeyElements)free,
+                                  (freeMapDataElements)destroyLocationPointer,
+                                  (compareMapKeyElements)strcmp);
+  if (NULL == location->neighbors) {
 		free(location->name);
 		free(location);
 		return NULL;
 	}
-	location->pokemons = listCreate(copyPokemon, destroyPokemon);
-	if (NULL == location->pokemons) {
+	location->pokemons = listCreate((CopyListElement)copyPokemon,
+                                  (FreeListElement)destroyPokemon);
+  if (NULL == location->pokemons) {
 		free(location->name);
 		mapDestroy(location->neighbors);
 		free(location);
@@ -138,14 +143,14 @@ bool locationIsEmpty(Location location) {
 }
 
 
-Location locationGetNeighour(Location location, char * neighour_name)
+bool locationIsNeighour(Location location, Location neighbour)
 {
 	assert(location);
-	assert(neighour_name);
+	assert(neighbour);
 
-	if (NULL == location || NULL == neighour_name) return NULL;
+	if (NULL == location || NULL == neighbour) return NULL;
 
-	return mapGet(location->neighbors, neighour_name);
+	return mapContains(location->neighbors, neighbour->name);
 }
 
 LocationErrorCode locationAddNeighbor(Location location, Location neighbor)
