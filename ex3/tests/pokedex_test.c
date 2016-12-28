@@ -95,7 +95,6 @@ bool testPokedexEntryGetSpecies() {
   // Valid input
   species = pokedexEntryGetSpecies(entry);
   ASSERT_TEST(NULL != species);
-  free(species);
 
   destroyPokedex(pokedex);
   return true;
@@ -130,7 +129,6 @@ bool testPokedexEntryGetTypes() {
   // Valid input
   types = pokedexEntryGetTypes(entry);
   ASSERT_TEST(NULL != types);
-  setDestroy(types);
 
   destroyPokedex(pokedex);
   return true;
