@@ -1,4 +1,5 @@
 #include <store.h>
+#include "mocks/store_mocks.h"
 #include "test_utilities.h"
 
 bool testStoreCreate() {

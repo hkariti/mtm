@@ -79,7 +79,7 @@ bool testPokemonGivePotion() {
 	Pokedex pokedex = demoPokedex();
 	Evolutions evolutions = demoEvolutions(pokedex);
 	double hp, prev_hp;
-	MtmErrorCode result;
+	PokemonErrorCode result;
 	Pokemon pokemon = demoPokemon(pokedex, evolutions);
 	Pokemon pokemon_2 = demoPokemon(pokedex, evolutions);
 
@@ -87,7 +87,7 @@ bool testPokemonGivePotion() {
 	result = pokemonGivePotion(pokemon, 1);
 	hp = pokemonGetHP(pokemon);
 	ASSERT_TEST(100 == hp);
-	ASSERT_TEST(MTM_HP_IS_AT_MAX == result);
+	ASSERT_TEST(POKEMON_HP_IS_AT_MAX == result);
 
 	// Test working scenario
 	pokemonBattle(pokemon, pokemon_2, 1);
@@ -95,13 +95,13 @@ bool testPokemonGivePotion() {
 	result = pokemonGivePotion(pokemon, 1);
 	hp = pokemonGetHP(pokemon);
 	ASSERT_TEST(prev_hp + 1 == hp);
-	ASSERT_TEST(MTM_SUCCESS == result);
+	ASSERT_TEST(POKEMON_SUCCESS == result);
 
 	// Test over-heal
 	result = pokemonGivePotion(pokemon, 1000);
 	hp = pokemonGetHP(pokemon);
 	ASSERT_TEST(100 == hp);
-	ASSERT_TEST(MTM_SUCCESS == result);
+	ASSERT_TEST(POKEMON_SUCCESS == result);
 
 	destroyPokemon(pokemon);
 	destroyPokemon(pokemon_2);
@@ -152,29 +152,6 @@ bool testPokemonCaught() {
 	return true;
 }
 
-bool testCalculateBattleDelta() {
-	Pokedex pokedex = demoPokedex();
-	Evolutions evolutions = demoEvolutions(pokedex);
-	Pokemon mew = createPokemon(pokedexGetPokemonInfo(pokedex,"mew"), evolutions);
-	Pokemon mewtwo = createPokemon(pokedexGetPokemonInfo(pokedex, "mewtwo"), evolutions);
-	double result;
-
-	// Test mewtwo on mew battle
-	result = calculateBattleDelta(mew, mewtwo, 2);
-	ASSERT_TEST(90 == result);
-
-	// Test mew on mewtwo battle
-	result = calculateBattleDelta(mewtwo, mew, 3);
-	ASSERT_TEST(90 == result);
-	
-	destroyPokemon(mew);
-	destroyPokemon(mewtwo);
-	destroyEvolutions(evolutions);
-	destroyPokedex(pokedex);
-
-	return true;
-}
-
 bool testPokemonBattle() {
 	Pokedex pokedex = demoPokedex();
 	Evolutions evolutions = demoEvolutions(pokedex);
@@ -211,7 +188,6 @@ int main() {
 	RUN_TEST(testPokemonCompareByID);
 	RUN_TEST(testPokemonGivePotion);
 	RUN_TEST(testPokemonCaught);
-	RUN_TEST(testCalculateBattleDelta);
 	RUN_TEST(testPokemonBattle);
 	return 0;
 }
