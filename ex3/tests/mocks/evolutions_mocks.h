@@ -1,7 +1,7 @@
 #ifndef EVOLUTIONS_MOCKS_H
 #define EVOLUTIONS_MOCKS_H
 
-#include <evolutions.h>
+#include "../../evolutions.h"
 #include "pokedex_mocks.h"
 
 Evolutions demoEvolutions();

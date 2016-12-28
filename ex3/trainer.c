@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include <trainer.h>
-#include <utils.h>
+#include "trainer.h"
+#include "utils.h"
 
 
 struct Trainer_t {

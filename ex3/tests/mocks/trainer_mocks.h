@@ -6,9 +6,9 @@
 #include "evolutions_mocks.h"
 #include "store_mocks.h"
 #include "pokemon_mocks.h"
-#include <trainer.h>
-#include <location.h>
-#include <utils.h>
+#include "../../trainer.h"
+#include "../../location.h"
+#include "../../utils.h"
 
 Map demoLocations(Pokedex pokedex, Evolutions evolutions);
 Trainer demoTrainerEmpty(char* name, Map locations);

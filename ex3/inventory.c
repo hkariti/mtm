@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <assert.h>
-#include <inventory.h>
-#include <utils.h>
+#include "inventory.h"
+#include "utils.h"
 
 Inventory createInventory() {
   Map inventory;
