@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <string.h>
+#include <utils.h>
 
 char* stringCopy(char* string) {
   if (NULL == string) return NULL;
