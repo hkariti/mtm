@@ -9,7 +9,7 @@
 
 bool testCreatePokemon() {
 	Pokedex pokedex = demoPokedex();
-	PokedexEntry pokemon_info = pokedexGetPokemonInfo(pokedex, "mew");
+	PokedexEntry pokemon_info = pokedexGetPokemonInfo(pokedex, "pikachu");
 	Evolutions evolutions = demoEvolutions(pokedex);
 	Pokemon pokemon;
 
@@ -90,7 +90,7 @@ bool testPokemonGivePotion() {
 	ASSERT_TEST(POKEMON_HP_IS_AT_MAX == result);
 
 	// Test working scenario
-	pokemonBattle(pokemon, pokemon_2, 1);
+	pokemonBattle(pokemon, pokemon_2, 10);
 	prev_hp = pokemonGetHP(pokemon);
 	result = pokemonGivePotion(pokemon, 1);
 	hp = pokemonGetHP(pokemon);
@@ -161,14 +161,14 @@ bool testPokemonBattle() {
 	int level;
 
 	// Test mewtwo on mew battle
-	pokemonBattle(mew, mewtwo, 2);
+	pokemonBattle(mew, mewtwo, 90);
 	hp = pokemonGetHP(mew);
 	level = pokemonGetLevel(mew);
 	ASSERT_TEST(10 == hp);
 	ASSERT_TEST(2 == level);
 
 	// Test mew on mewtwo battle
-	pokemonBattle(mewtwo, mew, 2);
+	pokemonBattle(mewtwo, mew, 42);
 	hp = pokemonGetHP(mewtwo);
 	level = pokemonGetLevel(mewtwo);
 	ASSERT_TEST(58 == hp);
