@@ -1,44 +1,11 @@
 #include "test_utilities.h"
 #include "../pokemon.h"
 #include "../utils.h" //TODO: ugly
+#include "mocks/evolutions_mocks.h"
+#include "mocks/pokedex_mocks.h"
+#include "mocks/pokemon_mocks.h"
 #include <string.h>
 #include <stdlib.h>
-
-Set demoTypes() {
-	Set types;
-	types = setCreate((copySetElements)stringCopy, (freeSetElements)free,
-		(compareSetElements)strcmp);
-	setAdd(types, "Fire");
-	setAdd(types, "Electric");
-	return types;
-}
-
-Pokedex demoPokedex() {
-	Pokedex pokedex = createPokedex();
-	Set types = demoTypes();
-	pokedexAddPokemon(pokedex, "pikachu", 50, types);
-	pokedexAddPokemon(pokedex, "raichu", 100, types);
-	pokedexAddPokemon(pokedex, "charmander", 30, types);
-	pokedexAddPokemon(pokedex, "charmelon", 30, types);
-	pokedexAddPokemon(pokedex, "charizard", 800, types);
-	pokedexAddPokemon(pokedex, "mew", 20, types);
-	pokedexAddPokemon(pokedex, "mewtwo", 30, types);
-	return pokedex;
-}
-
-Evolutions demoEvolutions(Pokedex pokedex) {
-	Evolutions evolutions = createEvolutions();
-	evolutionsAddEntry(evolutions, "pikachu", 2, pokedexGetPokemonInfo(pokedex, "raichu"));
-	evolutionsAddEntry(evolutions, "charmander", 1, pokedexGetPokemonInfo(pokedex, "charmelon"));
-	evolutionsAddEntry(evolutions, "charmelon", 1, pokedexGetPokemonInfo(pokedex, "charizard"));
-	evolutionsAddEntry(evolutions, "mew", 4, pokedexGetPokemonInfo(pokedex, "mewtwo"));
-	return evolutions;
-}
-
-Pokemon demoPokemon(Pokedex pokedex, Evolutions evolutions) {
-	Pokemon pokemon = createPokemon(pokedexGetPokemonInfo(pokedex, "pikachu"), evolutions);
-	return pokemon;
-}
 
 bool testCreatePokemon() {
 	Pokedex pokedex = demoPokedex();
