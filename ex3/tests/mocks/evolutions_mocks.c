@@ -1,10 +1,14 @@
 #include "evolutions_mocks.h"
 
-Evolutions demoEvolutions() {
+Evolutions demoEvolutions(Pokedex pokedex) {
   Evolutions evolutions = createEvolutions();
+  PokedexEntry entry;
 
-  evolutionsAddEntry(evolutions, "pikachu", 2, (PokedexEntry)0xdeadbeef);
-  evolutionsAddEntry(evolutions, "raichu", 1, (PokedexEntry)0xdeadbeef);
-  evolutionsAddEntry(evolutions, "mew", 4, (PokedexEntry)0xdeadbeef);
+  entry = pokedexGetPokemonInfo(pokedex, "Raichu");
+  evolutionsAddEntry(evolutions, "pikachu", 2, entry);;
+  entry = pokedexGetPokemonInfo(pokedex, "Ghost");
+  evolutionsAddEntry(evolutions, "raichu", 1, entry);
+  entry = pokedexGetPokemonInfo(pokedex, "Bulbasaur");
+  evolutionsAddEntry(evolutions, "mew", 4, entry);
   return evolutions;
 }

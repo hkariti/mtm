@@ -54,7 +54,7 @@ bool testEvolutionsAddEntry() {
 }
 
 bool testGetEvolution() {
-  Evolutions evolutions = demoEvolutions();
+  EVOLUTIONS_SET_UP();
   PokedexEntry ret;
 
   // Test NULL params
@@ -80,7 +80,7 @@ bool testGetEvolution() {
   ret = getEvolution(evolutions, "pikachu", 1);
   ASSERT_TEST(NULL != ret);
 
-  destroyEvolutions(evolutions);
+  EVOLUTIONS_TEAR_DOWN();
   return true;
 }
 
