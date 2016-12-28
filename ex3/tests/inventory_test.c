@@ -1,19 +1,6 @@
 #include <inventory.h>
+#include "mocks/inventory_mocks.h"
 #include "test_utilities.h"
-
-Inventory demoInventory() {
-  Inventory inventory = createInventory();
-
-  inventoryAddItem(inventory, 1);
-  inventoryAddItem(inventory, 1);
-  inventoryAddItem(inventory, 1);
-  inventoryAddItem(inventory, 1);
-
-  inventoryAddItem(inventory, 2);
-  inventoryAddItem(inventory, 2);
-
-  return inventory;
-}
 
 bool testCreateInventory() {
   Inventory inventory = createInventory();
