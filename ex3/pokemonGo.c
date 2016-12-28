@@ -33,6 +33,7 @@ PokemonGo createPokemonGo(Pokedex pokedex, Evolutions evolutions, Map locations,
 		free(pokemon_go);
 		return NULL;
 	}
+	return pokemon_go;
 }
 
 void pokemongoDestroy(PokemonGo pokemon_go) {
