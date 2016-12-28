@@ -7,6 +7,8 @@
 #include "store.h"
 #include "print_utils.h"
 
+#define TRAINER_INITIAL_XP 1
+
 typedef struct Trainer_t *Trainer;
 
 typedef enum {
@@ -41,7 +43,7 @@ double trainerCalculateBattleDelta(Trainer trainer, Pokemon pokemon);
 TrainerErrorCode trainersBattle(Trainer trainer, int pokemon_id,
                                 Trainer other_trainer, int other_pokemon_id);
 // INVALID_ARGUMENT, ALREADY_IN_LOCATION,LOCATION_IS_NOT_REACHABLE
-TrainerErrorCode tarinerGoToLocation(Trainer trainer, Location location);
+TrainerErrorCode trainerGoToLocation(Trainer trainer, Location location);
 // INVALID_ARGUMENT, OUT_OF_MEMORY
 TrainerErrorCode trainerHunt(Trainer trainer, FILE* output_channel);
 // INVALID_ARGUMENT, STORE_ITEM_OUT_OF_STOCK, BUDGET_IS_INSUFFICIENT, OUT_OF_MEMORY
