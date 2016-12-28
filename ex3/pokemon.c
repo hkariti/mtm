@@ -127,7 +127,6 @@ static int pokemonPokecoinsValue(Pokemon pokemon) { // need to verify all types 
 			0 == strcmp(current_type, "flying") ||
 			0 == strcmp(current_type, "poison"))
 		{
-			setDestroy(types);
 			return DOUBLE_STAR_TYPE_POKECOINS;
 		}
 		else if (0 == strcmp(current_type, "rock") ||
@@ -139,7 +138,6 @@ static int pokemonPokecoinsValue(Pokemon pokemon) { // need to verify all types 
 			pokecoins_value = ONE_STAR_TYPE_POKECOINS;
 		}
 	}
-	setDestroy(types);
 	return pokecoins_value;
 }
 
@@ -172,7 +170,9 @@ PokemonErrorCode pokemonBattle(Pokemon pokemon, Pokemon opponent_pokemon, double
 		pokemon->pokemon_info = evolved_pokemon_info;
 		evolved_pokemon_info = getEvolution(pokemon->evolutions_map,
 			pokemon_spceies, pokemon->level);
+		pokemon_spceies = pokedexEntryGetSpecies(pokemon->pokemon_info);
 	}
+	return POKEMON_SUCCESS;
 }
 
 PokemonErrorCode isPokemonDead(Pokemon pokemon, bool* is_dead)
