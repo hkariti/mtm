@@ -25,7 +25,7 @@ int locationCompare(Location location_1, Location location_2);
 char* locationGetName(Location location);
 
 // errors: LOCATION_INVALID_ARGUMENT, LOCATION_OUT_OF_MEMORY
-LocationErrorCode locationPushPokemon(Location location, Pokemon pokemon);
+LocationErrorCode locationAppendPokemon(Location location, Pokemon pokemon);
 
 // return null if null arg or if empty list or out of memory
 Pokemon locationPopPokemon(Location location);

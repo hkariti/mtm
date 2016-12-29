@@ -98,11 +98,11 @@ char* locationGetName(Location location)
 	return location->name;
 }
 
-LocationErrorCode locationPushPokemon(Location location, Pokemon pokemon) {
+LocationErrorCode locationAppendPokemon(Location location, Pokemon pokemon) {
 	if (NULL == location) return LOCATION_INVALID_ARGUMENT;
 	if (NULL == pokemon) return LOCATION_INVALID_ARGUMENT;
 
-	ListResult result = listInsertFirst(location->pokemons, pokemon);
+	ListResult result = listInsertLast(location->pokemons, pokemon);
 
 	if (result == LIST_NULL_ARGUMENT) return LOCATION_INVALID_ARGUMENT;
 	if (result == LIST_OUT_OF_MEMORY) return LOCATION_OUT_OF_MEMORY;
@@ -149,7 +149,7 @@ LocationErrorCode locationAddNeighbor(Location location, char* neighbour_name)
 
 	if (NULL == location || NULL == neighbour_name) return LOCATION_INVALID_ARGUMENT;
 
-	SetResult result = setAdd(location->neighbors, location->name);
+	SetResult result = setAdd(location->neighbors, neighbour_name);
 	if (result == SET_NULL_ARGUMENT) return LOCATION_INVALID_ARGUMENT;
 	if (result == SET_OUT_OF_MEMORY) return LOCATION_OUT_OF_MEMORY;
 

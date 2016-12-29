@@ -6,7 +6,7 @@ Location demoLocationWithPokemon(char* name, int num_of_pokemon, Pokedex pokedex
   Pokemon pokemon = demoPokemon(pokedex, evolutions);
 
   for (int i = 0; i < num_of_pokemon; i++) {
-    locationPushPokemon(location, pokemon);
+    locationAppendPokemon(location, pokemon);
   }
 
   destroyPokemon(pokemon);
