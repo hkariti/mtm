@@ -1,6 +1,6 @@
 bulbasaur ivysaur 3
 ivysaur venusaur 6
-charmanader charmeleon 3
+charmander charmeleon 3
 charmeleon charizard 8
 squirtle wartortle 2
 wartortle blastoise 4
