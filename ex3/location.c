@@ -6,18 +6,9 @@
 
 struct Location_t {
 	char* name;
-	Map neighbors;
+	Set neighbors;
 	List pokemons;
 };
-
-Location copyLocationPointer(Location location) {
-	assert(location);
-	return location;
-}
-
-void destroyLocationPointer(Location location) {
-	return;
-}
 
 Location createLocation(char * name)
 {
@@ -29,11 +20,9 @@ Location createLocation(char * name)
 		free(location);
 		return NULL;
 	}
-  location->neighbors = mapCreate((copyMapKeyElements)stringCopy,
-                                  (copyMapDataElements)copyLocationPointer,
-                                  (freeMapKeyElements)free,
-                                  (freeMapDataElements)destroyLocationPointer,
-                                  (compareMapKeyElements)strcmp);
+  location->neighbors = setCreate((copySetElements)stringCopy,
+                                  (freeSetElements)free,
+                                  (compareSetElements)strcmp);
   if (NULL == location->neighbors) {
 		free(location->name);
 		free(location);
@@ -43,7 +32,7 @@ Location createLocation(char * name)
                                   (FreeListElement)destroyPokemon);
   if (NULL == location->pokemons) {
 		free(location->name);
-		mapDestroy(location->neighbors);
+		setDestroy(location->neighbors);
 		free(location);
 		return NULL;
 	}
@@ -53,7 +42,7 @@ Location createLocation(char * name)
 void destroyLocation(Location location)
 {
 	if (NULL == location) return;
-	mapDestroy(location->neighbors);
+	setDestroy(location->neighbors);
 	listDestroy(location->pokemons);
 	free(location->name);
 	free(location);
@@ -68,7 +57,7 @@ Location copyLocation(Location location)
 	if (NULL == new_location->name) {
 		return NULL;
 	}
-	new_location->neighbors = mapCopy(location->neighbors);
+	new_location->neighbors = setCopy(location->neighbors);
 	if (NULL == new_location->neighbors) {
 		free(new_location->name);
 		return NULL;
@@ -76,7 +65,7 @@ Location copyLocation(Location location)
 	new_location->pokemons = listCopy(location->pokemons);
 	if (NULL == new_location->pokemons) {
 		free(new_location->name);
-		mapDestroy(new_location->neighbors);
+		setDestroy(new_location->neighbors);
 		return NULL;
 	}
 	return new_location;
@@ -150,19 +139,19 @@ bool locationIsNeighour(Location location, Location neighbour)
 
 	if (NULL == location || NULL == neighbour) return NULL;
 
-	return mapContains(location->neighbors, neighbour->name);
+	return setIsIn(location->neighbors, neighbour->name);
 }
 
-LocationErrorCode locationAddNeighbor(Location location, Location neighbor)
+LocationErrorCode locationAddNeighbor(Location location, char* neighbour_name)
 {
 	assert(location);
-	assert(neighbor);
+	assert(neighbour_name);
 
-	if (NULL == location || NULL == neighbor) return LOCATION_INVALID_ARGUMENT;
+	if (NULL == location || NULL == neighbour_name) return LOCATION_INVALID_ARGUMENT;
 
-	MapResult result = mapPut(location->neighbors, neighbor->name, neighbor);
-	if (result == MAP_NULL_ARGUMENT) return LOCATION_INVALID_ARGUMENT;
-	if (result == MAP_OUT_OF_MEMORY) return LOCATION_OUT_OF_MEMORY;
+	SetResult result = setAdd(location->neighbors, location->name);
+	if (result == SET_NULL_ARGUMENT) return LOCATION_INVALID_ARGUMENT;
+	if (result == SET_OUT_OF_MEMORY) return LOCATION_OUT_OF_MEMORY;
 
 	return LOCATION_SUCCESS;
 }

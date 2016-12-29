@@ -2,7 +2,7 @@
 #define LOCATION_H_
 
 #include "list.h"
-#include "map.h"
+#include "set.h"
 #include "pokemon.h"
 #include "print_utils.h"
 
@@ -37,6 +37,6 @@ bool locationIsEmpty(Location location);
 bool locationIsNeighour(Location location, Location neighbour);
 
 // errors: LOCATION_INVALID_ARGUMENT, LOCATION_OUT_OF_MEMORY
-LocationErrorCode locationAddNeighbor(Location location, Location neighbor);
+LocationErrorCode locationAddNeighbor(Location location, char* neighbour_name);
 
 #endif

@@ -8,9 +8,9 @@ Map demoLocations(Pokedex pokedex, Evolutions evolutions) {
                             (compareMapKeyElements)strcmp);
   Location empty_location, neighbor, full_location;
   empty_location = demoLocationWithPokemon("empty_location", 1, pokedex, evolutions);
-  neighbor = demoLocationWithPokemon("neighboor", 0, pokedex, evolutions);
+  neighbor = demoLocationWithPokemon("neighbor", 0, pokedex, evolutions);
   full_location = demoLocationWithPokemon("full_location", 10, pokedex, evolutions);
-  locationAddNeighbor(empty_location, neighbor);
+  locationAddNeighbor(empty_location, "neighbor");
 
   mapPut(locations, "empty_location", empty_location);
   mapPut(locations, "neighbor", neighbor);
