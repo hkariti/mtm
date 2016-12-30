@@ -120,12 +120,12 @@ TrainerErrorCode trainerHealPokemon(Trainer trainer, int pokemon_id) {
   Pokemon pokemon = getTrainerPokemon(trainer, pokemon_id);
   if (NULL == pokemon) return TRAINER_POKEMON_DOESNT_EXIST;
 
-  int hp = pokemonGetHP(pokemon);
+  double hp = pokemonGetHP(pokemon);
   if (hp == MAX_POKEMON_HP) return TRAINER_POKEMON_HP_IS_AT_MAX;
   // Find the most efficient potion
   int chosen_potion = -1;
   INVENTORY_FOREACH(potion, trainer->potions) {
-    int hp_after_potion = hp + *potion;
+    double hp_after_potion = hp + *potion;
     // Not enough to fill HP, no use looking further
     if (hp_after_potion < MAX_POKEMON_HP) {
       // If no better potion was seen before, it's the best we'll get
