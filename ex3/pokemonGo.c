@@ -56,11 +56,15 @@ PokemonGoErrorCode pokemongoTrainerAdd(PokemonGo pokemon_go, char* trainer_name,
 
 	trainer = createTrainer(trainer_name, budget, location);
 	if (NULL == trainer) return POKEMONGO_OUT_OF_MEMORY;
-
-	TrainerErrorCode trainer_result = trainerHunt(trainer, pokemon_go->output_channel);
-	if (trainer_result == TRAINER_OUT_OF_MEMORY) return POKEMONGO_OUT_OF_MEMORY;
+    TrainerErrorCode hunt_result = trainerHunt(trainer,
+                                               pokemon_go->output_channel);
+    if (hunt_result == TRAINER_OUT_OF_MEMORY) {
+        destroyTrainer(trainer);
+        return POKEMONGO_OUT_OF_MEMORY; 
+    }
 
 	MapResult map_result = mapPut(pokemon_go->trainers, trainer_name, trainer);
+    destroyTrainer(trainer);
 	if (map_result == MAP_OUT_OF_MEMORY) return POKEMONGO_OUT_OF_MEMORY;
 	// we checked all mapPut arg, so out of mem is the only possible error
 
@@ -76,7 +80,7 @@ PokemonGoErrorCode pokemongoTrainerGo(PokemonGo pokemon_go, char* trainer_name, 
 	Location location = mapGet(pokemon_go->locations, new_location);
 	if (NULL == location) return POKEMONGO_LOCATION_DOES_NOT_EXIST;
 	
-	TrainerErrorCode result = trainerGoToLocation(trainer, location); //TODO: print anything?
+	TrainerErrorCode result = trainerGoToLocation(trainer, location);
 	if (result == TRAINER_LOCATION_IS_NOT_REACHABLE) return POKEMONGO_LOCATION_IS_NOT_REACHABLE;
 	if (result == TRAINER_ALREADY_IN_LOCATION) return POKEMONGO_TRAINER_ALREADY_IN_LOCATION;
 
@@ -206,7 +210,8 @@ PokemonGoErrorCode pokemongoReportLocations(PokemonGo pokemon_go) {
 	assert(pokemon_go);
 
 	mtmPrintLocationsHeader(pokemon_go->output_channel);
-	MAP_FOREACH(Location, location, pokemon_go->locations) { //TODO: need to check if print with lexicographic order
+	MAP_FOREACH(char*, location_name, pokemon_go->locations) { //TODO: need to check if print with lexicographic order
+    Location location = mapGet(pokemon_go->locations, location_name);
 		printLocation(location, pokemon_go->output_channel);
 	}
 	return POKEMONGO_SUCCESS;
@@ -215,7 +220,6 @@ PokemonGoErrorCode pokemongoReportLocations(PokemonGo pokemon_go) {
 PokemonGoErrorCode pokemongoReportStock(PokemonGo pokemon_go) {
 	assert(pokemon_go);
 
-	mtmPrintStockHeader(pokemon_go->output_channel); //TODO: whos printing header?
 	storePrintStock(pokemon_go->store, pokemon_go->output_channel);
 	return POKEMONGO_SUCCESS;
 }
