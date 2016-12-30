@@ -38,11 +38,9 @@ TrainerErrorCode trainerRemovePokemon(Trainer trainer, int pokemon_id);
 TrainerErrorCode trainerHealPokemon(Trainer trainer, int pokemon_id);
 // INVALID_ARGUMENT, POKEMON_DOESNT_EXIST, NO_AVILABLE_ITEM_FOUND
 TrainerErrorCode trainerTrainPokemon(Trainer trainer, int pokemon_id);
-// -1 for invalid arg
-double trainerCalculateBattleDelta(Trainer trainer, Pokemon pokemon);
 // INVALID_ARGUMENT, POKEMON_DOESNT_EIST
-TrainerErrorCode trainersBattle(Trainer trainer, int pokemon_id,
-                                Trainer other_trainer, int other_pokemon_id);
+TrainerErrorCode trainersBattle(Trainer trainer_1, int pokemon1_id,
+                                Trainer trainer_2, int pokemon2_id);
 // INVALID_ARGUMENT, ALREADY_IN_LOCATION,LOCATION_IS_NOT_REACHABLE
 TrainerErrorCode trainerGoToLocation(Trainer trainer, Location location);
 // INVALID_ARGUMENT, OUT_OF_MEMORY

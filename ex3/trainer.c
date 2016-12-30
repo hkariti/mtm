@@ -177,20 +177,25 @@ double trainerCalculateBattleDelta(Trainer trainer, Pokemon pokemon) {
 }
 
 // TODO: Verify this implementation
-TrainerErrorCode trainersBattle(Trainer trainer, int pokemon_id,
-                                Trainer other_trainer, int other_pokemon_id) {
-  if (NULL == trainer || NULL == other_trainer) return TRAINER_INVALID_ARGUMENT;
-  Pokemon pokemon, other_pokemon;
-  pokemon = getTrainerPokemon(trainer, pokemon_id);
-  other_pokemon = getTrainerPokemon(other_trainer, other_pokemon_id);
-  if (NULL == pokemon || NULL == other_pokemon) {
+TrainerErrorCode trainersBattle(Trainer trainer_1, int pokemon1_id,
+                                Trainer trainer_2, int pokemon2_id) {
+  if (NULL == trainer_1 || NULL == trainer_2) return TRAINER_INVALID_ARGUMENT;
+
+  Pokemon pokemon_1, pokemon_2;
+  pokemon_1 = getTrainerPokemon(trainer_1, pokemon1_id);
+  pokemon_2 = getTrainerPokemon(trainer_2, pokemon2_id);
+  if (NULL == pokemon_1 || NULL == pokemon_2) {
     return TRAINER_POKEMON_DOESNT_EXIST;
   }
-  double my_delta = trainerCalculateBattleDelta(trainer, pokemon);
-  double other_delta = trainerCalculateBattleDelta(other_trainer, other_pokemon);
 
-  pokemonBattle(pokemon, other_pokemon, other_delta);
-  trainer->xp += my_delta/10;
+  double delta_2 = trainerCalculateBattleDelta(trainer_1, pokemon_1);
+  double delta_1 = trainerCalculateBattleDelta(trainer_2, pokemon_2);
+
+  pokemonBattle(pokemon_1, pokemon_2, delta_1);
+  pokemonBattle(pokemon_2, pokemon_1, delta_2);
+
+  trainer_1->xp += delta_2 / 10;
+  trainer_2->xp += delta_1 / 10;
 
   return TRAINER_SUCCESS;
 }

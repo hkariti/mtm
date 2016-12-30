@@ -141,7 +141,6 @@ PokemonGoErrorCode pokemongoBattleFight(PokemonGo pokemon_go, char* trainer1_nam
 	double old_xp_2 = getTrainerXP(trainer_2);
 
 	TrainerErrorCode result = trainersBattle(trainer_1, pokemon1_id, trainer_2, pokemon2_id);
-	result = trainersBattle(trainer_2, pokemon2_id, trainer_1, pokemon1_id);
 
 	double new_hp_1 = pokemonGetHP(pokemon_1);
 	double new_hp_2 = pokemonGetHP(pokemon_2);
