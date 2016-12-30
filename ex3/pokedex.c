@@ -49,7 +49,7 @@ Pokedex createPokedex() {
                       (copyMapDataElements)pokedexEntryCopy,
                       (freeMapKeyElements)free,
                       (freeMapDataElements)pokedexEntryDestroy,
-                      (compareMapKeyElements)strcmp);
+                      (compareMapKeyElements)stringCompare);
   return pokedex;
 }
 

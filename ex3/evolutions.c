@@ -41,7 +41,7 @@ Evolutions createEvolutions() {
                          (copyMapDataElements)evolutionEntryCopy,
                          (freeMapKeyElements)free,
                          (freeMapDataElements)evolutionEntryDestroy,
-                         (compareMapKeyElements)strcmp);
+                         (compareMapKeyElements)stringCompare);
 
   return evolutions;
 }

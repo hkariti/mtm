@@ -22,7 +22,7 @@ Location createLocation(char * name)
 	}
   location->neighbors = setCreate((copySetElements)stringCopy,
                                   (freeSetElements)free,
-                                  (compareSetElements)strcmp);
+                                  (compareSetElements)stringCompare);
   if (NULL == location->neighbors) {
 		free(location->name);
 		free(location);

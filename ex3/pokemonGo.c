@@ -30,7 +30,7 @@ PokemonGo createPokemonGo(Pokedex pokedex, Evolutions evolutions, Map locations,
                                    (copyMapDataElements)trainerCopy,
                                    (freeMapKeyElements)free,
                                    (freeMapDataElements)destroyTrainer,
-                                   (compareMapKeyElements)strcmp);
+                                   (compareMapKeyElements)stringCompare);
 	if (NULL == pokemon_go->trainers) {
 		free(pokemon_go);
 		return NULL;

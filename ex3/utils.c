@@ -9,8 +9,18 @@ char* stringCopy(char* string) {
   return string_copy;
 }
 
+int stringCompare(char* str1, char* str2) {
+  int cmp = strcmp((char*)str1, (char*)str2);
+  if (cmp > 0) return 1;
+  if (cmp < 0) return -1;
+  return 0;
+}
+
 int intCompare(int* a, int* b) {
-  return *a - *b;
+  int cmp = *a - *b;
+  if (cmp > 0) return 1;
+  if (cmp < 0) return -1;
+  return 0;
 }
 
 int* intCopy(int *key) {

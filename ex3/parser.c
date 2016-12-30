@@ -13,7 +13,7 @@ static bool pokedexAddFromLine(Pokedex pokedex, char* line) {
   char *species, *initial_cp_str, *types_part;
   int initial_cp;
   Set types = setCreate((copySetElements)stringCopy, (freeSetElements)free,
-                        (compareSetElements)strcmp);
+                        (compareSetElements)stringCompare);
   PokedexErrorCode pokedex_add_result;
   if (NULL == types) return false;
 
@@ -141,7 +141,7 @@ Map createLocationsMapFromFile(FILE* file, Pokedex pokedex,
                             (copyMapDataElements)copyLocation,
                             (freeMapKeyElements)free,
                             (freeMapDataElements)destroyLocation,
-                            (compareMapKeyElements)strcmp);
+                            (compareMapKeyElements)stringCompare);
   char line[MAX_STR_LENGTH + 1];
   Location location;
   MapResult add_location_result;
