@@ -14,15 +14,23 @@ struct PokemonGo_t {
 	FILE* output_channel;
 };
 
-PokemonGo createPokemonGo(Pokedex pokedex, Evolutions evolutions, Map locations, FILE* output_channel) {
-	if (NULL == pokedex || NULL == evolutions || NULL == locations || NULL == output_channel) return NULL;
+PokemonGo createPokemonGo(Pokedex pokedex, Evolutions evolutions, Map locations,
+                          FILE* output_channel) {
+	if (NULL == pokedex || NULL == evolutions || NULL == locations ||
+      NULL == output_channel) {
+    return NULL; 
+  }
 
 	PokemonGo pokemon_go = malloc(sizeof(*pokemon_go));
 	pokemon_go->pokedex = pokedex;
 	pokemon_go->evolutions = evolutions;
 	pokemon_go->locations = locations;
 	pokemon_go->output_channel = output_channel;
-	pokemon_go->trainers = mapCreate(stringCopy, trainerCopy, free, destroyTrainer, strcmp);
+	pokemon_go->trainers = mapCreate((copyMapKeyElements)stringCopy,
+                                   (copyMapDataElements)trainerCopy,
+                                   (freeMapKeyElements)free,
+                                   (freeMapDataElements)destroyTrainer,
+                                   (compareMapKeyElements)strcmp);
 	if (NULL == pokemon_go->trainers) {
 		free(pokemon_go);
 		return NULL;
@@ -43,8 +51,12 @@ void pokemongoDestroy(PokemonGo pokemon_go) {
 	free(pokemon_go);
 }
 
-PokemonGoErrorCode pokemongoTrainerAdd(PokemonGo pokemon_go, char* trainer_name, int budget, char* start_location) {
-	if (NULL == pokemon_go || NULL == trainer_name || NULL == start_location) return POKEMONGO_INVALID_ARGUMENT;
+PokemonGoErrorCode pokemongoTrainerAdd(PokemonGo pokemon_go, char* trainer_name,
+                                       int budget, char* start_location) {
+	if (NULL == pokemon_go || NULL == trainer_name ||
+      NULL == start_location) {
+    return POKEMONGO_INVALID_ARGUMENT; 
+  }
 
 	if (budget < 0) return POKEMONGO_INVALID_ARGUMENT;
 	
@@ -71,8 +83,11 @@ PokemonGoErrorCode pokemongoTrainerAdd(PokemonGo pokemon_go, char* trainer_name,
 	return POKEMONGO_SUCCESS;
 }
 
-PokemonGoErrorCode pokemongoTrainerGo(PokemonGo pokemon_go, char* trainer_name, char* new_location) {
-	if (NULL == pokemon_go || NULL == trainer_name || NULL == new_location) return POKEMONGO_INVALID_ARGUMENT;
+PokemonGoErrorCode pokemongoTrainerGo(PokemonGo pokemon_go, char* trainer_name,
+                                      char* new_location) {
+	if (NULL == pokemon_go || NULL == trainer_name || NULL == new_location) {
+    return POKEMONGO_INVALID_ARGUMENT; 
+  }
 
 	Trainer trainer = mapGet(pokemon_go->trainers, trainer_name);
 	if (NULL == trainer) return POKEMONGO_TRAINER_DOES_NOT_EXIST;
@@ -81,8 +96,12 @@ PokemonGoErrorCode pokemongoTrainerGo(PokemonGo pokemon_go, char* trainer_name, 
 	if (NULL == location) return POKEMONGO_LOCATION_DOES_NOT_EXIST;
 	
 	TrainerErrorCode result = trainerGoToLocation(trainer, location);
-	if (result == TRAINER_LOCATION_IS_NOT_REACHABLE) return POKEMONGO_LOCATION_IS_NOT_REACHABLE;
-	if (result == TRAINER_ALREADY_IN_LOCATION) return POKEMONGO_TRAINER_ALREADY_IN_LOCATION;
+	if (result == TRAINER_LOCATION_IS_NOT_REACHABLE) {
+    return POKEMONGO_LOCATION_IS_NOT_REACHABLE; 
+  }
+	if (result == TRAINER_ALREADY_IN_LOCATION) {
+    return POKEMONGO_TRAINER_ALREADY_IN_LOCATION; 
+  }
 
 	result = trainerHunt(trainer, pokemon_go->output_channel);
 	if (result == TRAINER_OUT_OF_MEMORY) return POKEMONGO_OUT_OF_MEMORY;
@@ -90,7 +109,8 @@ PokemonGoErrorCode pokemongoTrainerGo(PokemonGo pokemon_go, char* trainer_name, 
 	return POKEMONGO_SUCCESS;
 }
 
-PokemonGoErrorCode pokemongoStoreAdd(PokemonGo pokemon_go, char* item_type, int value, int quantity) {
+PokemonGoErrorCode pokemongoStoreAdd(PokemonGo pokemon_go, char* item_type,
+                                     int value, int quantity) {
 	if (NULL == pokemon_go || NULL == item_type) return POKEMONGO_INVALID_ARGUMENT;
 
 	if (quantity <= 0) return POKEMONGO_INVALID_ARGUMENT;
@@ -105,8 +125,12 @@ PokemonGoErrorCode pokemongoStoreAdd(PokemonGo pokemon_go, char* item_type, int 
 	return POKEMONGO_SUCCESS;
 }
 
-PokemonGoErrorCode pokemongoTrainerPurchase(PokemonGo pokemon_go, char* trainer_name, char* item_type, int value) {
-	if (NULL == pokemon_go || NULL == trainer_name || NULL == item_type) return POKEMONGO_INVALID_ARGUMENT;
+PokemonGoErrorCode pokemongoTrainerPurchase(PokemonGo pokemon_go,
+                                            char* trainer_name,
+                                            char* item_type, int value) {
+	if (NULL == pokemon_go || NULL == trainer_name || NULL == item_type) {
+    return POKEMONGO_INVALID_ARGUMENT; 
+  }
 
 	if (strcmp(item_type, "potion") != 0 &&
 		strcmp(item_type, "candy") != 0) return POKEMONGO_INVALID_ARGUMENT;
@@ -115,27 +139,43 @@ PokemonGoErrorCode pokemongoTrainerPurchase(PokemonGo pokemon_go, char* trainer_
 	Trainer trainer = mapGet(pokemon_go->trainers, trainer_name);
 	if (NULL == trainer) return POKEMONGO_TRAINER_DOES_NOT_EXIST;
 
-	TrainerErrorCode result = trainerBuyItem(trainer, pokemon_go->store, item_type, value);
-	//if (result == TRAINER_INVALID_ARGUMENT) return POKEMONGO_INVALID_ARGUMENT;
-	if (result == TRAINER_STORE_ITEM_OUT_OF_STOCK) return POKEMONGO_ITEM_OUT_OF_STOCK;
-	if (result == TRAINER_BUDGET_IS_INSUFFICIENT) return POKEMONGO_BUDGET_IS_NOT_SUFFICIENT;
-	if (result == TRAINER_OUT_OF_MEMORY) return POKEMONGO_OUT_OF_MEMORY;
+	TrainerErrorCode result = trainerBuyItem(trainer, pokemon_go->store,
+                                           item_type, value);
+	if (result == TRAINER_STORE_ITEM_OUT_OF_STOCK) {
+    return POKEMONGO_ITEM_OUT_OF_STOCK;
+  }
+  if (result == TRAINER_BUDGET_IS_INSUFFICIENT) {
+    return POKEMONGO_BUDGET_IS_NOT_SUFFICIENT; 
+  }
+	if (result == TRAINER_OUT_OF_MEMORY) {
+    return POKEMONGO_OUT_OF_MEMORY; 
+  }
 
 	return POKEMONGO_SUCCESS;
 }
 
-PokemonGoErrorCode pokemongoBattleFight(PokemonGo pokemon_go, char* trainer1_name, char* trainer2_name, int pokemon1_id, int pokemon2_id) {
-	if (NULL == pokemon_go || NULL == trainer1_name || NULL == trainer2_name) return POKEMONGO_INVALID_ARGUMENT;
+PokemonGoErrorCode pokemongoBattleFight(PokemonGo pokemon_go,
+                                        char* trainer1_name, char* trainer2_name,
+                                        int pokemon1_id, int pokemon2_id) {
+	if (NULL == pokemon_go || NULL == trainer1_name || NULL == trainer2_name) {
+    return POKEMONGO_INVALID_ARGUMENT; 
+  }
 
-	if (strcmp(trainer1_name, trainer2_name) == 0) return POKEMONGO_INVALID_ARGUMENT;
+	if (strcmp(trainer1_name, trainer2_name) == 0) {
+    return POKEMONGO_INVALID_ARGUMENT; 
+  }
 
 	Trainer trainer_1 = mapGet(pokemon_go->trainers, trainer1_name);
 	Trainer trainer_2 = mapGet(pokemon_go->trainers, trainer2_name);
-	if (NULL == trainer_1 || NULL == trainer_2) return POKEMONGO_TRAINER_DOES_NOT_EXIST;
+	if (NULL == trainer_1 || NULL == trainer_2) {
+    return POKEMONGO_TRAINER_DOES_NOT_EXIST; 
+  }
 
 	Pokemon pokemon_1 = getTrainerPokemon(trainer_1, pokemon1_id);
 	Pokemon pokemon_2 = getTrainerPokemon(trainer_2, pokemon2_id);
-	if (NULL == pokemon_1 || NULL == pokemon_2) return POKEMONGO_POKEMON_DOES_NOT_EXIST;
+	if (NULL == pokemon_1 || NULL == pokemon_2) {
+    return POKEMONGO_POKEMON_DOES_NOT_EXIST; 
+  }
 	char* pokemon1_name = pokemonGetSpecies(pokemon_1);
 	char* pokemon2_name = pokemonGetSpecies(pokemon_2);
 	int cp_1 = pokemonGetCP(pokemon_1);
@@ -147,7 +187,7 @@ PokemonGoErrorCode pokemongoBattleFight(PokemonGo pokemon_go, char* trainer1_nam
 	double old_xp_1 = getTrainerXP(trainer_1);
 	double old_xp_2 = getTrainerXP(trainer_2);
 
-	TrainerErrorCode result = trainersBattle(trainer_1, pokemon1_id, trainer_2, pokemon2_id);
+	trainersBattle(trainer_1, pokemon1_id, trainer_2, pokemon2_id);
 
 	double new_hp_1 = pokemonGetHP(pokemon_1);
 	double new_hp_2 = pokemonGetHP(pokemon_2);
@@ -158,46 +198,64 @@ PokemonGoErrorCode pokemongoBattleFight(PokemonGo pokemon_go, char* trainer1_nam
 	bool is_dead_1, is_dead_2;
 	isPokemonDead(pokemon_1, &is_dead_1);
 	isPokemonDead(pokemon_2, &is_dead_2);
-	mtmPrintBattle(pokemon_go->output_channel, trainer1_name, trainer2_name, pokemon1_name, pokemon2_name, cp_1, cp_2, old_hp_1, old_hp_2, new_hp_1, new_hp_2, old_level_1, old_level_2, new_level_1
-		, new_level_2, old_xp_1, old_xp_2, new_xp_1, new_xp_2, is_dead_1, is_dead_2);
-	if (is_dead_1) {
-		trainerRemovePokemon(trainer_1, pokemon1_id);
-	}
-	if (is_dead_2) {
-		trainerRemovePokemon(trainer_2, pokemon2_id);
-	}
+	mtmPrintBattle(pokemon_go->output_channel, trainer1_name, trainer2_name,
+                 pokemon1_name, pokemon2_name, cp_1, cp_2, old_hp_1, old_hp_2,
+                 new_hp_1, new_hp_2, old_level_1, old_level_2, new_level_1,
+                 new_level_2, old_xp_1, old_xp_2, new_xp_1, new_xp_2, is_dead_1,
+                 is_dead_2);
+	if (is_dead_1) trainerRemovePokemon(trainer_1, pokemon1_id);
+	if (is_dead_2) trainerRemovePokemon(trainer_2, pokemon2_id);
 	return POKEMONGO_SUCCESS;
 }
 
-PokemonGoErrorCode pokemongoPokemonHeal(PokemonGo pokemon_go, char* trainer_name, int pokemon_id) {
-	if (NULL == pokemon_go || NULL == trainer_name) return POKEMONGO_INVALID_ARGUMENT;
+PokemonGoErrorCode pokemongoPokemonHeal(PokemonGo pokemon_go, char* trainer_name,
+                                        int pokemon_id) {
+	if (NULL == pokemon_go || NULL == trainer_name) {
+    return POKEMONGO_INVALID_ARGUMENT; 
+  }
 
 	Trainer trainer = mapGet(pokemon_go->trainers, trainer_name);
 	if (NULL == trainer) return POKEMONGO_TRAINER_DOES_NOT_EXIST;
 
 	TrainerErrorCode result = trainerHealPokemon(trainer, pokemon_id);
-	if (result == TRAINER_POKEMON_DOESNT_EXIST) return POKEMONGO_POKEMON_DOES_NOT_EXIST;
-	if (result == TRAINER_POKEMON_HP_IS_AT_MAX) return POKEMONGO_HP_IS_AT_MAX;
-	if (result == TRAINER_NO_AVAILABLE_ITEM_FOUND) return POKEMONGO_NO_AVAILABLE_ITEM_FOUND;
+	if (result == TRAINER_POKEMON_DOESNT_EXIST) {
+    return POKEMONGO_POKEMON_DOES_NOT_EXIST; 
+  }
+	if (result == TRAINER_POKEMON_HP_IS_AT_MAX) {
+    return POKEMONGO_HP_IS_AT_MAX; 
+  }
+	if (result == TRAINER_NO_AVAILABLE_ITEM_FOUND) {
+    return POKEMONGO_NO_AVAILABLE_ITEM_FOUND; 
+  }
 
 	return POKEMONGO_SUCCESS;
 }
 
-PokemonGoErrorCode pokemongoPokemonTrain(PokemonGo pokemon_go, char* trainer_name, int pokemon_id) {
-	if (NULL == pokemon_go || NULL == trainer_name) return POKEMONGO_INVALID_ARGUMENT;
+PokemonGoErrorCode pokemongoPokemonTrain(PokemonGo pokemon_go,
+                                         char* trainer_name, int pokemon_id) {
+	if (NULL == pokemon_go || NULL == trainer_name) {
+    return POKEMONGO_INVALID_ARGUMENT; 
+  }
 
 	Trainer trainer = mapGet(pokemon_go->trainers, trainer_name);
 	if (NULL == trainer) return POKEMONGO_TRAINER_DOES_NOT_EXIST;
 
 	TrainerErrorCode result = trainerTrainPokemon(trainer, pokemon_id);
-	if (result == TRAINER_POKEMON_DOESNT_EXIST) return POKEMONGO_POKEMON_DOES_NOT_EXIST;
-	if (result == TRAINER_NO_AVAILABLE_ITEM_FOUND) return POKEMONGO_NO_AVAILABLE_ITEM_FOUND;
+	if (result == TRAINER_POKEMON_DOESNT_EXIST) {
+    return POKEMONGO_POKEMON_DOES_NOT_EXIST; 
+  }
+	if (result == TRAINER_NO_AVAILABLE_ITEM_FOUND) {
+    return POKEMONGO_NO_AVAILABLE_ITEM_FOUND; 
+  }
 
 	return POKEMONGO_SUCCESS;
 }
 
-PokemonGoErrorCode pokemongoReportTrainer(PokemonGo pokemon_go, char* trainer_name) {
-	if (NULL == pokemon_go || NULL == trainer_name) return POKEMONGO_INVALID_ARGUMENT;
+PokemonGoErrorCode pokemongoReportTrainer(PokemonGo pokemon_go,
+                                          char* trainer_name) {
+	if (NULL == pokemon_go || NULL == trainer_name) {
+    return POKEMONGO_INVALID_ARGUMENT; 
+  }
 
 	Trainer trainer = mapGet(pokemon_go->trainers, trainer_name);
 	if (NULL == trainer) return POKEMONGO_TRAINER_DOES_NOT_EXIST;
