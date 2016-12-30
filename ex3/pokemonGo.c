@@ -21,7 +21,7 @@ PokemonGo createPokemonGo(Pokedex pokedex, Evolutions evolutions, Map locations,
 	pokemon_go->pokedex = pokedex;
 	pokemon_go->evolutions = evolutions;
 	pokemon_go->locations = locations;
-	pokemon_go->output_channel;
+	pokemon_go->output_channel = output_channel;
 	pokemon_go->trainers = mapCreate(stringCopy, trainerCopy, free, destroyTrainer, strcmp);
 	if (NULL == pokemon_go->trainers) {
 		free(pokemon_go);
@@ -38,9 +38,6 @@ PokemonGo createPokemonGo(Pokedex pokedex, Evolutions evolutions, Map locations,
 
 void pokemongoDestroy(PokemonGo pokemon_go) {
 	if (NULL == pokemon_go) return;
-	destroyEvolutions(pokemon_go->evolutions);
-	destroyPokedex(pokemon_go->pokedex);
-	mapDestroy(pokemon_go->locations);
 	mapDestroy(pokemon_go->trainers);
 	storeDestroy(pokemon_go->store);
 	free(pokemon_go);
@@ -60,8 +57,11 @@ PokemonGoErrorCode pokemongoTrainerAdd(PokemonGo pokemon_go, char* trainer_name,
 	trainer = createTrainer(trainer_name, budget, location);
 	if (NULL == trainer) return POKEMONGO_OUT_OF_MEMORY;
 
-	MapResult result = mapPut(pokemon_go->trainers, trainer_name, trainer);
-	if (result == MAP_OUT_OF_MEMORY) return POKEMONGO_OUT_OF_MEMORY;
+	TrainerErrorCode trainer_result = trainerHunt(trainer, pokemon_go->output_channel);
+	if (trainer_result == TRAINER_OUT_OF_MEMORY) return POKEMONGO_OUT_OF_MEMORY;
+
+	MapResult map_result = mapPut(pokemon_go->trainers, trainer_name, trainer);
+	if (map_result == MAP_OUT_OF_MEMORY) return POKEMONGO_OUT_OF_MEMORY;
 	// we checked all mapPut arg, so out of mem is the only possible error
 
 	return POKEMONGO_SUCCESS;
