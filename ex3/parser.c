@@ -134,6 +134,12 @@ static Location locationFromLine(char* line, Pokedex pokedex,
   return location;
 }
 
+int stringCmp(MapKeyElement str1, MapKeyElement str2) {
+    int cmp =strcmp((char*)str1, (char*)str2);
+    if (cmp > 0) return 1;
+    if (cmp < 0) return -1;
+    return 0;
+}
 Map createLocationsMapFromFile(FILE* file, Pokedex pokedex,
                                Evolutions evolutions) {
   if (NULL == file || NULL == pokedex || NULL == evolutions) return NULL;
@@ -141,7 +147,8 @@ Map createLocationsMapFromFile(FILE* file, Pokedex pokedex,
                             (copyMapDataElements)copyLocation,
                             (freeMapKeyElements)free,
                             (freeMapDataElements)destroyLocation,
-                            (compareMapKeyElements)strcmp);
+                            stringCmp);
+  //(compareMapKeyElements)strcmp);
   char line[MAX_STR_LENGTH + 1];
   Location location;
   MapResult add_location_result;
