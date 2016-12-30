@@ -5,7 +5,8 @@ objects=$(addsuffix .o,$(modules))
 tests=$(addsuffix _test,$(modules))
 mocks=$(foreach mod,$(modules),$(if $(wildcard tests/mocks/$(mod)_mocks.c),$(mod)_mocks.o))
 
-pokemon_go_mtm: utils.o parser.o $(objects)
+pokemon_go_mtm: pokemon_go_mtm.o utils.o parser.o $(objects)
+	$(CC) ${CFLAGS} -o $@ $^ $(LDFLAGS)
 
 mtm_run:
 	$(CC) $(CFLAGS) *.c $(LDFLAGS) -o pokemon_go_mtm
@@ -29,7 +30,7 @@ evolutions.o: evolutions.c evolutions.h map.h pokedex.h set.h utils.h
 inventory.o: inventory.c inventory.h print_utils.h map.h utils.h
 location.o: location.c location.h list.h set.h pokemon.h print_utils.h \
   pokedex.h map.h evolutions.h utils.h
-main.o: main.c parser.h map.h pokedex.h set.h evolutions.h location.h \
+pokemon_go_mtm.o: pokemon_go_mtm.c parser.h map.h pokedex.h set.h evolutions.h location.h \
   list.h pokemon.h print_utils.h pokemonGo.h trainer.h store.h \
   inventory.h
 parser.o: parser.c parser.h map.h pokedex.h set.h evolutions.h location.h \

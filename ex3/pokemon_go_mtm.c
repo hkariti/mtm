@@ -83,6 +83,7 @@ MtmErrorCode convertErrorToMtm(PokemonGoErrorCode pokemon_go_code) {
   }
   // This should never happen
   assert(false);
+  return MTM_SUCCESS;
 }
 
 MtmErrorCode runTrainerCommand(PokemonGo game, char* subcommand, char** args) {
