@@ -52,7 +52,6 @@ void printPokemon(Pokemon pokemon, FILE* output_channel)
 	char* pokemon_species = pokedexEntryGetSpecies(pokemon->pokemon_info);
 	mtmPrintPokemon(output_channel, pokemon->id, pokemon_species,
 		pokemon->hp, pokemonGetCP(pokemon), pokemon->level);
-	free(pokemon_species);
 }
 
 int pokemonCompareByID(Pokemon pokemon_1, Pokemon pokemon_2)
