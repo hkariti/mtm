@@ -112,7 +112,6 @@ LocationErrorCode locationAppendPokemon(Location location, Pokemon pokemon) {
 
 Pokemon locationPopPokemon(Location location)
 {
-	assert(location);
 	if (NULL == location) return NULL;
 
 	Pokemon pokemon = listGetFirst(location->pokemons);
@@ -144,9 +143,6 @@ bool locationIsNeighour(Location location, Location neighbour)
 
 LocationErrorCode locationAddNeighbor(Location location, char* neighbour_name)
 {
-	assert(location);
-	assert(neighbour_name);
-
 	if (NULL == location || NULL == neighbour_name) return LOCATION_INVALID_ARGUMENT;
 
 	SetResult result = setAdd(location->neighbors, neighbour_name);
