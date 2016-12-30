@@ -11,14 +11,43 @@ Map demoLocations(Pokedex pokedex, Evolutions evolutions) {
   neighbor = demoLocationWithPokemon("neighbor", 0, pokedex, evolutions);
   full_location = demoLocationWithPokemon("full_location", 10, pokedex, evolutions);
   locationAddNeighbor(empty_location, "neighbor");
-
+  Location paris = demoLocationWithPokemon("paris", 1, pokedex, evolutions);
+  Location london = demoLocationWithPokemon("london", 2, pokedex, evolutions);
+  Location madrid = demoLocationWithPokemon("madrid", 10, pokedex, evolutions);
+  Location beijing = demoLocationWithPokemon("beijing", 10, pokedex, evolutions);
+  Location telaviv = demoLocationWithPokemon("tel aviv", 1, pokedex, evolutions);
+  Location jerusalem = demoLocationWithPokemon("jerusalem", 0, pokedex, evolutions);
+  Location palem = demoLocationWithPokemon("palem", 10, pokedex, evolutions);
+  locationAddNeighbor(paris, "london");
+  locationAddNeighbor(paris, "madrid");
+  locationAddNeighbor(london, "paris");
+  locationAddNeighbor(london, "madrid");
+  locationAddNeighbor(madrid, "paris");
+  locationAddNeighbor(madrid, "london");
+  locationAddNeighbor(jerusalem, "tel aviv");
+  locationAddNeighbor(telaviv, "jerusalem");
   mapPut(locations, "empty_location", empty_location);
   mapPut(locations, "neighbor", neighbor);
   mapPut(locations, "full_location", full_location);
+  mapPut(locations, "paris", paris);
+  mapPut(locations, "london", london);
+  mapPut(locations, "madrid", madrid);
+  mapPut(locations, "jerusalem", jerusalem);
+  mapPut(locations, "tel aviv", telaviv);
+  mapPut(locations, "beijing", beijing);
+  mapPut(locations, "palem", palem);
 
   destroyLocation(empty_location);
   destroyLocation(neighbor);
   destroyLocation(full_location);
+  destroyLocation(paris);
+  destroyLocation(london);
+  destroyLocation(madrid);
+  destroyLocation(telaviv); // O__O
+  destroyLocation(jerusalem);
+  destroyLocation(beijing);
+  destroyLocation(palem);
+
   return locations;
 }
 
@@ -29,9 +58,9 @@ Trainer demoTrainerEmpty(char* name, Map locations) {
   return trainer;
 }
 
-Trainer demoTrainerFull(char* name, Map locations) {
+Trainer demoTrainerFullAtLocation(char* name, Map locations, char* location_name) {
   FILE* devnull = fopen("/dev/null", "r");
-  Location location = mapGet(locations, "full_location");
+  Location location = mapGet(locations, location_name);
   Store store = demoStore();
   Trainer trainer = createTrainer(name, 1000, location);
   trainerHunt(trainer, devnull);
@@ -46,6 +75,10 @@ Trainer demoTrainerFull(char* name, Map locations) {
   storeDestroy(store);
   fclose(devnull);
   return trainer;
+}
+
+Trainer demoTrainerFull(char* name, Map locations) {
+	return demoTrainerFullAtLocation(name, locations, "full_location");
 }
 
 Trainer demoTrainerWithItems(char* name, Map locations) {
