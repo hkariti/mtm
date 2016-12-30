@@ -115,12 +115,12 @@ bool testPokemonCaught() {
 	Pokedex pokedex = demoPokedex();
 	Evolutions evolutions = demoEvolutions(pokedex);
 	Set types = setCreate((copySetElements)stringCopy, (freeSetElements)free,
-		(compareSetElements)strcmp);
+		(compareSetElements)stringCompare);
 	int pokecoins;
 
 	// Test regular types
-	setAdd(types, "bug");
-	setAdd(types, "ground");
+	setAdd(types, "BUG");
+	setAdd(types, "GROUND");
 	pokedexAddPokemon(pokedex, "weedle", 1000, types);
 	Pokemon weedle = createPokemon(pokedexGetPokemonInfo(pokedex, "weedle"), evolutions);
 	pokecoins = pokemonCaught(weedle, 10);
@@ -128,8 +128,8 @@ bool testPokemonCaught() {
 	ASSERT_TEST(pokecoins == REGULAR_TYPE_POKECOINS);
 
 	// Test 2 one star types
-	setAdd(types, "water");
-	setAdd(types, "fairy");
+	setAdd(types, "WATER");
+	setAdd(types, "FAIRY");
 	pokedexAddPokemon(pokedex, "tinkertoice", 1000, types);
 	Pokemon tinkertoice = createPokemon(pokedexGetPokemonInfo(pokedex, "tinkertoice"), evolutions);
 	pokecoins = pokemonCaught(tinkertoice, 10);
@@ -138,8 +138,8 @@ bool testPokemonCaught() {
 
 
 	// Test 2 double star types
-	setAdd(types, "fire");
-	setAdd(types, "lying");
+	setAdd(types, "FIRE");
+	setAdd(types, "LYING");
 	pokedexAddPokemon(pokedex, "moltres", 1000, types);
 	Pokemon moltres = createPokemon(pokedexGetPokemonInfo(pokedex, "moltres"), evolutions);
 	pokecoins = pokemonCaught(moltres, 10);
