@@ -80,6 +80,9 @@ PokemonGoErrorCode pokemongoTrainerGo(PokemonGo pokemon_go, char* trainer_name, 
 	if (result == TRAINER_LOCATION_IS_NOT_REACHABLE) return POKEMONGO_LOCATION_IS_NOT_REACHABLE;
 	if (result == TRAINER_ALREADY_IN_LOCATION) return POKEMONGO_TRAINER_ALREADY_IN_LOCATION;
 
+	result = trainerHunt(trainer, pokemon_go->output_channel);
+	if (result == TRAINER_OUT_OF_MEMORY) return POKEMONGO_OUT_OF_MEMORY;
+
 	return POKEMONGO_SUCCESS;
 }
 
