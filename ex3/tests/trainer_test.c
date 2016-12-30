@@ -250,28 +250,6 @@ bool testTrainerTrainPokemon() {
   return true;
 }
 
-bool testTrainerCalcuateBattleDelta() {
-  TRAINER_SET_UP();
-
-  Trainer trainer = demoTrainerWithPokemon("trainer", locations);
-  Pokemon pokemon = getTrainerPokemon(trainer, 1);
-  double delta;
-
-  // NULL input
-  delta = trainerCalculateBattleDelta(NULL, pokemon);
-  ASSERT_TEST(-1 == delta);
-  delta = trainerCalculateBattleDelta(trainer, NULL);
-  ASSERT_TEST(-1 == delta);
-
-  // Valid input
-  delta = trainerCalculateBattleDelta(trainer, pokemon);
-  ASSERT_TEST(delta > 0);
-
-  destroyTrainer(trainer);
-  TRAINER_TEAR_DOWN();
-  return true;
-}
-
 bool testTrainersBattle() {
   TRAINER_SET_UP();
 
@@ -478,12 +456,10 @@ int main() {
   RUN_TEST(testCreateTrainer);
   RUN_TEST(testDestroyTrainer);
   RUN_TEST(testCopyTrainer);
-  //  RUN_TEST(testPrintTrainer);
   RUN_TEST(testGetTrainerPokemon);
   RUN_TEST(testTrainerRemovePokemon);
   RUN_TEST(testTrainerHealPokemon);
   RUN_TEST(testTrainerTrainPokemon);
-  RUN_TEST(testTrainerCalcuateBattleDelta);
   RUN_TEST(testTrainersBattle);
   RUN_TEST(testTrainerGoToLocation);
   RUN_TEST(testTrainerHunt);
