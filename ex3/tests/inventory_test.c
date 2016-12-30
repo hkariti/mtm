@@ -1,4 +1,4 @@
-#include <inventory.h>
+#include "../inventory.h"
 #include "mocks/inventory_mocks.h"
 #include "test_utilities.h"
 
