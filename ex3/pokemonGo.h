@@ -36,7 +36,7 @@ PokemonGoErrorCode pokemongoBattleFight(PokemonGo pokemon_go, char* trainer1_nam
 PokemonGoErrorCode pokemongoPokemonHeal(PokemonGo pokemon_go, char* trainer_name, int pokemon_id);
 PokemonGoErrorCode pokemongoPokemonTrain(PokemonGo pokemon_go, char* trainer_name, int pokemon_id);
 PokemonGoErrorCode pokemongoReportTrainer(PokemonGo pokemon_go, char* trainer_name);
-void pokemongoReportLocations(PokemonGo pokemon_go);
-void pokemongoReportStock(PokemonGo pokemon_go);
+PokemonGoErrorCode pokemongoReportLocations(PokemonGo pokemon_go);
+PokemonGoErrorCode pokemongoReportStock(PokemonGo pokemon_go);
 
 #endif

@@ -202,19 +202,21 @@ PokemonGoErrorCode pokemongoReportTrainer(PokemonGo pokemon_go, char* trainer_na
 	return POKEMONGO_SUCCESS;
 }
 
-void pokemongoReportLocations(PokemonGo pokemon_go) {
+PokemonGoErrorCode pokemongoReportLocations(PokemonGo pokemon_go) {
 	assert(pokemon_go);
 
 	mtmPrintLocationsHeader(pokemon_go->output_channel);
 	MAP_FOREACH(Location, location, pokemon_go->locations) { //TODO: need to check if print with lexicographic order
 		printLocation(location, pokemon_go->output_channel);
 	}
+	return POKEMONGO_SUCCESS;
 }
 
-void pokemongoReportStock(PokemonGo pokemon_go) {
+PokemonGoErrorCode pokemongoReportStock(PokemonGo pokemon_go) {
 	assert(pokemon_go);
 
 	mtmPrintStockHeader(pokemon_go->output_channel); //TODO: whos printing header?
 	storePrintStock(pokemon_go->store, pokemon_go->output_channel);
+	return POKEMONGO_SUCCESS;
 }
 
