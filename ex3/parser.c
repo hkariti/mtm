@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include <parser.h>
-#include <pokemon.h>
-#include <utils.h>
+#include "parser.h"
+#include "pokemon.h"
+#include "utils.h"
 
 #define WORD_FOREACH(str, iterator)                          \
   for (char* iterator = strtok(str, " \t\r\n"); iterator != NULL;\

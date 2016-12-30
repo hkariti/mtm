@@ -2,10 +2,10 @@
 #define PARSER_H
 
 #include <stdio.h>
-#include <map.h>
-#include <pokedex.h>
-#include <evolutions.h>
-#include <location.h>
+#include "map.h"
+#include "pokedex.h"
+#include "evolutions.h"
+#include "location.h"
 
 #define MAX_STR_LENGTH 250
 

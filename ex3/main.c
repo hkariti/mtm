@@ -1,8 +1,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
-#include <parser.h>
-#include <pokemonGo.h>
+#include "parser.h"
+#include "pokemonGo.h"
 
 #define ERR_CHANNEL stderr
 

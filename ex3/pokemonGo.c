@@ -1,9 +1,9 @@
-#include "pokemonGo.h"
-#include "utils.h"
-#include "print_utils.h"
 #include <string.h>
 #include <stdlib.h>
 #include <assert.h>
+#include "pokemonGo.h"
+#include "utils.h"
+#include "print_utils.h"
 
 struct PokemonGo_t {
 	Evolutions evolutions;

@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
-#include <pokedex.h>
-#include <utils.h>
+#include "../pokedex.h"
+#include "../utils.h"
 #include "mocks/pokedex_mocks.h"
 #include "test_utilities.h"
 

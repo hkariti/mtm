@@ -1,6 +1,6 @@
 #include "test_utilities.h"
 #include "../pokemon.h"
-#include "../utils.h" //TODO: ugly
+#include "../utils.h"
 #include "mocks/evolutions_mocks.h"
 #include "mocks/pokedex_mocks.h"
 #include "mocks/pokemon_mocks.h"

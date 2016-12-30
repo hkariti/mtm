@@ -1,5 +1,5 @@
-#include <trainer.h>
-#include <utils.h>
+#include "../trainer.h"
+#include "../utils.h"
 #include "mocks/trainer_mocks.h"
 #include "test_utilities.h"
 

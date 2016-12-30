@@ -1,8 +1,8 @@
-#include "pokemon.h"
-#include "utils.h"
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include "pokemon.h"
+#include "utils.h"
 
 struct Pokemon_t {
 	Map evolutions_map;

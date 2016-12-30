@@ -1,8 +1,8 @@
-#include "location.h"
-#include "utils.h"
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include "location.h"
+#include "utils.h"
 
 struct Location_t {
 	char* name;
