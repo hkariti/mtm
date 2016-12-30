@@ -61,7 +61,7 @@ Evolutions createEvolutionsFromFile(FILE* file, Pokedex pokedex) {
   PokedexEntry evolution;
   EvolutionsErrorCode add_result;
   while (fgets(line, MAX_STR_LENGTH, file) != NULL) {
-    assert(sscanf(line, "%s %s %d", pokemon, evolution_name, &level) == 3);
+    sscanf(line, "%s %s %d", pokemon, evolution_name, &level);
     evolution = pokedexGetPokemonInfo(pokedex, evolution_name);
     assert(evolution);
     add_result = evolutionsAddEntry(evolutions, pokemon, level, evolution);
