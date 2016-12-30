@@ -83,11 +83,12 @@ void printLocation(Location location, FILE * output_channel)
 	assert(location);
 	assert(output_channel);
 
-	Pokemon first_pokemon = listGetFirst(location->pokemons);
 	char* pokemon_species = NULL;;
-	if (NULL != first_pokemon) {
+    if (listGetSize(location->pokemons) > 0) {
+        Pokemon first_pokemon = listGetFirst(location->pokemons);
 		pokemon_species = pokemonGetSpecies(first_pokemon);
-	}
+        assert(pokemon_species);
+    }
 	mtmPrintLocation(output_channel, location->name, pokemon_species);
 }
 
