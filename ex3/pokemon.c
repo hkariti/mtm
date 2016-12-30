@@ -122,17 +122,17 @@ static int pokemonPokecoinsValue(Pokemon pokemon) { // need to verify all types 
 	Set types = pokedexEntryGetTypes(pokemon->pokemon_info);
 	int pokecoins_value = REGULAR_TYPE_POKECOINS;
 	SET_FOREACH(char*, current_type, types) {
-		if (0 == strcmp(current_type, "fire") ||
-			0 == strcmp(current_type, "flying") ||
-			0 == strcmp(current_type, "poison"))
+		if (0 == strcmp(current_type, "FIRE") ||
+			0 == strcmp(current_type, "FLYING") ||
+			0 == strcmp(current_type, "POISON"))
 		{
 			return DOUBLE_STAR_TYPE_POKECOINS;
 		}
-		else if (0 == strcmp(current_type, "rock") ||
-			0 == strcmp(current_type, "electric") ||
-			0 == strcmp(current_type, "water") ||
-			0 == strcmp(current_type, "fairy") ||
-			0 == strcmp(current_type, "ice"))
+		else if (0 == strcmp(current_type, "ROCK") ||
+			0 == strcmp(current_type, "ELECTRIC") ||
+			0 == strcmp(current_type, "WATER") ||
+			0 == strcmp(current_type, "FAIRY") ||
+			0 == strcmp(current_type, "ICE"))
 		{
 			pokecoins_value = ONE_STAR_TYPE_POKECOINS;
 		}
