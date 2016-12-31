@@ -9,8 +9,8 @@
 #include "test_utilities.h"
 
 #define POKEMONGO_SET_UP()                              \
-  Evolutions evolutions = demoEvolutions();           \
   Pokedex pokedex = demoPokedex();                    \
+  Evolutions evolutions = demoEvolutions(pokedex);           \
   Map locations = demoLocations(pokedex, evolutions);
 
 #define POKEMONGO_TEAR_DOWN()                     \

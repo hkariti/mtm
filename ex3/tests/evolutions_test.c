@@ -22,7 +22,6 @@ bool testDestroyEvolutions() {
 
   // Test with entries
   EVOLUTIONS_SET_UP();
-  destroyEvolutions(evolutions);
   EVOLUTIONS_TEAR_DOWN();
 
   return true;
