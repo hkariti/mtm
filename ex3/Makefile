@@ -8,16 +8,20 @@ mocks=$(foreach mod,$(modules),$(if $(wildcard tests/mocks/$(mod)_mocks.c),$(mod
 pokemon_go_mtm: pokemon_go_mtm.o utils.o parser.o $(objects)
 	$(CC) ${CFLAGS} -o $@ $^ $(LDFLAGS)
 
+map_mtm_test: map_mtm.o map_mtm_test.o utils.o
+	$(CC) $(CFLAGS) -o $@ $^
+
 mtm_run:
 	$(CC) $(CFLAGS) *.c $(LDFLAGS) -o pokemon_go_mtm
 .PHONY: mtm_run
 
-tests: $(tests)
+tests: $(tests) map_mtm_test
 .PHONY: tests
 
 clean:
 	rm -f *.o *_test pokemon_go_mtm
 .PHONY: clean
+
 
 %_test: CFLAGS+=-g
 %_test: %_test.o utils.o $(objects) $(mocks)
@@ -26,6 +30,9 @@ clean:
 %.o:
 	$(CC) ${CFLAGS} -c -o $@ $<
 	
+map_mtm_test.o: tests/map_mtm_test.c tests/test_utilities.h \
+	  tests/../map_mtm/map_mtm.h tests/../utils.h
+map_mtm.o: map_mtm/map_mtm.c map_mtm/map_mtm.h
 evolutions.o: evolutions.c evolutions.h map.h pokedex.h set.h utils.h
 inventory.o: inventory.c inventory.h print_utils.h map.h utils.h
 location.o: location.c location.h list.h set.h pokemon.h print_utils.h \

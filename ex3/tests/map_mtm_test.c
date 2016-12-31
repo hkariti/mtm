@@ -4,56 +4,72 @@
 #include "../utils.h"
 
 bool testMapCreateDestroy() {
-	Map map = mapCreate(stringCopy, intCopy, free, free, stringCompare);
-	ASSERT_TEST(map != NULL);
-	ASSERT_TEST(mapGetSize(map) == 0);
-	ASSERT_TEST(mapGetFirst(map) == NULL);
-	mapDestroy(map);
-	return true;
+    Map map = mapCreate((copyMapKeyElements)stringCopy,
+            (copyMapDataElements)intCopy,
+            (freeMapKeyElements)free,
+            (freeMapDataElements)free,
+            (compareMapKeyElements)stringCompare);
+    ASSERT_TEST(map != NULL);
+    ASSERT_TEST(mapGetSize(map) == 0);
+    ASSERT_TEST(mapGetFirst(map) == NULL);
+    mapDestroy(map);
+    return true;
 
 }
 
 bool testMapPutAndIterate() {
-	Map map = mapCreate(intCopy, intCopy, free, free, intCompare);
-	for (int i = 1; i<1001; ++i) {
-		ASSERT_TEST(mapPut(map, &i, &i) == MAP_SUCCESS);
-		ASSERT_TEST(mapGetSize(map) == i);
-	}
-	int* current_key = mapGetFirst(map);
-	for (int i = 1; i<1001; ++i) {
-		int* current_data = mapGet(map, current_key);
-		ASSERT_TEST(*current_data == i);
-		current_key = mapGetNext(map);
-	}
-	int* current_data = mapGet(map, current_key);
-	ASSERT_TEST(current_data == NULL);
-	mapDestroy(map);
-	return true;
+    Map map = mapCreate((copyMapKeyElements)intCopy,
+            (copyMapDataElements)intCopy,
+            (freeMapKeyElements)free,
+            (freeMapDataElements)free,
+            (compareMapKeyElements)intCompare);
+    for (int i = 1; i<1001; ++i) {
+        ASSERT_TEST(mapPut(map, &i, &i) == MAP_SUCCESS);
+        ASSERT_TEST(mapGetSize(map) == i);
+    }
+    int* current_key = mapGetFirst(map);
+    for (int i = 1; i<1001; ++i) {
+        int* current_data = mapGet(map, current_key);
+        ASSERT_TEST(*current_data == i);
+        current_key = mapGetNext(map);
+    }
+    int* current_data = mapGet(map, current_key);
+    ASSERT_TEST(current_data == NULL);
+    mapDestroy(map);
+    return true;
 }
 
 bool testMapGet() {
-	Map map = mapCreate(stringCopy, intCopy, free, free, stringCompare);
-	char buffer[1000];
-	for (int i = 1; i < 1001; ++i) {
-		sprintf(buffer, "%d", i);
-		ASSERT_TEST(mapPut(map, buffer, &i) == MAP_SUCCESS);
-		ASSERT_TEST(mapGetSize(map) == i);
-	}
-	for (int i = 1; i < 1001; ++i) {
-		sprintf(buffer, "%d", i);
-		ASSERT_TEST(*(int*)mapGet(map, buffer) == i);
-	}
-	for (int i = 1000; i > 0; --i) {
-		sprintf(buffer, "%d", i);
-		ASSERT_TEST(*(int*)mapGet(map, buffer) == i);
-	}
-	mapDestroy(map);
-	return true;
+    Map map = mapCreate((copyMapKeyElements)stringCopy,
+            (copyMapDataElements)intCopy,
+            (freeMapKeyElements)free,
+            (freeMapDataElements)free,
+            (compareMapKeyElements)stringCompare);
+    char buffer[1000];
+    for (int i = 1; i < 1001; ++i) {
+        sprintf(buffer, "%d", i);
+        ASSERT_TEST(mapPut(map, buffer, &i) == MAP_SUCCESS);
+        ASSERT_TEST(mapGetSize(map) == i);
+    }
+    for (int i = 1; i < 1001; ++i) {
+        sprintf(buffer, "%d", i);
+        ASSERT_TEST(*(int*)mapGet(map, buffer) == i);
+    }
+    for (int i = 1000; i > 0; --i) {
+        sprintf(buffer, "%d", i);
+        ASSERT_TEST(*(int*)mapGet(map, buffer) == i);
+    }
+    mapDestroy(map);
+    return true;
 }
 
 bool testMapCopyAndClear() {
-	Map map = mapCreate(stringCopy, intCopy, free, free, stringCompare);
-	Map map_copy;
+    Map map = mapCreate((copyMapKeyElements)stringCopy,
+            (copyMapDataElements)intCopy,
+            (freeMapKeyElements)free,
+            (freeMapDataElements)free,
+            (compareMapKeyElements)stringCompare);
+    Map map_copy;
 	char buffer[1000];
 	for (int i = 0; i < 5; ++i) {
 		sprintf(buffer, "%d", i);
