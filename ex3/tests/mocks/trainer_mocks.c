@@ -59,21 +59,19 @@ Trainer demoTrainerEmpty(char* name, Map locations) {
 }
 
 Trainer demoTrainerFullAtLocation(char* name, Map locations, char* location_name) {
-  FILE* devnull = fopen("/dev/null", "r");
   Location location = mapGet(locations, location_name);
   Store store = demoStore();
   Trainer trainer = createTrainer(name, 1000, location);
-  trainerHunt(trainer, devnull);
-  trainerHunt(trainer, devnull);
-  trainerHunt(trainer, devnull);
-  trainerHunt(trainer, devnull);
+  trainerHunt(trainer, stdout);
+  trainerHunt(trainer, stdout);
+  trainerHunt(trainer, stdout);
+  trainerHunt(trainer, stdout);
   trainerBuyItem(trainer, store, "candy", 1);
   trainerBuyItem(trainer, store, "candy", 1);
   trainerBuyItem(trainer, store, "potion", 1);
   trainerBuyItem(trainer, store, "potion", 1);
 
   storeDestroy(store);
-  fclose(devnull);
   return trainer;
 }
 
@@ -96,16 +94,14 @@ Trainer demoTrainerWithItems(char* name, Map locations) {
 }
 
 Trainer demoTrainerWithPokemon(char* name, Map locations) {
-  FILE* devnull = fopen("/dev/null", "r");
   Location location = mapGet(locations, "full_location");
   Trainer trainer = createTrainer(name, 0, location);
 
-  trainerHunt(trainer, devnull);
-  trainerHunt(trainer, devnull);
-  trainerHunt(trainer, devnull);
-  trainerHunt(trainer, devnull);
+  trainerHunt(trainer, stdout);
+  trainerHunt(trainer, stdout);
+  trainerHunt(trainer, stdout);
+  trainerHunt(trainer, stdout);
 
-  fclose(devnull);
   return trainer;
 }
 
