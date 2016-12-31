@@ -126,17 +126,12 @@ TrainerErrorCode trainerHealPokemon(Trainer trainer, int pokemon_id) {
   int chosen_potion = -1;
   INVENTORY_FOREACH(potion, trainer->potions) {
     double hp_after_potion = hp + *potion;
-    // Not enough to fill HP, no use looking further
-    if (hp_after_potion < MAX_POKEMON_HP) {
-      // If no better potion was seen before, it's the best we'll get
-      if (chosen_potion < 0) {
-        chosen_potion = *potion;
-      };
+    // Potions are sorted, so every potion is better than the last
+    chosen_potion = *potion;
+    // We reached the max, no use wasting better potions
+    if (hp_after_potion >= MAX_POKEMON_HP) {
       break;
     }
-    // We're saturating the pokemon's HP. Remember this one and hope for a more
-    // efficient potion next
-    chosen_potion = *potion;
   }
 
   if (chosen_potion < 0) return TRAINER_NO_AVAILABLE_ITEM_FOUND;
@@ -152,9 +147,9 @@ TrainerErrorCode trainerTrainPokemon(Trainer trainer, int pokemon_id) {
   if (NULL == pokemon) return TRAINER_POKEMON_DOESNT_EXIST;
 
   int chosen_candy = -1;
-  INVENTORY_FOREACH(candy, trainer->candies) { // TODO: yuck
+  INVENTORY_FOREACH(candy, trainer->candies) {
+    // Get to the last (highest) candy
     chosen_candy = *candy;
-    break;
   }
 
   if (chosen_candy < 0) return TRAINER_NO_AVAILABLE_ITEM_FOUND;
