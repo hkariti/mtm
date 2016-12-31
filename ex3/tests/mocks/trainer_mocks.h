@@ -18,8 +18,8 @@ Trainer demoTrainerWithPokemon(char* name, Map locations);
 Trainer demoTrainerWithMoney(char* name, int money, Map locations);
 
 #define TRAINER_SET_UP()                              \
-  Evolutions evolutions = demoEvolutions();           \
   Pokedex pokedex = demoPokedex();                    \
+  Evolutions evolutions = demoEvolutions(pokedex);    \
   Map locations = demoLocations(pokedex, evolutions);
 
 #define TRAINER_TEAR_DOWN()                     \
