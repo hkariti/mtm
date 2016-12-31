@@ -90,7 +90,7 @@ bool testPokemonGivePotion() {
 	ASSERT_TEST(POKEMON_HP_IS_AT_MAX == result);
 
 	// Test working scenario
-	pokemonBattle(pokemon, pokemon_2, 10);
+	pokemonBattle(pokemon, pokemon_2, 10, 10);
 	prev_hp = pokemonGetHP(pokemon);
 	result = pokemonGivePotion(pokemon, 1);
 	hp = pokemonGetHP(pokemon);
@@ -157,22 +157,19 @@ bool testPokemonBattle() {
 	Evolutions evolutions = demoEvolutions(pokedex);
 	Pokemon mew = createPokemon(pokedexGetPokemonInfo(pokedex, "mew"), evolutions);
 	Pokemon mewtwo = createPokemon(pokedexGetPokemonInfo(pokedex, "mewtwo"), evolutions);
-	double hp;
-	int level;
+	double mew_hp, mewtwo_hp;
+	int mew_level, mewtwo_level;
 
 	// Test mewtwo on mew battle
-	pokemonBattle(mew, mewtwo, 90);
-	hp = pokemonGetHP(mew);
-	level = pokemonGetLevel(mew);
-	ASSERT_TEST(10 == hp);
-	ASSERT_TEST(2 == level);
-
-	// Test mew on mewtwo battle
-	pokemonBattle(mewtwo, mew, 42);
-	hp = pokemonGetHP(mewtwo);
-	level = pokemonGetLevel(mewtwo);
-	ASSERT_TEST(58 == hp);
-	ASSERT_TEST(2 == level);
+	pokemonBattle(mew, mewtwo, 90, 42);
+	mew_hp = pokemonGetHP(mew);
+	mew_level = pokemonGetLevel(mew);
+	ASSERT_TEST(10 == mew_hp);
+	ASSERT_TEST(2 == mew_level);
+	mewtwo_hp = pokemonGetHP(mewtwo);
+	mewtwo_level = pokemonGetLevel(mewtwo);
+	ASSERT_TEST(58 == mewtwo_hp);
+	ASSERT_TEST(2 == mewtwo_level);
 
 	destroyPokemon(mew);
 	destroyPokemon(mewtwo);

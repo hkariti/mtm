@@ -4,7 +4,7 @@
 #include "test_utilities.h"
 
 void pokemonInjure(Pokemon pokemon) {
-  pokemonBattle(pokemon, pokemon, 50);
+  pokemonBattle(pokemon, pokemon, 50, 50);
 }
 
 bool testCreateTrainer() {
