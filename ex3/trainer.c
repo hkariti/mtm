@@ -159,7 +159,7 @@ TrainerErrorCode trainerTrainPokemon(Trainer trainer, int pokemon_id) {
   return TRAINER_SUCCESS;
 }
 
-double trainerCalculateBattleDelta(Trainer trainer, Pokemon pokemon) {
+static double trainerCalculateBattleDelta(Trainer trainer, Pokemon pokemon) {
   if (NULL == trainer || NULL == pokemon) return -1;
 
   double cp = pokemonGetCP(pokemon);
@@ -171,7 +171,6 @@ double trainerCalculateBattleDelta(Trainer trainer, Pokemon pokemon) {
   return delta;
 }
 
-// TODO: Verify this implementation
 TrainerErrorCode trainersBattle(Trainer trainer_1, int pokemon1_id,
                                 Trainer trainer_2, int pokemon2_id) {
   if (NULL == trainer_1 || NULL == trainer_2) return TRAINER_INVALID_ARGUMENT;
@@ -186,8 +185,7 @@ TrainerErrorCode trainersBattle(Trainer trainer_1, int pokemon1_id,
   double delta_2 = trainerCalculateBattleDelta(trainer_1, pokemon_1);
   double delta_1 = trainerCalculateBattleDelta(trainer_2, pokemon_2);
 
-  pokemonBattle(pokemon_1, pokemon_2, delta_1);
-  pokemonBattle(pokemon_2, pokemon_1, delta_2);
+  pokemonBattle(pokemon_1, pokemon_2, delta_1, delta_2);
 
   trainer_1->xp += delta_2 / 10;
   trainer_2->xp += delta_1 / 10;

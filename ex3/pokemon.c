@@ -149,13 +149,11 @@ int pokemonCaught(Pokemon pokemon, int new_pokemon_id)
 	return pokemonPokecoinsValue(pokemon);
 }
 
-PokemonErrorCode pokemonBattle(Pokemon pokemon, Pokemon opponent_pokemon, double battle_delta)
-{
-	if (NULL == pokemon || NULL == opponent_pokemon) return POKEMON_INVALID_ARGUMENT;
-	if (battle_delta < 0) return POKEMON_INVALID_ARGUMENT;
-
-	pokemon->level += (pokemon->level + opponent_pokemon->level) / 4 +
-		((pokemon->level + opponent_pokemon->level) % 4 != 0);
+static void pokemonBattleSingle(Pokemon pokemon, double battle_delta,
+                                int opponent_level) {
+  
+	pokemon->level += (pokemon->level + opponent_level) / 4 +
+		((pokemon->level + opponent_level) % 4 != 0);
 
 	pokemon->hp -= battle_delta;
 	if (pokemon->hp < 0) {
@@ -164,13 +162,27 @@ PokemonErrorCode pokemonBattle(Pokemon pokemon, Pokemon opponent_pokemon, double
 
 	char* pokemon_spceies = pokedexEntryGetSpecies(pokemon->pokemon_info);
 	PokedexEntry evolved_pokemon_info = getEvolution(pokemon->evolutions_map,
-		pokemon_spceies, pokemon->level);
+                                                   pokemon_spceies,
+                                                   pokemon->level);
 	while (evolved_pokemon_info != NULL) {
 		pokemon->pokemon_info = evolved_pokemon_info;
 		evolved_pokemon_info = getEvolution(pokemon->evolutions_map,
-			pokemon_spceies, pokemon->level);
+                                        pokemon_spceies, pokemon->level);
 		pokemon_spceies = pokedexEntryGetSpecies(pokemon->pokemon_info);
 	}
+}
+
+PokemonErrorCode pokemonBattle(Pokemon pokemon1, Pokemon pokemon2,
+                               double battle_delta1, double battle_delta2)
+{
+	if (NULL == pokemon1 || NULL == pokemon2) return POKEMON_INVALID_ARGUMENT;
+	if (battle_delta1 < 0 || battle_delta2 < 0) return POKEMON_INVALID_ARGUMENT;
+
+  int old_level1 = pokemon1->level;
+  int old_level2 = pokemon2->level;
+  pokemonBattleSingle(pokemon1, battle_delta1, old_level2);
+  pokemonBattleSingle(pokemon2, battle_delta2, old_level1);
+
 	return POKEMON_SUCCESS;
 }
 
