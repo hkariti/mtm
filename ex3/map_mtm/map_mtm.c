@@ -98,6 +98,7 @@ Map mapCopy(Map map) {
 		}
 		element_to_add_key = mapGetNext(map);
 	}
+	return new_map;
 }
 
 int mapGetSize(Map map) {
