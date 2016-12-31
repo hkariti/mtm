@@ -15,14 +15,15 @@ bool testDestroyEvolutions() {
   // Test with NULL
   destroyEvolutions(NULL);
 
-  Evolutions evolutions;
+  Evolutions empty_evolutions;
   // Test with empty
-  evolutions = createEvolutions();
-  destroyEvolutions(evolutions);
+  empty_evolutions = createEvolutions();
+  destroyEvolutions(empty_evolutions);
 
   // Test with entries
-  evolutions = demoEvolutions();
+  EVOLUTIONS_SET_UP();
   destroyEvolutions(evolutions);
+  EVOLUTIONS_TEAR_DOWN();
 
   return true;
 }
