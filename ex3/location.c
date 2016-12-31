@@ -137,7 +137,7 @@ bool locationIsNeighour(Location location, Location neighbour)
 	assert(location);
 	assert(neighbour);
 
-	if (NULL == location || NULL == neighbour) return NULL;
+	if (NULL == location || NULL == neighbour) return false;
 
 	return setIsIn(location->neighbors, neighbour->name);
 }
