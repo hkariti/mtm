@@ -5,7 +5,7 @@ Map demoLocations(Pokedex pokedex, Evolutions evolutions) {
                             (copyMapDataElements)copyLocation,
                             (freeMapKeyElements)free,
                             (freeMapDataElements)destroyLocation,
-                            (compareMapKeyElements)strcmp);
+                            (compareMapKeyElements)stringCompare);
   Location empty_location, neighbor, full_location;
   empty_location = demoLocationWithPokemon("empty_location", 1, pokedex, evolutions);
   neighbor = demoLocationWithPokemon("neighbor", 0, pokedex, evolutions);
