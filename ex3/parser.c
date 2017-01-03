@@ -17,8 +17,8 @@ static bool pokedexAddFromLine(Pokedex pokedex, char* line) {
   PokedexErrorCode pokedex_add_result;
   if (NULL == types) return false;
 
-  species = strtok(line, " ");
-  initial_cp_str = strtok(NULL, " ");
+  species = strtok(line, " \t");
+  initial_cp_str = strtok(NULL, " \t");
   types_part = strtok(NULL, "\r\n");
   WORD_FOREACH(types_part, type) {
     if (SET_OUT_OF_MEMORY == setAdd(types, type)) {
@@ -29,8 +29,8 @@ static bool pokedexAddFromLine(Pokedex pokedex, char* line) {
   initial_cp = atoi(initial_cp_str);
   pokedex_add_result = pokedexAddPokemon(pokedex, species, initial_cp, types);
   setDestroy(types);
-  if (SET_SUCCESS == pokedex_add_result) return true;
-  return false;
+  if (SET_SUCCESS != pokedex_add_result) return false;
+  return true;
 }
 
 Pokedex createPokedexFromFile(FILE* file) {
@@ -61,7 +61,7 @@ Evolutions createEvolutionsFromFile(FILE* file, Pokedex pokedex) {
   PokedexEntry evolution;
   EvolutionsErrorCode add_result;
   while (fgets(line, MAX_STR_LENGTH, file) != NULL) {
-    sscanf(line, "%s %s %d", pokemon, evolution_name, &level);
+	sscanf(line, "%s %s %d", pokemon, evolution_name, &level);
     evolution = pokedexGetPokemonInfo(pokedex, evolution_name);
     assert(evolution);
     add_result = evolutionsAddEntry(evolutions, pokemon, level, evolution);
