@@ -9,6 +9,17 @@
   for (char* iterator = strtok(str, " \t\r\n"); iterator != NULL;\
        iterator = strtok(NULL, " \t\r\n"))
 
+static bool isLineEmpty(char* line) {
+	char* line_copy;
+	char* trimmed_line;
+	line_copy = stringCopy(line);
+	if (NULL == line_copy) return true;
+	trimmed_line = strtok(line_copy, " \t\r\n");
+	free(line_copy);
+	if (NULL == trimmed_line || 0 == strlen(trimmed_line)) return true;
+	return false;
+}
+
 static bool pokedexAddFromLine(Pokedex pokedex, char* line) {
   char *species, *initial_cp_str, *types_part;
   int initial_cp;
@@ -42,6 +53,7 @@ Pokedex createPokedexFromFile(FILE* file) {
     return NULL;
   }
   while (fgets(line, MAX_STR_LENGTH, file) != NULL) {
+	if (isLineEmpty(line)) continue;
     if (!pokedexAddFromLine(pokedex, line)) {
       destroyPokedex(pokedex);
       return NULL;
@@ -61,6 +73,7 @@ Evolutions createEvolutionsFromFile(FILE* file, Pokedex pokedex) {
   PokedexEntry evolution;
   EvolutionsErrorCode add_result;
   while (fgets(line, MAX_STR_LENGTH, file) != NULL) {
+	if (isLineEmpty(line)) continue;
 	sscanf(line, "%s %s %d", pokemon, evolution_name, &level);
     evolution = pokedexGetPokemonInfo(pokedex, evolution_name);
     assert(evolution);
@@ -110,6 +123,7 @@ static bool locationAddNeighborsFromLine(Location location,
 static Location locationFromLine(char* line, Pokedex pokedex,
                                     Evolutions evolutions) {
   if (NULL == line || NULL == pokedex || NULL == evolutions) return NULL;
+
   char *name_and_pokemon_part, *neighbors_part, *location_name, *pokemon_part;
   Location location;
   bool add_pokemon_result, add_neighbors_result;
@@ -142,12 +156,14 @@ Map createLocationsMapFromFile(FILE* file, Pokedex pokedex,
                             (freeMapKeyElements)free,
                             (freeMapDataElements)destroyLocation,
                             (compareMapKeyElements)stringCompare);
+  if (NULL == locations) return NULL;
   char line[MAX_STR_LENGTH + 1];
   Location location;
   MapResult add_location_result;
   while (fgets(line, MAX_STR_LENGTH, file) != NULL) {
+	if (isLineEmpty(line)) continue;
     location = locationFromLine(line, pokedex, evolutions);
-    if (NULL == locations) {
+    if (NULL == location) {
       mapDestroy(locations);
       return NULL;
     }
