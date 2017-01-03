@@ -8,11 +8,21 @@
 
 void cleanUpFiles(FILE* input_file, FILE* output_file, FILE* pokedex_file,
                   FILE* evolutions_file, FILE* locations_file) {
-  fclose(input_file);
-  fclose(output_file);
-  fclose(pokedex_file);
-  fclose(evolutions_file);
-  fclose(locations_file);
+	if (input_file != NULL) {
+		fclose(input_file);
+	}
+	if (output_file != NULL) {
+		fclose(output_file);
+	}
+	if (pokedex_file != NULL) {
+		fclose(pokedex_file);
+	}
+	if (evolutions_file != NULL) {
+		fclose(evolutions_file);
+	}
+	if (locations_file != NULL) {
+		fclose(locations_file);
+	}
 }
 
 void cleanUp(Pokedex pokedex, Evolutions evolutions, Map locations,
