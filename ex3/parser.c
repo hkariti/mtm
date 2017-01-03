@@ -210,6 +210,10 @@ bool parseArgs(int argc, char** argv, char** pokedex_filename,
 void tokenizeCommand(char* line, char** command, char** subcommand,
                      char** args) {
   char *args_part;
+  if (isLineEmpty(line)) {
+	  *command = NULL;
+	  return;
+  }
   *command = strtok(line, " \t");
   *subcommand = strtok(NULL, " \t\r\n");
   args_part = strtok(NULL, "\r\n");

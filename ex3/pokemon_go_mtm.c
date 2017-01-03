@@ -51,7 +51,7 @@ bool openFilesFromArgs(int argc, char** argv, FILE** pokedex_file,
   *pokedex_file = fopen(pokedex_filename, "r");
   *evolutions_file = fopen(evolutions_filename, "r");
   if (input_filename) *input_file = fopen(input_filename, "r");
-  if (output_filename) *output_file = fopen(output_filename, "w");
+  if (output_filename) *output_file = fopen(output_filename, "w"); //TODO: check with appending
   if (NULL == *input_file || NULL == *output_file || NULL == *locations_file ||
       NULL == *pokedex_file || NULL == *evolutions_file) {
     cleanUpFiles(*input_file, *output_file, *pokedex_file, *evolutions_file,
@@ -170,7 +170,9 @@ void playGame(PokemonGo game, FILE* input) {
   MtmErrorCode command_result;
   while (fgets(line, MAX_STR_LENGTH, input)) {
     tokenizeCommand(line, &command, &subcommand, args);
-    if (strcmp(command, "trainer") == 0) {
+	if (NULL == command) {
+		continue;
+	} else if (strcmp(command, "trainer") == 0) {
       command_result = runTrainerCommand(game, subcommand, args);
     } else if (strcmp(command, "store") == 0) {
       command_result = runStoreCommand(game, subcommand, args);
