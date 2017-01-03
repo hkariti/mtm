@@ -132,7 +132,7 @@ static Location locationFromLine(char* line, Pokedex pokedex,
   name_and_pokemon_part = strtok(line, ";");
   neighbors_part = strtok(NULL, "\r\n");
   // Finer splitting
-  location_name = strtok(name_and_pokemon_part, " \r\n");
+  location_name = strtok(name_and_pokemon_part, " \t\r\n");
   assert(location_name);
   pokemon_part = strtok(NULL, ";");
   // Now create the object
