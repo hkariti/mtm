@@ -11,6 +11,11 @@ struct PokedexEntry_t {
 	Set types;
 };
 
+/**
+ * pokedexEntryDestroy - Deallocates a pokedexEntry and frees its resources.
+ *
+ * @param entry - a pokedex entry. If entry is NULL nothing will be done.
+ */
 static void pokedexEntryDestroy(PokedexEntry entry) {
   if (NULL == entry) return;
   setDestroy(entry->types);
@@ -18,6 +23,18 @@ static void pokedexEntryDestroy(PokedexEntry entry) {
   free(entry);
 }
 
+/**
+ * pokedexEntryCreate - Create a new pokedex entry
+ *
+ * @param species   - the pokemon species
+ * @param cp        - the pokemon intial cp value
+ * @param types     - a set of uppercase strings, representing the types
+ *                    of the pokemon
+ *
+ * @return
+ *  NULL - alloc failure or null argument
+ *  A new pokedexEntry on success.
+ */
 static PokedexEntry pokedexEntryCreate(char* species, int cp,
                                        Set types) {
   if (NULL == species || NULL == types) return NULL;
@@ -35,6 +52,16 @@ static PokedexEntry pokedexEntryCreate(char* species, int cp,
   return entry;
 }
 
+/**
+ * pokedexEntryCopy - copy a pokedexEntry
+ *
+ * @param original_entry - A pokedexEntry to copy
+ *
+ * @return
+ *   NULL - null argument or memory error
+ *   A new pokedexEntry, with the same species, cp and types on success.
+ *   A copy will be made of all of these.
+ */
 static PokedexEntry pokedexEntryCopy(PokedexEntry original_entry) {
   if (NULL == original_entry) return NULL;
   PokedexEntry new_entry;
