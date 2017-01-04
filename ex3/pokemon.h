@@ -67,7 +67,7 @@ void printPokemon(Pokemon pokemon, FILE* output_channel);
 * @return
 * 	NULL if a NULL was sent or a memory allocation failed.
 * 	A newly allocated Pokemon containing the same fields as
-*	elements otherwise.
+*	pokemon otherwise.
 */
 Pokemon copyPokemon(Pokemon pokemon);
 
