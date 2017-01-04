@@ -211,7 +211,7 @@ int main(int argc, char** argv) {
   Evolutions evolutions = evolutionsCreateFromFile(evolutions_file, pokedex);
   Map locations = locationsCreateMapFromFile(locations_file, pokedex,
                                              evolutions);
-  PokemonGo game = pokemonGoCreate(pokedex, evolutions, locations, output);
+  PokemonGo game = pokemongoCreate(pokedex, evolutions, locations, output);
   if (NULL == game || NULL == pokedex || NULL == evolutions ||
       NULL == locations) {
     cleanUp(pokedex, evolutions, locations, game);

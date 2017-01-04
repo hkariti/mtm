@@ -24,19 +24,19 @@ bool testCreatePokemonGo() {
 	PokemonGo pokemonGo;
 
 	// Invalid inputs
-	pokemonGo = pokemonGoCreate(NULL, NULL, NULL, NULL);
+	pokemonGo = pokemongoCreate(NULL, NULL, NULL, NULL);
 	ASSERT_TEST(NULL == pokemonGo);
-	pokemonGo = pokemonGoCreate(NULL, evolutions, locations, stdout);
+	pokemonGo = pokemongoCreate(NULL, evolutions, locations, stdout);
 	ASSERT_TEST(NULL == pokemonGo);
-	pokemonGo = pokemonGoCreate(pokedex, NULL, locations, stdout);
+	pokemonGo = pokemongoCreate(pokedex, NULL, locations, stdout);
 	ASSERT_TEST(NULL == pokemonGo);
-	pokemonGo = pokemonGoCreate(pokedex, evolutions, NULL, stdout);
+	pokemonGo = pokemongoCreate(pokedex, evolutions, NULL, stdout);
 	ASSERT_TEST(NULL == pokemonGo);
-	pokemonGo = pokemonGoCreate(pokedex, evolutions, locations, NULL);
+	pokemonGo = pokemongoCreate(pokedex, evolutions, locations, NULL);
 	ASSERT_TEST(NULL == pokemonGo);
 
 	// Valid inputs
-	pokemonGo = pokemonGoCreate(pokedex, evolutions, locations, stdout);
+	pokemonGo = pokemongoCreate(pokedex, evolutions, locations, stdout);
 	ASSERT_TEST(pokemonGo != NULL);
 
 	pokemongoDestroy(pokemonGo);
@@ -51,7 +51,7 @@ bool testDestroyPokemonGo() {
 	pokemongoDestroy(NULL);
 
 	// Valid input
-	PokemonGo pokemonGo = pokemonGoCreate(pokedex, evolutions, locations, stdout);
+	PokemonGo pokemonGo = pokemongoCreate(pokedex, evolutions, locations, stdout);
 	pokemongoDestroy(pokemonGo);
 
 	POKEMONGO_TEAR_DOWN();
@@ -61,7 +61,7 @@ bool testDestroyPokemonGo() {
 bool testPokemonGoAddTrainer() {
 	POKEMONGO_SET_UP();
 	PokemonGoErrorCode result;
-	PokemonGo pokemonGo = pokemonGoCreate(pokedex, evolutions, locations, stdout);
+	PokemonGo pokemonGo = pokemongoCreate(pokedex, evolutions, locations, stdout);
 
 	// invalid budget 
 	result = pokemongoTrainerAdd(pokemonGo, "Ash", -100, "madagascar");
@@ -87,7 +87,7 @@ bool testPokemonGoAddTrainer() {
 bool testPokemonGoTrainerGo() {
 	POKEMONGO_SET_UP();
 	PokemonGoErrorCode result;
-	PokemonGo pokemonGo = pokemonGoCreate(pokedex, evolutions, locations, stdout);
+	PokemonGo pokemonGo = pokemongoCreate(pokedex, evolutions, locations, stdout);
 	result = pokemongoTrainerAdd(pokemonGo, "ash", 0, "paris");
 
 	result = pokemongoTrainerGo(pokemonGo, "bibi", "madagascar");
@@ -111,7 +111,7 @@ bool testPokemonGoTrainerGo() {
 bool testPokemonGoStoreAdd() {
 	POKEMONGO_SET_UP();
 	PokemonGoErrorCode result;
-	PokemonGo pokemonGo = pokemonGoCreate(pokedex, evolutions, locations, stdout);
+	PokemonGo pokemonGo = pokemongoCreate(pokedex, evolutions, locations, stdout);
 
 	// invalid args
 	result = pokemongoStoreAdd(pokemonGo, "snack", 10, 10);
@@ -138,7 +138,7 @@ bool testPokemonGoStoreAdd() {
 bool testPokemonGoTrainerPurchase() {
 	POKEMONGO_SET_UP();
 	PokemonGoErrorCode result;
-	PokemonGo pokemonGo = pokemonGoCreate(pokedex, evolutions, locations, stdout);
+	PokemonGo pokemonGo = pokemongoCreate(pokedex, evolutions, locations, stdout);
 
 	result = pokemongoTrainerAdd(pokemonGo, "ash", 10000, "paris");
 	result = pokemongoTrainerAdd(pokemonGo, "trump", 0, "jerusalem");
@@ -187,7 +187,7 @@ bool testPokemonGoTrainerPurchase() {
 bool testPokemonGoHealPokemon() {
 	POKEMONGO_SET_UP();
 	PokemonGoErrorCode result;
-	PokemonGo pokemonGo = pokemonGoCreate(pokedex, evolutions, locations, stdout);
+	PokemonGo pokemonGo = pokemongoCreate(pokedex, evolutions, locations, stdout);
 
 	result = pokemongoTrainerAdd(pokemonGo, "ash", 10000, "full_location");
 	result = pokemongoTrainerAdd(pokemonGo, "putin", 0, "full_location");
@@ -221,7 +221,7 @@ bool testPokemonGoHealPokemon() {
 bool testPokemonGoTrainPokemon() {
 	POKEMONGO_SET_UP();
 	PokemonGoErrorCode result;
-	PokemonGo pokemonGo = pokemonGoCreate(pokedex, evolutions, locations, stdout);
+	PokemonGo pokemonGo = pokemongoCreate(pokedex, evolutions, locations, stdout);
 
 	result = pokemongoTrainerAdd(pokemonGo, "ash", 10000, "full_location");
 
@@ -249,7 +249,7 @@ bool testPokemonGoTrainPokemon() {
 bool testPokemonGosBattleFight() {
 	POKEMONGO_SET_UP();
 	PokemonGoErrorCode result;
-	PokemonGo pokemonGo = pokemonGoCreate(pokedex, evolutions, locations, stdout);
+	PokemonGo pokemonGo = pokemongoCreate(pokedex, evolutions, locations, stdout);
 
 	result = pokemongoTrainerAdd(pokemonGo, "obama", 100000, "full_location");
 	result = pokemongoTrainerAdd(pokemonGo, "putin", 100000, "full_location");
