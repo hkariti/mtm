@@ -22,15 +22,15 @@ static void destroyList(Node list) {
 }
 
 /**
-* listOperator:	Creating a new unified which it's nodes are the result
-				of the provided operator of the nodes at the same index 
-				of the lists provided.
+* listOperator:	Create a new list in which the nodes are the result
+				of the provided operator on the nodes at the same index 
+				in the lists provided.
 *
 * @param list1 -	pointer to a node's list
 *		 list2 -	pointer to a node's list
-*		 operator - function pointer which get's 2 int's and return one int
+*		 operator - function pointer which gets 2 ints and returns one int
 * @return
-*	a new allocated list which each of it's nodes are the result
+*	a new allocated list in which each of its nodes are the result
 *	of the two nodes in the same index at two provided lists.
 * 	NULL -	if both lists are empty or the lists dont have the same size,
 			or if allocations failed.
@@ -81,16 +81,15 @@ static int intMax(int a, int b) {
 }
 
 /**
-* maxElements:	Creating a one unified list of the maximum nodes 
-*				of all the lists provided.
+* maxElements:	Creates a list of the maximum nodes from all the lists provided.
 *
-* @param lists -	pointer to a node's list's array. 
+* @param lists -	pointer to an array of node lists.
 *					All the lists in the array must have the same size.
 		 size =		The size of the lists array, count how many lists 
 					are in the array.
 * @return
-*	a new allocated list which each of it's nodes are the maximum
-	of all the nodes in the same index at all the lists provided.
+*	a new allocated list in which each of its nodes are the maximum
+	of all the nodes in the same index in all the lists provided.
 	If the lists contains only one list, a copy of that list is returned.
 * 	NULL - if lists array contains no lists or allocations failed.
 */
