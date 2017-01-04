@@ -39,7 +39,7 @@ typedef struct Pokemon_t *Pokemon;
 * 	NULL - if one of the parameters is NULL or allocations failed.
 * 	A new Pokemon in case of success.
 */
-Pokemon createPokemon(PokedexEntry pokemon_info, Evolutions evolutions_map);
+Pokemon pokemonCreate(PokedexEntry pokemon_info, Evolutions evolutions_map);
 
 /**
 * pokemonDestroy: Deallocates an existing pokemon. Clears all elements by using the
@@ -48,17 +48,17 @@ Pokemon createPokemon(PokedexEntry pokemon_info, Evolutions evolutions_map);
 * @param pokemon - Target pokemon to be deallocated. If ppokemon is NULL nothing will be
 * 		done
 */
-void destroyPokemon(Pokemon pokemon);
+void pokemonDestroy(Pokemon pokemon);
 
 /**
 * pokemonPrint: prints the current pokemon information to the output channel.
 *				print is done using mtmPrintPokemon function.
 *
-* @param pokemon - Target pokemon to be printed. If ppokemon is NULL nothing will be
+* @param pokemon - Target pokemon to be printed. If pokemon is NULL nothing will be
 * 		 done
 *		 output_channel - pointer to a FILE* output stream.
 */
-void printPokemon(Pokemon pokemon, FILE* output_channel);
+void pokemonPrint(Pokemon pokemon, FILE* output_channel);
 
 /**
 * pokemonCopy: Creates a copy of target pokemon.
@@ -69,7 +69,7 @@ void printPokemon(Pokemon pokemon, FILE* output_channel);
 * 	A newly allocated Pokemon containing the same fields as
 *	pokemon otherwise.
 */
-Pokemon copyPokemon(Pokemon pokemon);
+Pokemon pokemonCopy(Pokemon pokemon);
 
 /**
 * int pokemonCompareByID: Compares 2 pokemons by their id's

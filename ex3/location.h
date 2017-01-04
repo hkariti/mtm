@@ -6,6 +6,9 @@
 #include "pokemon.h"
 #include "print_utils.h"
 
+
+
+
 /** Type used for returning error codes from location functions */
 typedef enum {
 	LOCATION_SUCCESS,
@@ -25,16 +28,16 @@ typedef struct Location_t *Location;
 * 	NULL - if one of the parameters is NULL or allocations failed.
 * 	A new Location in case of success.
 */
-Location createLocation(char* name);
+Location locationCreate(char* name);
 
 
 /**
-* pokemonDestroy: Deallocates an existing location. Clears all elements 
+* locationDestroy: Deallocates an existing location. Clears all elements 
 *				  by using the stored free & destroy functions.
 * @param location - Target location to be deallocated. 
 *					If location is NULL nothing will be done
 */
-void destroyLocation(Location location);
+void locationDestroy(Location location);
 
 /**
 * locationPrint: prints the current location information to the output channel.
@@ -44,7 +47,7 @@ void destroyLocation(Location location);
 					If location is NULL nothing will be done
 * @param output_channel - pointer to a FILE* output stream.
 */
-void printLocation(Location location, FILE* output_channel);
+void locationPrint(Location location, FILE* output_channel);
 
 
 /**
@@ -56,7 +59,7 @@ void printLocation(Location location, FILE* output_channel);
 * 	A newly allocated Location containing the same fields as
 *	location otherwise.
 */
-Location copyLocation(Location location);
+Location locationCopy(Location location);
 
 
 /**
