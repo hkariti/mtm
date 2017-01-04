@@ -4,10 +4,10 @@
 #include "evolutions.h"
 #include "utils.h"
 
-struct EvolutionEntry_t {
+typedef struct EvolutionEntry_t {
 	PokedexEntry evolved_pokemon;
 	int level;
-};
+} *EvolutionEntry;
 
 static EvolutionEntry evolutionEntryCreate(PokedexEntry evolved_pokemon,
                                            int level) {

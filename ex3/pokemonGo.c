@@ -14,7 +14,7 @@ struct PokemonGo_t {
 	FILE* output_channel;
 };
 
-PokemonGo pokemonGoCreate(Pokedex pokedex, Evolutions evolutions, Map locations,
+PokemonGo pokemongoCreate(Pokedex pokedex, Evolutions evolutions, Map locations,
                           FILE* output_channel) {
 	if (NULL == pokedex || NULL == evolutions || NULL == locations ||
       NULL == output_channel) {

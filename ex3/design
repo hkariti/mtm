@@ -97,7 +97,7 @@ game:
     locations dict
     store pointer
     trainers dict
-    pokemonGoCreate(Pokedex pokedex, Evolutions evolutions, Location locations)
+    pokemongoCreate(Pokedex pokedex, Evolutions evolutions, Location locations)
     trainerAdd()
     trainerGo()
     storeAdd()
