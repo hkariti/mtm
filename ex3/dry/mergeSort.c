@@ -70,13 +70,13 @@ void mergeParts(Element *array, Element *first_part, Element *second_part,
  *                            elementCompare.
  */
 void mergeSort(Element *array, int length, elementCompare compare_function) {
-  assert(array && length >= 0);
+  assert(array && compare_function && length >= 0);
 
   if (length <= 1) return;
   Element *array_copy = malloc(sizeof(Element) * length);
   assert(array_copy);
   for (int i = 0; i < length; i++) {
-    array_copy[i]= array[i];
+    array_copy[i] = array[i];
   }
   Element *first_part, *second_part;
   int first_length = length / 2;
