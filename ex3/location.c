@@ -28,8 +28,8 @@ Location createLocation(char * name)
 		free(location);
 		return NULL;
 	}
-	location->pokemons = listCreate((CopyListElement)copyPokemon,
-                                  (FreeListElement)destroyPokemon);
+	location->pokemons = listCreate((CopyListElement)pokemonCopy,
+                                  (FreeListElement)pokemonDestroy);
   if (NULL == location->pokemons) {
 		free(location->name);
 		setDestroy(location->neighbors);
@@ -118,7 +118,7 @@ Pokemon locationPopPokemon(Location location)
 	Pokemon pokemon = listGetFirst(location->pokemons);
 	if (NULL == pokemon) return NULL;
 
-	pokemon = copyPokemon(pokemon);
+	pokemon = pokemonCopy(pokemon);
 	if (NULL == pokemon) return NULL;
 
 	listRemoveCurrent(location->pokemons);

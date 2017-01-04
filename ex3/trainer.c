@@ -16,7 +16,7 @@ struct Trainer_t {
 	int total_pokemon_caught;
 };
 
-static Inventory getInventoryByType(Trainer trainer, char* type) {
+static Inventory inventoryGetByType(Trainer trainer, char* type) {
   if (strcmp(type, "candy") == 0) return trainer->candies;
   if (strcmp(type, "potion") == 0) return trainer->potions;
   return NULL;
@@ -29,7 +29,7 @@ static bool verifyMemoryAllocations(Trainer trainer) {
     trainer->candies != NULL;
 }
 
-Trainer createTrainer(char* name, int budget, Location start_location) {
+Trainer trainerCreate(char* name, int budget, Location start_location) {
   if (NULL == name || budget < 0 || NULL == start_location) return NULL;
 
   Trainer trainer = malloc(sizeof(*trainer));
@@ -37,28 +37,28 @@ Trainer createTrainer(char* name, int budget, Location start_location) {
   trainer->name = stringCopy(name);
   trainer->current_location = start_location;
   trainer->pokemons = mapCreate((copyMapKeyElements)intCopy,
-                                (copyMapDataElements)copyPokemon,
+                                (copyMapDataElements)pokemonCopy,
                                 (freeMapKeyElements)intDestroy,
-                                (freeMapDataElements)destroyPokemon,
+                                (freeMapDataElements)pokemonDestroy,
                                 (compareMapKeyElements)intCompare);
-  trainer->potions = createInventory();
-  trainer->candies = createInventory();
+  trainer->potions = inventoryCreate();
+  trainer->candies = inventoryCreate();
   trainer->money = budget;
   trainer->xp = TRAINER_INITIAL_XP;
   trainer->total_pokemon_caught = 0;
   if (!verifyMemoryAllocations(trainer)) {
-    destroyTrainer(trainer);
+    trainerDestroy(trainer);
     return NULL;
   }
   return trainer;
 }
 
-void destroyTrainer(Trainer trainer) {
+void trainerDestroy(Trainer trainer) {
   if (NULL == trainer) return;
   free(trainer->name);
   mapDestroy(trainer->pokemons);
-  destroyInventory(trainer->potions);
-  destroyInventory(trainer->candies);
+  inventoryDestroy(trainer->potions);
+  inventoryDestroy(trainer->candies);
   free(trainer);
 }
 
@@ -66,41 +66,41 @@ Trainer trainerCopy(Trainer trainer) {
   if (NULL == trainer) return NULL;
 
   Trainer trainer_copy;
-  trainer_copy = createTrainer(trainer->name, trainer->money,
+  trainer_copy = trainerCreate(trainer->name, trainer->money,
                                trainer->current_location);
   if (NULL == trainer_copy) return NULL;
   mapDestroy(trainer_copy->pokemons);
-  destroyInventory(trainer_copy->candies);
-  destroyInventory(trainer_copy->potions);
-  trainer_copy->potions = copyInventory(trainer->potions);
-  trainer_copy->candies = copyInventory(trainer->candies);
+  inventoryDestroy(trainer_copy->candies);
+  inventoryDestroy(trainer_copy->potions);
+  trainer_copy->potions = inventoryCopy(trainer->potions);
+  trainer_copy->candies = inventoryCopy(trainer->candies);
   trainer_copy->pokemons = mapCopy(trainer->pokemons);
   trainer_copy->xp = trainer->xp;
   trainer_copy->total_pokemon_caught = trainer->total_pokemon_caught;
   if (!verifyMemoryAllocations(trainer_copy)) {
-    destroyTrainer(trainer_copy);
+    trainerDestroy(trainer_copy);
     return NULL;
   }
   return trainer_copy;
 }
 
-void printTrainer(Trainer trainer, FILE* output_channel) {
+void trainerPrint(Trainer trainer, FILE* output_channel) {
   assert(trainer != NULL);
   assert(output_channel != NULL);
   char* location_name = locationGetName(trainer->current_location);
   mtmPrintTrainerHeader(output_channel, trainer->name, location_name,
                         trainer->money, trainer->xp);
   mtmPrintItemsHeaderForTrainer(output_channel);
-  printInventory(trainer->candies, "candy", output_channel); //TODO: Insert type into inventory
-  printInventory(trainer->potions, "potion", output_channel);
+  inventoryPrint(trainer->candies, "candy", output_channel); //TODO: Insert type into inventory
+  inventoryPrint(trainer->potions, "potion", output_channel);
   mtmPrintPokemonsHeaderForTrainer(output_channel);
   MAP_FOREACH(int*, id, trainer->pokemons) {
     Pokemon pokemon = mapGet(trainer->pokemons, id);
-    printPokemon(pokemon, output_channel);
+    pokemonPrint(pokemon, output_channel);
   }
 }
 
-Pokemon getTrainerPokemon(Trainer trainer, int pokemon_id) {
+Pokemon trainerGetPokemon(Trainer trainer, int pokemon_id) {
   if (NULL == trainer) return NULL;
   return mapGet(trainer->pokemons, &pokemon_id);
 }
@@ -117,7 +117,7 @@ TrainerErrorCode trainerRemovePokemon(Trainer trainer, int pokemon_id) {
 
 TrainerErrorCode trainerHealPokemon(Trainer trainer, int pokemon_id) {
   if (NULL == trainer) return TRAINER_INVALID_ARGUMENT;
-  Pokemon pokemon = getTrainerPokemon(trainer, pokemon_id);
+  Pokemon pokemon = trainerGetPokemon(trainer, pokemon_id);
   if (NULL == pokemon) return TRAINER_POKEMON_DOESNT_EXIST;
 
   double hp = pokemonGetHP(pokemon);
@@ -143,7 +143,7 @@ TrainerErrorCode trainerHealPokemon(Trainer trainer, int pokemon_id) {
 
 TrainerErrorCode trainerTrainPokemon(Trainer trainer, int pokemon_id) {
   if (NULL == trainer) return TRAINER_INVALID_ARGUMENT;
-  Pokemon pokemon = getTrainerPokemon(trainer, pokemon_id);
+  Pokemon pokemon = trainerGetPokemon(trainer, pokemon_id);
   if (NULL == pokemon) return TRAINER_POKEMON_DOESNT_EXIST;
 
   int chosen_candy = -1;
@@ -176,8 +176,8 @@ TrainerErrorCode trainersBattle(Trainer trainer_1, int pokemon1_id,
   if (NULL == trainer_1 || NULL == trainer_2) return TRAINER_INVALID_ARGUMENT;
 
   Pokemon pokemon_1, pokemon_2;
-  pokemon_1 = getTrainerPokemon(trainer_1, pokemon1_id);
-  pokemon_2 = getTrainerPokemon(trainer_2, pokemon2_id);
+  pokemon_1 = trainerGetPokemon(trainer_1, pokemon1_id);
+  pokemon_2 = trainerGetPokemon(trainer_2, pokemon2_id);
   if (NULL == pokemon_1 || NULL == pokemon_2) {
     return TRAINER_POKEMON_DOESNT_EXIST;
   }
@@ -241,7 +241,7 @@ TrainerErrorCode trainerBuyItem(Trainer trainer, Store store, char* type,
     return TRAINER_INVALID_ARGUMENT; 
   }
   int price;
-  Inventory chosen_inventory = getInventoryByType(trainer, type);
+  Inventory chosen_inventory = inventoryGetByType(trainer, type);
   StoreErrorCode store_result = storeGetItemPrice(store, type, value, &price);
   if (STORE_INVALID_ARGUMENT == store_result || NULL == chosen_inventory) {
     return TRAINER_INVALID_ARGUMENT; 
@@ -260,13 +260,13 @@ TrainerErrorCode trainerBuyItem(Trainer trainer, Store store, char* type,
   return TRAINER_SUCCESS;
 }
 
-char* getTrainerName(Trainer trainer) {
+char* trainerGetName(Trainer trainer) {
   if (NULL == trainer) return NULL;
 
   return trainer->name;
 }
 
-double getTrainerXP(Trainer trainer) {
+double trainerGetXP(Trainer trainer) {
   if (NULL == trainer) return -1;
 
   return trainer->xp;

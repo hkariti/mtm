@@ -24,8 +24,8 @@ Store storeCreate() {
   Store store;
   store = malloc(sizeof(struct store_t));
   if (NULL == store) return NULL;
-  store->potions = createInventory();
-  store->candies = createInventory();
+  store->potions = inventoryCreate();
+  store->candies = inventoryCreate();
   if (NULL == store->potions || NULL == store->candies) {
     storeDestroy(store);
     return NULL;
@@ -36,8 +36,8 @@ Store storeCreate() {
 
 void storeDestroy(Store store) {
   if (NULL == store) return;
-  destroyInventory(store->candies);
-  destroyInventory(store->potions);
+  inventoryDestroy(store->candies);
+  inventoryDestroy(store->potions);
   free(store);
 }
 
@@ -97,6 +97,6 @@ void storePrintStock(Store store, FILE* output_channel) {
   assert(store != NULL);
   assert(output_channel != NULL);
   mtmPrintStockHeader(output_channel);
-  printInventory(store->candies, "candy", output_channel);
-  printInventory(store->potions, "potion", output_channel);
+  inventoryPrint(store->candies, "candy", output_channel);
+  inventoryPrint(store->potions, "potion", output_channel);
 }

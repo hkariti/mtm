@@ -44,18 +44,18 @@ static bool pokedexAddFromLine(Pokedex pokedex, char* line) {
   return true;
 }
 
-Pokedex createPokedexFromFile(FILE* file) {
+Pokedex pokedexCreateFromFile(FILE* file) {
   if (NULL == file) return NULL;
-  Pokedex pokedex = createPokedex();
+  Pokedex pokedex = pokedexCreate();
   char line[MAX_STR_LENGTH + 1];
   if (NULL == pokedex) {
-    destroyPokedex(pokedex);
+    pokedexDestroy(pokedex);
     return NULL;
   }
   while (fgets(line, MAX_STR_LENGTH, file) != NULL) {
 	if (isLineEmpty(line)) continue;
     if (!pokedexAddFromLine(pokedex, line)) {
-      destroyPokedex(pokedex);
+      pokedexDestroy(pokedex);
       return NULL;
     }
   }
@@ -63,9 +63,9 @@ Pokedex createPokedexFromFile(FILE* file) {
   return pokedex;
 }
 
-Evolutions createEvolutionsFromFile(FILE* file, Pokedex pokedex) {
+Evolutions evolutionsCreateFromFile(FILE* file, Pokedex pokedex) {
   if (NULL == file || NULL == pokedex) return NULL;
-  Evolutions evolutions = createEvolutions();
+  Evolutions evolutions = evolutionsCreate();
   if (NULL == evolutions) return NULL;
   char line[MAX_STR_LENGTH + 1];
   char pokemon[MAX_STR_LENGTH], evolution_name[MAX_STR_LENGTH];
@@ -79,7 +79,7 @@ Evolutions createEvolutionsFromFile(FILE* file, Pokedex pokedex) {
     assert(evolution);
     add_result = evolutionsAddEntry(evolutions, pokemon, level, evolution);
     if (EVOLUTIONS_OUT_OF_MEMORY == add_result) {
-      destroyEvolutions(evolutions);
+      evolutionsDestroy(evolutions);
       return NULL;
     }
   }
@@ -98,10 +98,10 @@ static bool locationAddPokemonFromLine(Location location, char* pokemon_part,
   WORD_FOREACH(pokemon_part, species) {
     pokemon_info = pokedexGetPokemonInfo(pokedex, species);
     assert(pokemon_info);
-    pokemon = createPokemon(pokemon_info, evolutions);
+    pokemon = pokemonCreate(pokemon_info, evolutions);
     if (NULL == pokemon) return false;
     add_result = locationAppendPokemon(location, pokemon);
-    destroyPokemon(pokemon);
+    pokemonDestroy(pokemon);
     if (LOCATION_OUT_OF_MEMORY == add_result) return false;
   }
   return true;
@@ -148,7 +148,7 @@ static Location locationFromLine(char* line, Pokedex pokedex,
   return location;
 }
 
-Map createLocationsMapFromFile(FILE* file, Pokedex pokedex,
+Map locationsCreateMapFromFile(FILE* file, Pokedex pokedex,
                                Evolutions evolutions) {
   if (NULL == file || NULL == pokedex || NULL == evolutions) return NULL;
   Map locations = mapCreate((copyMapKeyElements)stringCopy,

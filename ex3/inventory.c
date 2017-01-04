@@ -3,7 +3,7 @@
 #include "inventory.h"
 #include "utils.h"
 
-Inventory createInventory() {
+Inventory inventoryCreate() {
   Map inventory;
   inventory = mapCreate((copyMapKeyElements)intCopy,
                         (copyMapDataElements)intCopy,
@@ -14,11 +14,11 @@ Inventory createInventory() {
   return inventory;
 }
 
-void destroyInventory(Inventory inventory) {
+void inventoryDestroy(Inventory inventory) {
   mapDestroy(inventory);
 }
 
-Inventory copyInventory(Inventory inventory) {
+Inventory inventoryCopy(Inventory inventory) {
   if (NULL == inventory) return NULL;
   return mapCopy(inventory);
 }
@@ -71,7 +71,7 @@ InventoryErrorCode inventoryRemoveItem(Inventory inventory, int value) {
   return INVENTORY_SUCCESS;
 }
 
-void printInventory(Inventory inventory, char* inventory_type,
+void inventoryPrint(Inventory inventory, char* inventory_type,
                     FILE* output_channel) {
   if (NULL == inventory || NULL == inventory_type ||  NULL == output_channel) {
     return;

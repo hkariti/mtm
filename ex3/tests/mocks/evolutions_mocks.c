@@ -1,7 +1,7 @@
 #include "evolutions_mocks.h"
 
 Evolutions demoEvolutions(Pokedex pokedex) {
-  Evolutions evolutions = createEvolutions();
+  Evolutions evolutions = evolutionsCreate();
   PokedexEntry entry;
 
   entry = pokedexGetPokemonInfo(pokedex, "Raichu");

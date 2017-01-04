@@ -13,18 +13,18 @@ bool testCreateTrainer() {
   Location location = mapGet(locations, "empty_location");
 
   // Invalid inputs
-  trainer = createTrainer(NULL, 1, location);
+  trainer = trainerCreate(NULL, 1, location);
   ASSERT_TEST(NULL == trainer);
-  trainer = createTrainer("tembel", -1, location);
+  trainer = trainerCreate("tembel", -1, location);
   ASSERT_TEST(NULL == trainer);
-  trainer = createTrainer("tembel", 1, NULL);
+  trainer = trainerCreate("tembel", 1, NULL);
   ASSERT_TEST(NULL == trainer);
 
   // Valid inputs
-  trainer = createTrainer("tembel", 12, location);
+  trainer = trainerCreate("tembel", 12, location);
   ASSERT_TEST(trainer != NULL);
 
-  destroyTrainer(trainer);
+  trainerDestroy(trainer);
   TRAINER_TEAR_DOWN();
   return true;
 }
@@ -33,11 +33,11 @@ bool testDestroyTrainer() {
   TRAINER_SET_UP();
 
   // NULL Input
-  destroyTrainer(NULL);
+  trainerDestroy(NULL);
 
   // Valid input
   Trainer trainer = demoTrainerEmpty("trainer", locations);
-  destroyTrainer(trainer);
+  trainerDestroy(trainer);
 
   TRAINER_TEAR_DOWN();
   return true;
@@ -57,14 +57,14 @@ bool testCopyTrainer() {
   // Valid input
   trainer_copy = trainerCopy(trainer);
   ASSERT_TEST(trainer_copy != NULL);
-  destroyTrainer(trainer_copy);
+  trainerDestroy(trainer_copy);
 
   trainer_copy = trainerCopy(trainer_with_pokemon);
   ASSERT_TEST(trainer_copy != NULL);
-  destroyTrainer(trainer_copy);
+  trainerDestroy(trainer_copy);
 
-  destroyTrainer(trainer);
-  destroyTrainer(trainer_with_pokemon);
+  trainerDestroy(trainer);
+  trainerDestroy(trainer_with_pokemon);
   TRAINER_TEAR_DOWN();
   return true;
 }
@@ -75,10 +75,10 @@ bool testPrintTrainer() {
   Trainer trainer = demoTrainerEmpty("trainer", locations);
   FILE* dummy_file = (FILE*)0x1234;
   // NULL input
-  printTrainer(NULL, dummy_file);
-  printTrainer(trainer, NULL);
+  trainerPrint(NULL, dummy_file);
+  trainerPrint(trainer, NULL);
 
-  destroyTrainer(trainer);
+  trainerDestroy(trainer);
   TRAINER_TEAR_DOWN();
   return true;
 }
@@ -91,23 +91,23 @@ bool testGetTrainerPokemon() {
   Pokemon pokemon;
 
   // Invalid input
-  pokemon = getTrainerPokemon(NULL, 1);
+  pokemon = trainerGetPokemon(NULL, 1);
   ASSERT_TEST(NULL == pokemon);
-  pokemon = getTrainerPokemon(trainer, -1);
+  pokemon = trainerGetPokemon(trainer, -1);
   ASSERT_TEST(NULL == pokemon);
-  pokemon = getTrainerPokemon(trainer, 1);
+  pokemon = trainerGetPokemon(trainer, 1);
   ASSERT_TEST(NULL == pokemon);
-  pokemon = getTrainerPokemon(trainer, 0);
+  pokemon = trainerGetPokemon(trainer, 0);
   ASSERT_TEST(NULL == pokemon);
-  pokemon = getTrainerPokemon(trainer_with_pokemon, 135);
+  pokemon = trainerGetPokemon(trainer_with_pokemon, 135);
   ASSERT_TEST(NULL == pokemon);
 
   // Valid input
-  pokemon = getTrainerPokemon(trainer_with_pokemon, 1);
+  pokemon = trainerGetPokemon(trainer_with_pokemon, 1);
   ASSERT_TEST(pokemon != NULL);
 
-  destroyTrainer(trainer);
-  destroyTrainer(trainer_with_pokemon);
+  trainerDestroy(trainer);
+  trainerDestroy(trainer_with_pokemon);
   TRAINER_TEAR_DOWN();
   return true;
 }
@@ -139,8 +139,8 @@ bool testTrainerRemovePokemon() {
   remove_result = trainerRemovePokemon(trainer_with_pokemon, 1);
   ASSERT_TEST(TRAINER_POKEMON_DOESNT_EXIST == remove_result);
 
-  destroyTrainer(trainer);
-  destroyTrainer(trainer_with_pokemon);
+  trainerDestroy(trainer);
+  trainerDestroy(trainer_with_pokemon);
   TRAINER_TEAR_DOWN();
   return true;
 }
@@ -176,10 +176,10 @@ bool testTrainerHealPokemon() {
   ASSERT_TEST(TRAINER_POKEMON_HP_IS_AT_MAX == heal_result);
 
   // Injure some pokemon to make potions work
-  pokemonInjure(getTrainerPokemon(trainer_with_pokemon, 2));
-  pokemonInjure(getTrainerPokemon(full_trainer, 2));
-  pokemonInjure(getTrainerPokemon(full_trainer, 3));
-  pokemonInjure(getTrainerPokemon(full_trainer, 4));
+  pokemonInjure(trainerGetPokemon(trainer_with_pokemon, 2));
+  pokemonInjure(trainerGetPokemon(full_trainer, 2));
+  pokemonInjure(trainerGetPokemon(full_trainer, 3));
+  pokemonInjure(trainerGetPokemon(full_trainer, 4));
 
   // No potions
   heal_result = trainerHealPokemon(trainer_with_pokemon, 2);
@@ -196,10 +196,10 @@ bool testTrainerHealPokemon() {
   heal_result = trainerHealPokemon(full_trainer, 4);
   ASSERT_TEST(TRAINER_NO_AVAILABLE_ITEM_FOUND == heal_result);
 
-  destroyTrainer(empty_trainer);
-  destroyTrainer(trainer_with_items);
-  destroyTrainer(trainer_with_pokemon);
-  destroyTrainer(full_trainer);
+  trainerDestroy(empty_trainer);
+  trainerDestroy(trainer_with_items);
+  trainerDestroy(trainer_with_pokemon);
+  trainerDestroy(full_trainer);
   TRAINER_TEAR_DOWN();
   return true;
 }
@@ -242,10 +242,10 @@ bool testTrainerTrainPokemon() {
   train_result = trainerTrainPokemon(full_trainer, 1);
   ASSERT_TEST(TRAINER_NO_AVAILABLE_ITEM_FOUND == train_result);
 
-  destroyTrainer(empty_trainer);
-  destroyTrainer(trainer_with_items);
-  destroyTrainer(trainer_with_pokemon);
-  destroyTrainer(full_trainer);
+  trainerDestroy(empty_trainer);
+  trainerDestroy(trainer_with_items);
+  trainerDestroy(trainer_with_pokemon);
+  trainerDestroy(full_trainer);
   TRAINER_TEAR_DOWN();
   return true;
 }
@@ -273,8 +273,8 @@ bool testTrainersBattle() {
   battle_result = trainersBattle(trainer1, 1, trainer2, 1);
   ASSERT_TEST(TRAINER_SUCCESS == battle_result);
 
-  destroyTrainer(trainer1);
-  destroyTrainer(trainer2);
+  trainerDestroy(trainer1);
+  trainerDestroy(trainer2);
   TRAINER_TEAR_DOWN();
   return true;
 }
@@ -306,7 +306,7 @@ bool testTrainerGoToLocation() {
   go_result = trainerGoToLocation(trainer, neighbor);
   ASSERT_TEST(TRAINER_SUCCESS == go_result);
 
-  destroyTrainer(trainer);
+  trainerDestroy(trainer);
   TRAINER_TEAR_DOWN();
   return true;
 }
@@ -332,7 +332,7 @@ bool testTrainerHunt() {
   hunt_result = trainerHunt(trainer, output_channel);
   ASSERT_TEST(TRAINER_SUCCESS == hunt_result);
 
-  destroyTrainer(trainer);
+  trainerDestroy(trainer);
   TRAINER_TEAR_DOWN();
   return true;
 }
@@ -407,9 +407,9 @@ bool testTrainerBuyItem() {
   ASSERT_TEST(TRAINER_STORE_ITEM_OUT_OF_STOCK == buy_result);
 
   storeDestroy(store);
-  destroyTrainer(poor_trainer);
-  destroyTrainer(normal_trainer);
-  destroyTrainer(rich_trainer);
+  trainerDestroy(poor_trainer);
+  trainerDestroy(normal_trainer);
+  trainerDestroy(rich_trainer);
   TRAINER_TEAR_DOWN();
   return true;
 }
@@ -421,14 +421,14 @@ bool testGetTrainerName() {
   char* name;
 
   // Invalid argument
-  name = getTrainerName(NULL);
+  name = trainerGetName(NULL);
   ASSERT_TEST(NULL == name);
 
   // Success
-  name = getTrainerName(trainer);
+  name = trainerGetName(trainer);
   ASSERT_TEST(name != NULL);
 
-  destroyTrainer(trainer);
+  trainerDestroy(trainer);
   TRAINER_TEAR_DOWN();
   return true;
 }
@@ -440,14 +440,14 @@ bool testGetTrainerXP() {
   double xp;
 
   // Invalid argument
-  xp = getTrainerXP(NULL);
+  xp = trainerGetXP(NULL);
   ASSERT_TEST(-1 == xp);
 
   // Success
-  xp = getTrainerXP(trainer);
+  xp = trainerGetXP(trainer);
   ASSERT_TEST(xp >= TRAINER_INITIAL_XP);
 
-  destroyTrainer(trainer);
+  trainerDestroy(trainer);
   TRAINER_TEAR_DOWN();
   return true;
 }

@@ -12,7 +12,7 @@ Set demoTypes() {
 }
 
 Pokedex demoPokedex() {
-  Pokedex pokedex = createPokedex();
+  Pokedex pokedex = pokedexCreate();
   Set types = demoTypes();
   pokedexAddPokemon(pokedex, "pikachu", 10, types);
   pokedexAddPokemon(pokedex, "Raichu", 7, types);

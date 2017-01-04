@@ -1,7 +1,7 @@
 #include "inventory_mocks.h"
 
 Inventory demoInventory() {
-  Inventory inventory = createInventory();
+  Inventory inventory = inventoryCreate();
 
   inventoryAddItem(inventory, 1);
   inventoryAddItem(inventory, 1);

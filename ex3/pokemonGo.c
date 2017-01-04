@@ -14,7 +14,7 @@ struct PokemonGo_t {
 	FILE* output_channel;
 };
 
-PokemonGo createPokemonGo(Pokedex pokedex, Evolutions evolutions, Map locations,
+PokemonGo pokemonGoCreate(Pokedex pokedex, Evolutions evolutions, Map locations,
                           FILE* output_channel) {
 	if (NULL == pokedex || NULL == evolutions || NULL == locations ||
       NULL == output_channel) {
@@ -29,7 +29,7 @@ PokemonGo createPokemonGo(Pokedex pokedex, Evolutions evolutions, Map locations,
 	pokemon_go->trainers = mapCreate((copyMapKeyElements)stringCopy,
                                    (copyMapDataElements)trainerCopy,
                                    (freeMapKeyElements)free,
-                                   (freeMapDataElements)destroyTrainer,
+                                   (freeMapDataElements)trainerDestroy,
                                    (compareMapKeyElements)stringCompare);
 	if (NULL == pokemon_go->trainers) {
 		free(pokemon_go);
@@ -66,17 +66,17 @@ PokemonGoErrorCode pokemongoTrainerAdd(PokemonGo pokemon_go, char* trainer_name,
 	Location location = mapGet(pokemon_go->locations, start_location);
 	if (NULL == location) return POKEMONGO_LOCATION_DOES_NOT_EXIST;
 
-	trainer = createTrainer(trainer_name, budget, location);
+	trainer = trainerCreate(trainer_name, budget, location);
 	if (NULL == trainer) return POKEMONGO_OUT_OF_MEMORY;
     TrainerErrorCode hunt_result = trainerHunt(trainer,
                                                pokemon_go->output_channel);
     if (hunt_result == TRAINER_OUT_OF_MEMORY) {
-        destroyTrainer(trainer);
+        trainerDestroy(trainer);
         return POKEMONGO_OUT_OF_MEMORY; 
     }
 
 	MapResult map_result = mapPut(pokemon_go->trainers, trainer_name, trainer);
-    destroyTrainer(trainer);
+    trainerDestroy(trainer);
 	if (map_result == MAP_OUT_OF_MEMORY) return POKEMONGO_OUT_OF_MEMORY;
 	// we checked all mapPut arg, so out of mem is the only possible error
 
@@ -171,8 +171,8 @@ PokemonGoErrorCode pokemongoBattleFight(PokemonGo pokemon_go,
     return POKEMONGO_TRAINER_DOES_NOT_EXIST; 
   }
 
-	Pokemon pokemon_1 = getTrainerPokemon(trainer_1, pokemon1_id);
-	Pokemon pokemon_2 = getTrainerPokemon(trainer_2, pokemon2_id);
+	Pokemon pokemon_1 = trainerGetPokemon(trainer_1, pokemon1_id);
+	Pokemon pokemon_2 = trainerGetPokemon(trainer_2, pokemon2_id);
 	if (NULL == pokemon_1 || NULL == pokemon_2) {
     return POKEMONGO_POKEMON_DOES_NOT_EXIST; 
   }
@@ -184,8 +184,8 @@ PokemonGoErrorCode pokemongoBattleFight(PokemonGo pokemon_go,
 	double old_hp_2 = pokemonGetHP(pokemon_2);
 	int old_level_1 = pokemonGetLevel(pokemon_1);
 	int old_level_2 = pokemonGetLevel(pokemon_2);
-	double old_xp_1 = getTrainerXP(trainer_1);
-	double old_xp_2 = getTrainerXP(trainer_2);
+	double old_xp_1 = trainerGetXP(trainer_1);
+	double old_xp_2 = trainerGetXP(trainer_2);
 
 	trainersBattle(trainer_1, pokemon1_id, trainer_2, pokemon2_id);
 
@@ -193,8 +193,8 @@ PokemonGoErrorCode pokemongoBattleFight(PokemonGo pokemon_go,
 	double new_hp_2 = pokemonGetHP(pokemon_2);
 	int new_level_1 = pokemonGetLevel(pokemon_1);
 	int new_level_2 = pokemonGetLevel(pokemon_2);
-	double new_xp_1 = getTrainerXP(trainer_1);
-	double new_xp_2 = getTrainerXP(trainer_2);
+	double new_xp_1 = trainerGetXP(trainer_1);
+	double new_xp_2 = trainerGetXP(trainer_2);
 	bool is_dead_1, is_dead_2;
 	isPokemonDead(pokemon_1, &is_dead_1);
 	isPokemonDead(pokemon_2, &is_dead_2);
@@ -260,7 +260,7 @@ PokemonGoErrorCode pokemongoReportTrainer(PokemonGo pokemon_go,
 	Trainer trainer = mapGet(pokemon_go->trainers, trainer_name);
 	if (NULL == trainer) return POKEMONGO_TRAINER_DOES_NOT_EXIST;
 
-	printTrainer(trainer, pokemon_go->output_channel);
+	trainerPrint(trainer, pokemon_go->output_channel);
 	return POKEMONGO_SUCCESS;
 }
 

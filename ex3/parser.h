@@ -9,9 +9,9 @@
 
 #define MAX_STR_LENGTH 250
 
-Pokedex createPokedexFromFile(FILE* file);
-Evolutions createEvolutionsFromFile(FILE* file, Pokedex pokedex);
-Map createLocationsMapFromFile(FILE* file, Pokedex pokedex,
+Pokedex pokedexCreateFromFile(FILE* file);
+Evolutions evolutionsCreateFromFile(FILE* file, Pokedex pokedex);
+Map locationsCreateMapFromFile(FILE* file, Pokedex pokedex,
                                Evolutions evolutions);
 bool parseArgs(int argc, char** argv, char** pokedex_filename,
                char** evolutions_filename, char** locations_filename,
