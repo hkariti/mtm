@@ -5,7 +5,7 @@
 #include "utils.h"
 
 struct Pokemon_t {
-	Map evolutions_map;
+	Evolutions evolutions_map;
 	PokedexEntry pokemon_info;
 	double hp;
 	int cp_extra;
@@ -62,7 +62,7 @@ int pokemonCompareByID(Pokemon pokemon_1, Pokemon pokemon_2)
 		return 0;
 	}
 	else if (pokemon_1->id > pokemon_2->id) {
-		return 1; //is 1 or -1?
+		return 1;
 	}
 	else {
 		return -1;
@@ -116,7 +116,14 @@ PokemonErrorCode pokemonGivePotion(Pokemon pokemon, int potion_value)
 	return POKEMON_SUCCESS;
 }
 
-static int pokemonPokecoinsValue(Pokemon pokemon) { // need to verify all types are lowercase
+/**
+* pokemonPokecoinsValue: Returns the amount of PokeCoins the specified pokemon
+						 is worth when catched according to it's types.
+* @param pokemon - The target pokemon.
+* @return
+*	The amount of PokeCoins the pokemon is worth when being catched
+*/
+static int pokemonPokecoinsValue(Pokemon pokemon) {
 	assert(pokemon);
 
 	Set types = pokedexEntryGetTypes(pokemon->pokemon_info);
@@ -149,6 +156,14 @@ int pokemonCaught(Pokemon pokemon, int new_pokemon_id)
 	return pokemonPokecoinsValue(pokemon);
 }
 
+/**
+* pokemonBattleSingle: Performs a battle on a single pokemon,
+					   Results in changing it's hp & level accordingly
+* @param pokemon - The target pokemon to perform battle on.
+* @param battle_delta - The battle delta as calculated by the opponent
+						pokemon and trainer
+* @param opponent_level - Opponent pokemon's level
+*/
 static void pokemonBattleSingle(Pokemon pokemon, double battle_delta,
                                 int opponent_level) {
   
