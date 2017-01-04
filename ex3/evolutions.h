@@ -11,8 +11,8 @@
  * object (see the Pokedex type in pokedex.h) given its species.
  *
  * The following functions are available:
- *  createEvolutions    Creates a new empty evolutions map
- *  destroyEvolutions   Deletes an existing map. Pokedex entries are *NOT*
+ *  evolutionsCreate    Creates a new empty evolutions map
+ *  evolutionsDestroy   Deletes an existing map. Pokedex entries are *NOT*
  *                      freed.
  *  evolutionsAddEntry  Adds an entry to the map, if an entry alredy exists
  *                      it's overwritten.
@@ -32,23 +32,23 @@ typedef enum {
 } EvolutionsErrorCode;
 
 /**
- * createEvolutions: create a new empty evolutions map.
+ * evolutionsCreate: create a new empty evolutions map.
  *
  * @return
  *  NULL - allocation failed.
  *  A new Evolutions type in case of success.
  */
-Evolutions createEvolutions();
+Evolutions evolutionsCreate();
 
 /**
- * destroyEvolutions: Deallocates an existing map. The corresponding Pokedex
+ * evolutionsDestroy: Deallocates an existing map. The corresponding Pokedex
  *  entries are assumed to be shared with the Pokedex type, and so will
  *  NOT be destroyed.
  *
  *  @param evolutions   Target map to be deallocated. If evolutions is NULL
  *                      nothing will be done
  */
-void destroyEvolutions(Evolutions evolutions);
+void evolutionsDestroy(Evolutions evolutions);
 
 /**
  * evolutionsAddEntry: Add an evolution entry to the map

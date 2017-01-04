@@ -12,15 +12,15 @@
  * stores, that's up to you.
  *
  * The following functions are available:
- *  createInventory     - Creates a new empty inventory.
- *  destroyInventory    - Deletes an inventory and frees all resources.
- *  copyInventory       - Copies an existing inventory.
+ *  inventoryCreate     - Creates a new empty inventory.
+ *  inventoryDestroy    - Deletes an inventory and frees all resources.
+ *  inventoryCopy       - Copies an existing inventory.
  *  inventoryAddItem    - Adds a new item to the inventory, given its value.
  *  inventoryRemoveItem - Removes an existing item, given its value, if it's
  *                        in the inventory.
  *  inventoryContains   - returns whether the inventory contains an item,
  *                        given by its value.
- *  printInventory      - Prints an inventory's stock
+ *  inventoryPrint      - Prints an inventory's stock
  *  INVENTORY_FOREACH   - Iterates over item values in the inventory, from
  *                        smallest value to highest value.
  */
@@ -37,23 +37,23 @@ typedef enum {
 } InventoryErrorCode;
 
 /**
- * createInventory - creates a new empty inventory.
+ * inventoryCreate - creates a new empty inventory.
  *
  * @return
  *  NULL - allocation error
  *  A new Inventory in case of success
  */
-Inventory createInventory();
+Inventory inventoryCreate();
 
 /**
- * destroyInventory - Deallocates an existing inventory and all its items.
+ * inventoryDestroy - Deallocates an existing inventory and all its items.
  *
  * @param inventory - existing Inventory. If inventory is NULL nothing is done.
  */
-void destroyInventory(Inventory inventory);
+void inventoryDestroy(Inventory inventory);
 
 /**
- * copyInventory - Copies an existing Inventory and all its items.
+ * inventoryCopy - Copies an existing Inventory and all its items.
  *
  * @param inventory - Inventory type to copy
  *
@@ -61,7 +61,7 @@ void destroyInventory(Inventory inventory);
  *  NULL - allocation error or NULL argument
  *  A new Inventory containing the same items in case of success
  */
-Inventory copyInventory(Inventory inventory);
+Inventory inventoryCopy(Inventory inventory);
 
 /**
  * inventoryAddItem - Adds an item to the inventory
@@ -103,13 +103,13 @@ InventoryErrorCode inventoryRemoveItem(Inventory inventory, int value);
 bool inventoryContains(Inventory inventory, int value);
 
 /**
- * printInventory - Print inventory stock, sorted by value
+ * inventoryPrint - Print inventory stock, sorted by value
  *
  * @param inventory         - Existing inventory
  * @param type              - Type of items in the inventory
  * @param output_channel    - File to write the output to
  */
-void printInventory(Inventory inventory, char* type,
+void inventoryPrint(Inventory inventory, char* type,
                     FILE* output_channel);
 
 /**
