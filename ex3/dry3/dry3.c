@@ -1,7 +1,5 @@
 #include <stdlib.h>
 
-//TODO: TEST & DOCUMENT ALL FILE
-
 /** Type for defining the Node struct */
 typedef struct node_t* Node; 
 struct node_t {
