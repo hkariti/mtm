@@ -27,8 +27,8 @@ void cleanUpFiles(FILE* input_file, FILE* output_file, FILE* pokedex_file,
 
 void cleanUp(Pokedex pokedex, Evolutions evolutions, Map locations,
              PokemonGo game) {
-  destroyPokedex(pokedex);
-  destroyEvolutions(evolutions);
+  pokedexDestroy(pokedex);
+  evolutionsDestroy(evolutions);
   mapDestroy(locations);
   pokemongoDestroy(game);
 }
@@ -207,11 +207,11 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-  Pokedex pokedex = createPokedexFromFile(pokedex_file);
-  Evolutions evolutions = createEvolutionsFromFile(evolutions_file, pokedex);
-  Map locations = createLocationsMapFromFile(locations_file, pokedex,
+  Pokedex pokedex = pokedexCreateFromFile(pokedex_file);
+  Evolutions evolutions = evolutionsCreateFromFile(evolutions_file, pokedex);
+  Map locations = locationsCreateMapFromFile(locations_file, pokedex,
                                              evolutions);
-  PokemonGo game = createPokemonGo(pokedex, evolutions, locations, output);
+  PokemonGo game = pokemonGoCreate(pokedex, evolutions, locations, output);
   if (NULL == game || NULL == pokedex || NULL == evolutions ||
       NULL == locations) {
     cleanUp(pokedex, evolutions, locations, game);

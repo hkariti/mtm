@@ -14,20 +14,20 @@ bool testCreatePokemon() {
 	Pokemon pokemon;
 
 	// test null args
-	pokemon = createPokemon(NULL, evolutions);
+	pokemon = pokemonCreate(NULL, evolutions);
 	ASSERT_TEST(NULL == pokemon);
-	pokemon = createPokemon(NULL, NULL);
+	pokemon = pokemonCreate(NULL, NULL);
 	ASSERT_TEST(NULL == pokemon);
-	pokemon = createPokemon(pokemon_info, NULL);
+	pokemon = pokemonCreate(pokemon_info, NULL);
 	ASSERT_TEST(NULL == pokemon);
 
 	// check valid args
-	pokemon = createPokemon(pokemon_info, evolutions);
+	pokemon = pokemonCreate(pokemon_info, evolutions);
 	ASSERT_TEST(NULL != pokemon);
-	destroyPokemon(pokemon);
+	pokemonDestroy(pokemon);
 
-	destroyEvolutions(evolutions);
-	destroyPokedex(pokedex);
+	evolutionsDestroy(evolutions);
+	pokedexDestroy(pokedex);
 	return true;
 }
 
@@ -37,14 +37,14 @@ bool testDestroyPokemon() {
 	Pokemon pokemon;
 
 	// Test NULL argument
-	destroyPokemon(NULL);
+	pokemonDestroy(NULL);
 
 	// Test valid pokemon
 	pokemon = demoPokemon(pokedex, evolutions);
-	destroyPokemon(pokemon);
+	pokemonDestroy(pokemon);
 
-	destroyEvolutions(evolutions);
-	destroyPokedex(pokedex);
+	evolutionsDestroy(evolutions);
+	pokedexDestroy(pokedex);
 	return true;
 }
 
@@ -66,11 +66,11 @@ bool testPokemonCompareByID() {
 	compare_result = pokemonCompareByID(pokemon_1, pokemon_2);
 	ASSERT_TEST(1 == compare_result);
 
-	destroyPokemon(pokemon_1);
-	destroyPokemon(pokemon_2);
+	pokemonDestroy(pokemon_1);
+	pokemonDestroy(pokemon_2);
 
-	destroyEvolutions(evolutions);
-	destroyPokedex(pokedex);
+	evolutionsDestroy(evolutions);
+	pokedexDestroy(pokedex);
 
 	return true;
 }
@@ -103,10 +103,10 @@ bool testPokemonGivePotion() {
 	ASSERT_TEST(100 == hp);
 	ASSERT_TEST(POKEMON_SUCCESS == result);
 
-	destroyPokemon(pokemon);
-	destroyPokemon(pokemon_2);
-	destroyEvolutions(evolutions);
-	destroyPokedex(pokedex);
+	pokemonDestroy(pokemon);
+	pokemonDestroy(pokemon_2);
+	evolutionsDestroy(evolutions);
+	pokedexDestroy(pokedex);
 
 	return true;
 }
@@ -122,18 +122,18 @@ bool testPokemonCaught() {
 	setAdd(types, "BUG");
 	setAdd(types, "GROUND");
 	pokedexAddPokemon(pokedex, "weedle", 1000, types);
-	Pokemon weedle = createPokemon(pokedexGetPokemonInfo(pokedex, "weedle"), evolutions);
+	Pokemon weedle = pokemonCreate(pokedexGetPokemonInfo(pokedex, "weedle"), evolutions);
 	pokecoins = pokemonCaught(weedle, 10);
-	destroyPokemon(weedle);
+	pokemonDestroy(weedle);
 	ASSERT_TEST(pokecoins == REGULAR_TYPE_POKECOINS);
 
 	// Test 2 one star types
 	setAdd(types, "WATER");
 	setAdd(types, "FAIRY");
 	pokedexAddPokemon(pokedex, "tinkertoice", 1000, types);
-	Pokemon tinkertoice = createPokemon(pokedexGetPokemonInfo(pokedex, "tinkertoice"), evolutions);
+	Pokemon tinkertoice = pokemonCreate(pokedexGetPokemonInfo(pokedex, "tinkertoice"), evolutions);
 	pokecoins = pokemonCaught(tinkertoice, 10);
-	destroyPokemon(tinkertoice);
+	pokemonDestroy(tinkertoice);
 	ASSERT_TEST(pokecoins == ONE_STAR_TYPE_POKECOINS);
 
 
@@ -141,22 +141,22 @@ bool testPokemonCaught() {
 	setAdd(types, "FIRE");
 	setAdd(types, "LYING");
 	pokedexAddPokemon(pokedex, "moltres", 1000, types);
-	Pokemon moltres = createPokemon(pokedexGetPokemonInfo(pokedex, "moltres"), evolutions);
+	Pokemon moltres = pokemonCreate(pokedexGetPokemonInfo(pokedex, "moltres"), evolutions);
 	pokecoins = pokemonCaught(moltres, 10);
-	destroyPokemon(moltres);
+	pokemonDestroy(moltres);
 	ASSERT_TEST(pokecoins == DOUBLE_STAR_TYPE_POKECOINS);
 
 	setDestroy(types);
-	destroyEvolutions(evolutions);
-	destroyPokedex(pokedex);
+	evolutionsDestroy(evolutions);
+	pokedexDestroy(pokedex);
 	return true;
 }
 
 bool testPokemonBattle() {
 	Pokedex pokedex = demoPokedex();
 	Evolutions evolutions = demoEvolutions(pokedex);
-	Pokemon mew = createPokemon(pokedexGetPokemonInfo(pokedex, "mew"), evolutions);
-	Pokemon mewtwo = createPokemon(pokedexGetPokemonInfo(pokedex, "mewtwo"), evolutions);
+	Pokemon mew = pokemonCreate(pokedexGetPokemonInfo(pokedex, "mew"), evolutions);
+	Pokemon mewtwo = pokemonCreate(pokedexGetPokemonInfo(pokedex, "mewtwo"), evolutions);
 	double mew_hp, mewtwo_hp;
 	int mew_level, mewtwo_level;
 
@@ -171,10 +171,10 @@ bool testPokemonBattle() {
 	ASSERT_TEST(58 == mewtwo_hp);
 	ASSERT_TEST(2 == mewtwo_level);
 
-	destroyPokemon(mew);
-	destroyPokemon(mewtwo);
-	destroyEvolutions(evolutions);
-	destroyPokedex(pokedex);
+	pokemonDestroy(mew);
+	pokemonDestroy(mewtwo);
+	evolutionsDestroy(evolutions);
+	pokedexDestroy(pokedex);
 
 	return true;
 }

@@ -140,7 +140,7 @@ bool testLocationAppendPokemon() {
 	is_empty = locationIsEmpty(empty_location);
 	ASSERT_TEST(false == is_empty);
 
-	destroyPokemon(pokemon);
+	pokemonDestroy(pokemon);
 	destroyLocation(empty_location);
 
 	LOCATION_TEAR_DOWN();
@@ -161,7 +161,7 @@ bool testLocationPopPokemon() {
 	// non empty location
 	poppedPokemon = locationPopPokemon(one_pokemon_location);
 	ASSERT_TEST(NULL != poppedPokemon);
-	destroyPokemon(poppedPokemon);
+	pokemonDestroy(poppedPokemon);
 
 	// empty location
 	poppedPokemon = locationPopPokemon(one_pokemon_location);

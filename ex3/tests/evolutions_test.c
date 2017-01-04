@@ -4,21 +4,21 @@
 
 
 bool testCreateEvolutions() {
-  Evolutions evolutions = createEvolutions();
+  Evolutions evolutions = evolutionsCreate();
 
   ASSERT_TEST(evolutions != NULL);
-  destroyEvolutions(evolutions);
+  evolutionsDestroy(evolutions);
   return true;
 }
 
 bool testDestroyEvolutions() {
   // Test with NULL
-  destroyEvolutions(NULL);
+  evolutionsDestroy(NULL);
 
   Evolutions empty_evolutions;
   // Test with empty
-  empty_evolutions = createEvolutions();
-  destroyEvolutions(empty_evolutions);
+  empty_evolutions = evolutionsCreate();
+  evolutionsDestroy(empty_evolutions);
 
   // Test with entries
   EVOLUTIONS_SET_UP();
@@ -28,7 +28,7 @@ bool testDestroyEvolutions() {
 }
 
 bool testEvolutionsAddEntry() {
-  Evolutions evolutions = createEvolutions();
+  Evolutions evolutions = evolutionsCreate();
   EvolutionsErrorCode add_result;
 
   // Test NULL params
@@ -49,7 +49,7 @@ bool testEvolutionsAddEntry() {
   add_result = evolutionsAddEntry(evolutions, "pikachu", 2, (PokedexEntry)0x1337);
   ASSERT_TEST(EVOLUTIONS_SUCCESS == add_result);
 
-  destroyEvolutions(evolutions);
+  evolutionsDestroy(evolutions);
   return true;
 }
 
@@ -58,26 +58,26 @@ bool testGetEvolution() {
   PokedexEntry ret;
 
   // Test NULL params
-  ret = getEvolution(NULL, "pikachu", 1);
+  ret = evolutionsGet(NULL, "pikachu", 1);
   ASSERT_TEST(NULL == ret);
-  ret = getEvolution(evolutions, NULL, 1);
+  ret = evolutionsGet(evolutions, NULL, 1);
   ASSERT_TEST(NULL == ret);
 
   // Test level is too low (pikachu evolves at level 2 in our example)
-  ret = getEvolution(evolutions, "pikachu", 0);
+  ret = evolutionsGet(evolutions, "pikachu", 0);
   ASSERT_TEST(NULL == ret);
-  ret = getEvolution(evolutions, "pikachu", 1);
+  ret = evolutionsGet(evolutions, "pikachu", 1);
   ASSERT_TEST(NULL == ret);
 
   // Test level is equals or higher
-  ret = getEvolution(evolutions, "pikachu", 2);
+  ret = evolutionsGet(evolutions, "pikachu", 2);
   ASSERT_TEST(NULL != ret);
-  ret = getEvolution(evolutions, "pikachu", 3);
+  ret = evolutionsGet(evolutions, "pikachu", 3);
   ASSERT_TEST(NULL != ret);
 
   // Test after update
   evolutionsAddEntry(evolutions, "pikachu", 1, (PokedexEntry)0x1337);
-  ret = getEvolution(evolutions, "pikachu", 1);
+  ret = evolutionsGet(evolutions, "pikachu", 1);
   ASSERT_TEST(NULL != ret);
 
   EVOLUTIONS_TEAR_DOWN();

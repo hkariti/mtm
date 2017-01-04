@@ -23,7 +23,7 @@ Trainer demoTrainerWithMoney(char* name, int money, Map locations);
   Map locations = demoLocations(pokedex, evolutions);
 
 #define TRAINER_TEAR_DOWN()                     \
-  destroyEvolutions(evolutions);                \
-  destroyPokedex(pokedex);                      \
+  evolutionsDestroy(evolutions);                \
+  pokedexDestroy(pokedex);                      \
   mapDestroy(locations);
 #endif

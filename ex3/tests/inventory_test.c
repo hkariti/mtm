@@ -3,11 +3,11 @@
 #include "test_utilities.h"
 
 bool testCreateInventory() {
-  Inventory inventory = createInventory();
+  Inventory inventory = inventoryCreate();
 
   ASSERT_TEST(NULL != inventory);
 
-  destroyInventory(inventory);
+  inventoryDestroy(inventory);
   return true;
 }
 
@@ -15,10 +15,10 @@ bool testDestroyInventory() {
   Inventory inventory = demoInventory();
 
   // Test NULL input
-  destroyInventory(NULL);
+  inventoryDestroy(NULL);
 
   // Valid input
-  destroyInventory(inventory);
+  inventoryDestroy(inventory);
 
   return true;
 }
@@ -28,20 +28,20 @@ bool testCopyInventory() {
   Inventory inventory_copy;
 
   // NULL input
-  inventory_copy = copyInventory(NULL);
+  inventory_copy = inventoryCopy(NULL);
   ASSERT_TEST(NULL == inventory_copy);
 
   // Valid input
-  inventory_copy = copyInventory(inventory);
+  inventory_copy = inventoryCopy(inventory);
   ASSERT_TEST(NULL != inventory_copy);
 
-  destroyInventory(inventory_copy);
-  destroyInventory(inventory);
+  inventoryDestroy(inventory_copy);
+  inventoryDestroy(inventory);
   return true;
 }
 
 bool testInventoryAddItem() {
-  Inventory inventory = createInventory();
+  Inventory inventory = inventoryCreate();
   InventoryErrorCode add_result;
 
   // NULL input
@@ -56,7 +56,7 @@ bool testInventoryAddItem() {
   add_result = inventoryAddItem(inventory, 1);
   ASSERT_TEST(INVENTORY_SUCCESS == add_result);
 
-  destroyInventory(inventory);
+  inventoryDestroy(inventory);
   return true;
 }
 
@@ -70,7 +70,7 @@ bool testInventoryContains() {
   ASSERT_TEST(inventoryContains(inventory, 1) == true);
   ASSERT_TEST(inventoryContains(inventory, 1337) == false);
 
-  destroyInventory(inventory);
+  inventoryDestroy(inventory);
   return true;
 }
 
@@ -95,7 +95,7 @@ bool testInventoryRemoveItem() {
   remove_result = inventoryRemoveItem(inventory, 2);
   ASSERT_TEST(INVENTORY_OUT_OF_STOCK == remove_result);
 
-  destroyInventory(inventory);
+  inventoryDestroy(inventory);
   return true;
 }
 
@@ -104,9 +104,9 @@ bool testPrintInventory() {
   Inventory dummy_inventory = (Inventory)0x1337;
 
   // NULL inputs
-  printInventory(NULL, "potion", dummy_file);
-  printInventory(dummy_inventory, NULL, dummy_file);
-  printInventory(dummy_inventory, "potion", NULL);
+  inventoryPrint(NULL, "potion", dummy_file);
+  inventoryPrint(dummy_inventory, NULL, dummy_file);
+  inventoryPrint(dummy_inventory, "potion", NULL);
 
   return true;
 }
@@ -118,7 +118,7 @@ bool testInventoryForeach() {
     ASSERT_TEST(*i > 0);
   }
 
-  destroyInventory(inventory);
+  inventoryDestroy(inventory);
   return true;
 }
 

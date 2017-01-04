@@ -16,8 +16,8 @@ typedef struct PokedexEntry_t *PokedexEntry;
 
 typedef Map Pokedex;
 
-Pokedex createPokedex();
-void destroyPokedex(Pokedex pokedex);
+Pokedex pokedexCreate();
+void pokedexDestroy(Pokedex pokedex);
 // errors: POKEDEX_INVALID_ARGUMENT, OUT_OF_MEMORY
 PokedexErrorCode pokedexAddPokemon(Pokedex pokedex, char* species, int cp,
                             Set types);

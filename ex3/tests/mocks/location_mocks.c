@@ -9,6 +9,6 @@ Location demoLocationWithPokemon(char* name, int num_of_pokemon, Pokedex pokedex
     locationAppendPokemon(location, pokemon);
   }
 
-  destroyPokemon(pokemon);
+  pokemonDestroy(pokemon);
   return location;
 }

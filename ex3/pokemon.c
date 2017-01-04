@@ -13,7 +13,7 @@ struct Pokemon_t {
 	int id;
 };
 
-Pokemon createPokemon(PokedexEntry pokemon_info, Evolutions evolutions_map)
+Pokemon pokemonCreate(PokedexEntry pokemon_info, Evolutions evolutions_map)
 {
 	if (NULL == pokemon_info || NULL == evolutions_map) return NULL;
 	Pokemon pokemon = malloc(sizeof(*pokemon));
@@ -27,12 +27,12 @@ Pokemon createPokemon(PokedexEntry pokemon_info, Evolutions evolutions_map)
 	return pokemon;
 }
 
-void destroyPokemon(Pokemon pokemon)
+void pokemonDestroy(Pokemon pokemon)
 {
 	free(pokemon);
 }
 
-Pokemon copyPokemon(Pokemon pokemon) {
+Pokemon pokemonCopy(Pokemon pokemon) {
 	if (NULL == pokemon) return NULL;
 	Pokemon new_pokemon = malloc(sizeof(*new_pokemon));
 	if (NULL == new_pokemon) return NULL;
@@ -45,7 +45,7 @@ Pokemon copyPokemon(Pokemon pokemon) {
 	return new_pokemon;
 }
 
-void printPokemon(Pokemon pokemon, FILE* output_channel)
+void pokemonPrint(Pokemon pokemon, FILE* output_channel)
 {
 	assert(pokemon);
 	assert(output_channel);
@@ -176,12 +176,12 @@ static void pokemonBattleSingle(Pokemon pokemon, double battle_delta,
 	}
 
 	char* pokemon_spceies = pokedexEntryGetSpecies(pokemon->pokemon_info);
-	PokedexEntry evolved_pokemon_info = getEvolution(pokemon->evolutions_map,
+	PokedexEntry evolved_pokemon_info = evolutionsGet(pokemon->evolutions_map,
                                                    pokemon_spceies,
                                                    pokemon->level);
 	while (evolved_pokemon_info != NULL) {
 		pokemon->pokemon_info = evolved_pokemon_info;
-		evolved_pokemon_info = getEvolution(pokemon->evolutions_map,
+		evolved_pokemon_info = evolutionsGet(pokemon->evolutions_map,
                                         pokemon_spceies, pokemon->level);
 		pokemon_spceies = pokedexEntryGetSpecies(pokemon->pokemon_info);
 	}

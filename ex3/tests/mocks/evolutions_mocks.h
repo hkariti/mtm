@@ -11,6 +11,6 @@ Evolutions demoEvolutions(Pokedex pokedex);
   Evolutions evolutions = demoEvolutions(pokedex);
 
 #define EVOLUTIONS_TEAR_DOWN() \
-  destroyEvolutions(evolutions);\
-  destroyPokedex(pokedex);
+  evolutionsDestroy(evolutions);\
+  pokedexDestroy(pokedex);
 #endif

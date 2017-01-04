@@ -63,10 +63,10 @@ trainer:
     money
     current_location
     addPokemon()
-    getPokemonById()
+    pokemonGetById()
     healPokemon()
     trainPokemon()
-    printTrainerDetails()
+    trainerPrintDetails()
     battle()
     go()
     buyItem()
@@ -97,7 +97,7 @@ game:
     locations dict
     store pointer
     trainers dict
-    createPokemonGo(Pokedex pokedex, Evolutions evolutions, Location locations)
+    pokemonGoCreate(Pokedex pokedex, Evolutions evolutions, Location locations)
     trainerAdd()
     trainerGo()
     storeAdd()

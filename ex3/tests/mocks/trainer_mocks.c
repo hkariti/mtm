@@ -53,7 +53,7 @@ Map demoLocations(Pokedex pokedex, Evolutions evolutions) {
 
 Trainer demoTrainerEmpty(char* name, Map locations) {
   Location location = mapGet(locations, "empty_location");
-  Trainer trainer = createTrainer(name, 0, location);
+  Trainer trainer = trainerCreate(name, 0, location);
 
   return trainer;
 }
@@ -61,7 +61,7 @@ Trainer demoTrainerEmpty(char* name, Map locations) {
 Trainer demoTrainerFullAtLocation(char* name, Map locations, char* location_name) {
   Location location = mapGet(locations, location_name);
   Store store = demoStore();
-  Trainer trainer = createTrainer(name, 1000, location);
+  Trainer trainer = trainerCreate(name, 1000, location);
   trainerHunt(trainer, stdout);
   trainerHunt(trainer, stdout);
   trainerHunt(trainer, stdout);
@@ -82,7 +82,7 @@ Trainer demoTrainerFull(char* name, Map locations) {
 Trainer demoTrainerWithItems(char* name, Map locations) {
   Location location = mapGet(locations, "empty_location");
   Store store = demoStore();
-  Trainer trainer = createTrainer(name, 1000, location);
+  Trainer trainer = trainerCreate(name, 1000, location);
 
   trainerBuyItem(trainer, store, "candy", 1);
   trainerBuyItem(trainer, store, "candy", 1);
@@ -95,7 +95,7 @@ Trainer demoTrainerWithItems(char* name, Map locations) {
 
 Trainer demoTrainerWithPokemon(char* name, Map locations) {
   Location location = mapGet(locations, "full_location");
-  Trainer trainer = createTrainer(name, 0, location);
+  Trainer trainer = trainerCreate(name, 0, location);
 
   trainerHunt(trainer, stdout);
   trainerHunt(trainer, stdout);
@@ -107,7 +107,7 @@ Trainer demoTrainerWithPokemon(char* name, Map locations) {
 
 Trainer demoTrainerWithMoney(char* name, int money, Map locations) {
   Location location = mapGet(locations, "empty_location");
-  Trainer trainer = createTrainer(name, money, location);
+  Trainer trainer = trainerCreate(name, money, location);
 
   return trainer;
 }

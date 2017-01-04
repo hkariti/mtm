@@ -8,10 +8,10 @@
 bool testCreatePokedex() {
   Pokedex pokedex;
 
-  pokedex = createPokedex();
+  pokedex = pokedexCreate();
   ASSERT_TEST(NULL != pokedex);
 
-  destroyPokedex(pokedex);
+  pokedexDestroy(pokedex);
   return true;
 }
 
@@ -19,21 +19,21 @@ bool testDestroyPokedex() {
   Pokedex pokedex;
 
   // Test NULL argument
-  destroyPokedex(NULL);
+  pokedexDestroy(NULL);
 
   // Test empty pokedex
-  pokedex = createPokedex();
-  destroyPokedex(pokedex);
+  pokedex = pokedexCreate();
+  pokedexDestroy(pokedex);
 
   // Test with entries
   pokedex = demoPokedex();
-  destroyPokedex(pokedex);
+  pokedexDestroy(pokedex);
 
   return true;
 }
 
 bool testPokedexAddPokemon() {
-  Pokedex pokedex = createPokedex();
+  Pokedex pokedex = pokedexCreate();
   PokedexErrorCode add_result;
   Set types = demoTypes();
 
@@ -56,7 +56,7 @@ bool testPokedexAddPokemon() {
   ASSERT_TEST(POKEDEX_SUCCESS == add_result);
 
   setDestroy(types);
-  destroyPokedex(pokedex);
+  pokedexDestroy(pokedex);
   return true;
 }
 
@@ -78,7 +78,7 @@ bool testPokedexGetPokemonInfo() {
   ret = pokedexGetPokemonInfo(pokedex, "pikachu");
   ASSERT_TEST(NULL != ret);
 
-  destroyPokedex(pokedex);
+  pokedexDestroy(pokedex);
   return true;
 }
 
@@ -96,7 +96,7 @@ bool testPokedexEntryGetSpecies() {
   species = pokedexEntryGetSpecies(entry);
   ASSERT_TEST(NULL != species);
 
-  destroyPokedex(pokedex);
+  pokedexDestroy(pokedex);
   return true;
 }
 
@@ -113,7 +113,7 @@ bool testPokedexEntryGetCp() {
   cp = pokedexEntryGetCp(entry);
   ASSERT_TEST(cp >= 0);
 
-  destroyPokedex(pokedex);
+  pokedexDestroy(pokedex);
   return true;
 }
 
@@ -130,7 +130,7 @@ bool testPokedexEntryGetTypes() {
   types = pokedexEntryGetTypes(entry);
   ASSERT_TEST(NULL != types);
 
-  destroyPokedex(pokedex);
+  pokedexDestroy(pokedex);
   return true;
 }
 

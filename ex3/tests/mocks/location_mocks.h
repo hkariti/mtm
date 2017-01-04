@@ -15,8 +15,8 @@ Location demoLocationWithPokemon(char* name, int num_of_pokemon, Pokedex pokedex
   Location location = demoLocationWithPokemon("Hong Kong", 15, pokedex, evolutions);
 
 #define LOCATION_TEAR_DOWN()                     \
-  destroyEvolutions(evolutions);                \
-  destroyPokedex(pokedex);                      \
+  evolutionsDestroy(evolutions);                \
+  pokedexDestroy(pokedex);                      \
   destroyLocation(location);
 
 

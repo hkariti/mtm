@@ -24,13 +24,13 @@ typedef enum {
   TRAINER_STORE_ITEM_OUT_OF_STOCK,
 } TrainerErrorCode;
 
-Trainer createTrainer(char* name, int budget, Location start_location);
-void destroyTrainer(Trainer trainer);
+Trainer trainerCreate(char* name, int budget, Location start_location);
+void trainerDestroy(Trainer trainer);
 Trainer trainerCopy(Trainer trainer);
-void printTrainer(Trainer trainer, FILE* output_channel);
+void trainerPrint(Trainer trainer, FILE* output_channel);
 
 // NULL is pokemon doesn't exist or null arg
-Pokemon getTrainerPokemon(Trainer trainer, int pokemon_id);
+Pokemon trainerGetPokemon(Trainer trainer, int pokemon_id);
 
 // INVALID_ARGUMENT, POKEON_DOESNT_EXIST
 TrainerErrorCode trainerRemovePokemon(Trainer trainer, int pokemon_id);
@@ -50,8 +50,8 @@ TrainerErrorCode trainerBuyItem(Trainer trainer, Store store, char* type,
                                 int value);
 
 // null if null arg
-char* getTrainerName(Trainer trainer);
+char* trainerGetName(Trainer trainer);
 // -1 is null arg
-double getTrainerXP(Trainer trainer);
+double trainerGetXP(Trainer trainer);
 
 #endif

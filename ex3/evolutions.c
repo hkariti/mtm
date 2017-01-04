@@ -35,7 +35,7 @@ static EvolutionEntry evolutionEntryCopy(EvolutionEntry original_entry) {
   return new_entry;
 }
 
-Evolutions createEvolutions() {
+Evolutions evolutionsCreate() {
   Map evolutions;
   evolutions = mapCreate((copyMapKeyElements)stringCopy,
                          (copyMapDataElements)evolutionEntryCopy,
@@ -46,7 +46,7 @@ Evolutions createEvolutions() {
   return evolutions;
 }
 
-void destroyEvolutions(Evolutions evolutions) {
+void evolutionsDestroy(Evolutions evolutions) {
   mapDestroy(evolutions);
 }
 
@@ -66,7 +66,7 @@ EvolutionsErrorCode evolutionsAddEntry(Evolutions evolutions,
   return EVOLUTIONS_SUCCESS;
 }
 
-PokedexEntry getEvolution(Evolutions evolutions, char* pokemon_to_evolve,
+PokedexEntry evolutionsGet(Evolutions evolutions, char* pokemon_to_evolve,
                           int level) {
   if (NULL == evolutions || NULL == pokemon_to_evolve || level < 0) return NULL;
   EvolutionEntry evolution_entry = mapGet(evolutions, pokemon_to_evolve);

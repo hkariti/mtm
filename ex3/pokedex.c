@@ -43,7 +43,7 @@ static PokedexEntry pokedexEntryCopy(PokedexEntry original_entry) {
   return new_entry;
 }
 
-Pokedex createPokedex() {
+Pokedex pokedexCreate() {
   Map pokedex;
   pokedex = mapCreate((copyMapKeyElements)stringCopy,
                       (copyMapDataElements)pokedexEntryCopy,
@@ -53,7 +53,7 @@ Pokedex createPokedex() {
   return pokedex;
 }
 
-void destroyPokedex(Pokedex pokedex) {
+void pokedexDestroy(Pokedex pokedex) {
   mapDestroy(pokedex);
 }
 
