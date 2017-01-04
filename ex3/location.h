@@ -6,8 +6,27 @@
 #include "pokemon.h"
 #include "print_utils.h"
 
-
-
+/**
+* Location Container
+*
+* Implements a Container for a PokemonGo Exotic Location Resort
+*
+* The info is stored in a Location structure, which stores the following info:
+*  - Name		- The exotic name
+*  - Naighbours - Set of neighbours names
+*  - Pokemon	- List of wild pokemons
+*
+* The following functions are available:
+*  locationCreate   - Creates a new location
+*  locationDestroy  - Wiping the location off the world
+*  locationPrint	-  Prints location info
+*  locationCopy	    - Copy the location
+*  locationCompare  - compare 2 locations by their name
+*  locationAppendPokemon - Add pokemon to the location at the end of list
+*  locationIsEmpty - Check if location doesn't contain any pokemons
+*  locationIsNeighbour - Check if the specified location is a neighbour
+*  locationnAddNeighbour - Add a new neighbour to location
+*/
 
 /** Type used for returning error codes from location functions */
 typedef enum {

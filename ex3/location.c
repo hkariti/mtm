@@ -10,8 +10,7 @@ struct Location_t {
 	List pokemons;
 };
 
-Location locationCreate(char * name)
-{
+Location locationCreate(char * name) {
 	if (NULL == name) return NULL;
 	Location location = malloc(sizeof(*location));
 	if (NULL == location) return NULL;
@@ -39,8 +38,7 @@ Location locationCreate(char * name)
 	return location;
 }
 
-void locationDestroy(Location location)
-{
+void locationDestroy(Location location) {
 	if (NULL == location) return;
 	setDestroy(location->neighbors);
 	listDestroy(location->pokemons);
@@ -48,8 +46,7 @@ void locationDestroy(Location location)
 	free(location);
 }
 
-Location locationCopy(Location location)
-{
+Location locationCopy(Location location) {
 	if (NULL == location) return NULL;
 	Location new_location = malloc(sizeof(*new_location));
 	if (NULL == new_location) return NULL;
@@ -78,8 +75,7 @@ int locationCompare(Location location_1, Location location_2) {
 	return strcmp(location_1->name, location_2->name);
 }
 
-void locationPrint(Location location, FILE * output_channel)
-{
+void locationPrint(Location location, FILE * output_channel) {
 	assert(location);
 	assert(output_channel);
 
@@ -92,8 +88,7 @@ void locationPrint(Location location, FILE * output_channel)
 	mtmPrintLocation(output_channel, location->name, pokemon_species);
 }
 
-char* locationGetName(Location location)
-{
+char* locationGetName(Location location) {
 	if (NULL == location) return NULL;
 
 	return location->name;
@@ -111,8 +106,7 @@ LocationErrorCode locationAppendPokemon(Location location, Pokemon pokemon) {
 	return LOCATION_SUCCESS;
 }
 
-Pokemon locationPopPokemon(Location location)
-{
+Pokemon locationPopPokemon(Location location) {
 	if (NULL == location) return NULL;
 
 	Pokemon pokemon = listGetFirst(location->pokemons);
@@ -132,8 +126,7 @@ bool locationIsEmpty(Location location) {
 }
 
 
-bool locationIsNeighour(Location location, Location neighbour)
-{
+bool locationIsNeighour(Location location, Location neighbour) {
 	assert(location);
 	assert(neighbour);
 
@@ -142,8 +135,7 @@ bool locationIsNeighour(Location location, Location neighbour)
 	return setIsIn(location->neighbors, neighbour->name);
 }
 
-LocationErrorCode locationAddNeighbor(Location location, char* neighbour_name)
-{
+LocationErrorCode locationAddNeighbor(Location location, char* neighbour_name) {
 	if (NULL == location || NULL == neighbour_name) return LOCATION_INVALID_ARGUMENT;
 
 	SetResult result = setAdd(location->neighbors, neighbour_name);

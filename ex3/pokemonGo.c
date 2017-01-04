@@ -14,12 +14,12 @@ struct PokemonGo_t {
 	FILE* output_channel;
 };
 
-PokemonGo pokemongoCreate(Pokedex pokedex, Evolutions evolutions, Map locations,
-                          FILE* output_channel) {
+PokemonGo pokemongoCreate(Pokedex pokedex, Evolutions evolutions,
+	Map locations, FILE* output_channel) {
 	if (NULL == pokedex || NULL == evolutions || NULL == locations ||
       NULL == output_channel) {
     return NULL; 
-  }
+    }
 
 	PokemonGo pokemon_go = malloc(sizeof(*pokemon_go));
 	pokemon_go->pokedex = pokedex;
@@ -51,8 +51,8 @@ void pokemongoDestroy(PokemonGo pokemon_go) {
 	free(pokemon_go);
 }
 
-PokemonGoErrorCode pokemongoTrainerAdd(PokemonGo pokemon_go, char* trainer_name,
-                                       int budget, char* start_location) {
+PokemonGoErrorCode pokemongoTrainerAdd(PokemonGo pokemon_go, 
+	char* trainer_name, int budget, char* start_location) {
 	if (NULL == pokemon_go || NULL == trainer_name ||
       NULL == start_location) {
     return POKEMONGO_INVALID_ARGUMENT; 
@@ -111,7 +111,9 @@ PokemonGoErrorCode pokemongoTrainerGo(PokemonGo pokemon_go, char* trainer_name,
 
 PokemonGoErrorCode pokemongoStoreAdd(PokemonGo pokemon_go, char* item_type,
                                      int value, int quantity) {
-	if (NULL == pokemon_go || NULL == item_type) return POKEMONGO_INVALID_ARGUMENT;
+	if (NULL == pokemon_go || NULL == item_type) {
+		return POKEMONGO_INVALID_ARGUMENT;
+	}
 
 	if (quantity <= 0) return POKEMONGO_INVALID_ARGUMENT;
 
@@ -119,7 +121,9 @@ PokemonGoErrorCode pokemongoStoreAdd(PokemonGo pokemon_go, char* item_type,
 	for (int i = 0; i < quantity; i++) {
 		result = storeAddItem(pokemon_go->store, item_type, value);
 		if (result == STORE_OUT_OF_MEMORY) return POKEMONGO_OUT_OF_MEMORY;
-		if (result == STORE_INVALID_ARGUMENT) return POKEMONGO_INVALID_ARGUMENT;
+		if (result == STORE_INVALID_ARGUMENT) {
+			return POKEMONGO_INVALID_ARGUMENT;
+		}
 	}
 
 	return POKEMONGO_SUCCESS;
@@ -154,28 +158,26 @@ PokemonGoErrorCode pokemongoTrainerPurchase(PokemonGo pokemon_go,
 	return POKEMONGO_SUCCESS;
 }
 
+/**
+	Ugly but nessecary.
+	Because mtmPrintBattle get's too many parameters, 
+	it's not possible to keep this function follow 30 lines max rule and 
+	up to 80 char in each line rule, we are obligated to do it.
+	Moving this function to another object will be a bad design decision.
+*/
+#define BTL_INVALID_ARGUMENT	POKEMONGO_INVALID_ARGUMENT
+#define BTL_TRAINER_NOT_EXIST	POKEMONGO_TRAINER_DOES_NOT_EXIST
+#define BTL_POKEMON_NOT_EXIST	POKEMONGO_POKEMON_DOES_NOT_EXIST
 PokemonGoErrorCode pokemongoBattleFight(PokemonGo pokemon_go,
-                                        char* trainer1_name, char* trainer2_name,
-                                        int pokemon1_id, int pokemon2_id) {
-	if (NULL == pokemon_go || NULL == trainer1_name || NULL == trainer2_name) {
-    return POKEMONGO_INVALID_ARGUMENT; 
-  }
-
-	if (strcmp(trainer1_name, trainer2_name) == 0) {
-    return POKEMONGO_INVALID_ARGUMENT; 
-  }
-
+		char* trainer1_name, char* trainer2_name, 
+		int pokemon1_id, int pokemon2_id) {
+	if (strcmp(trainer1_name, trainer2_name) == 0) return BTL_INVALID_ARGUMENT;
 	Trainer trainer_1 = mapGet(pokemon_go->trainers, trainer1_name);
 	Trainer trainer_2 = mapGet(pokemon_go->trainers, trainer2_name);
-	if (NULL == trainer_1 || NULL == trainer_2) {
-    return POKEMONGO_TRAINER_DOES_NOT_EXIST; 
-  }
-
+	if (NULL == trainer_1 || NULL == trainer_2) return BTL_TRAINER_NOT_EXIST;
 	Pokemon pokemon_1 = trainerGetPokemon(trainer_1, pokemon1_id);
 	Pokemon pokemon_2 = trainerGetPokemon(trainer_2, pokemon2_id);
-	if (NULL == pokemon_1 || NULL == pokemon_2) {
-    return POKEMONGO_POKEMON_DOES_NOT_EXIST; 
-  }
+	if (NULL == pokemon_1 || NULL == pokemon_2) return BTL_POKEMON_NOT_EXIST;
 	char* pokemon1_name = pokemonGetSpecies(pokemon_1);
 	char* pokemon2_name = pokemonGetSpecies(pokemon_2);
 	int cp_1 = pokemonGetCP(pokemon_1);
@@ -186,23 +188,16 @@ PokemonGoErrorCode pokemongoBattleFight(PokemonGo pokemon_go,
 	int old_level_2 = pokemonGetLevel(pokemon_2);
 	double old_xp_1 = trainerGetXP(trainer_1);
 	double old_xp_2 = trainerGetXP(trainer_2);
-
 	trainersBattle(trainer_1, pokemon1_id, trainer_2, pokemon2_id);
-
-	double new_hp_1 = pokemonGetHP(pokemon_1);
-	double new_hp_2 = pokemonGetHP(pokemon_2);
-	int new_level_1 = pokemonGetLevel(pokemon_1);
-	int new_level_2 = pokemonGetLevel(pokemon_2);
-	double new_xp_1 = trainerGetXP(trainer_1);
-	double new_xp_2 = trainerGetXP(trainer_2);
 	bool is_dead_1, is_dead_2;
 	isPokemonDead(pokemon_1, &is_dead_1);
 	isPokemonDead(pokemon_2, &is_dead_2);
 	mtmPrintBattle(pokemon_go->output_channel, trainer1_name, trainer2_name,
-                 pokemon1_name, pokemon2_name, cp_1, cp_2, old_hp_1, old_hp_2,
-                 new_hp_1, new_hp_2, old_level_1, old_level_2, new_level_1,
-                 new_level_2, old_xp_1, old_xp_2, new_xp_1, new_xp_2, is_dead_1,
-                 is_dead_2);
+		pokemon1_name, pokemon2_name, cp_1, cp_2, old_hp_1, old_hp_2,
+		pokemonGetHP(pokemon_1), pokemonGetHP(pokemon_2), old_level_1,
+		old_level_2, pokemonGetLevel(pokemon_1), pokemonGetLevel(pokemon_2),
+		old_xp_1, old_xp_2, trainerGetXP(trainer_1), trainerGetXP(trainer_2),
+		is_dead_1, is_dead_2);
 	if (is_dead_1) trainerRemovePokemon(trainer_1, pokemon1_id);
 	if (is_dead_2) trainerRemovePokemon(trainer_2, pokemon2_id);
 	return POKEMONGO_SUCCESS;

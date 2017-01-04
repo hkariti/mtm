@@ -13,8 +13,7 @@ struct Pokemon_t {
 	int id;
 };
 
-Pokemon pokemonCreate(PokedexEntry pokemon_info, Evolutions evolutions_map)
-{
+Pokemon pokemonCreate(PokedexEntry pokemon_info, Evolutions evolutions_map) {
 	if (NULL == pokemon_info || NULL == evolutions_map) return NULL;
 	Pokemon pokemon = malloc(sizeof(*pokemon));
 	if (NULL == pokemon) return NULL;
@@ -27,8 +26,7 @@ Pokemon pokemonCreate(PokedexEntry pokemon_info, Evolutions evolutions_map)
 	return pokemon;
 }
 
-void pokemonDestroy(Pokemon pokemon)
-{
+void pokemonDestroy(Pokemon pokemon) {
 	free(pokemon);
 }
 
@@ -45,8 +43,7 @@ Pokemon pokemonCopy(Pokemon pokemon) {
 	return new_pokemon;
 }
 
-void pokemonPrint(Pokemon pokemon, FILE* output_channel)
-{
+void pokemonPrint(Pokemon pokemon, FILE* output_channel) {
 	assert(pokemon);
 	assert(output_channel);
 	char* pokemon_species = pokedexEntryGetSpecies(pokemon->pokemon_info);
@@ -54,8 +51,7 @@ void pokemonPrint(Pokemon pokemon, FILE* output_channel)
 		pokemon->hp, pokemonGetCP(pokemon), pokemon->level);
 }
 
-int pokemonCompareByID(Pokemon pokemon_1, Pokemon pokemon_2)
-{
+int pokemonCompareByID(Pokemon pokemon_1, Pokemon pokemon_2) {
 	assert(pokemon_1);
 	assert(pokemon_2);
 	if (pokemon_1->id == pokemon_2->id) {
@@ -69,40 +65,34 @@ int pokemonCompareByID(Pokemon pokemon_1, Pokemon pokemon_2)
 	}
 }
 
-int pokemonGetCP(Pokemon pokemon)
-{
+int pokemonGetCP(Pokemon pokemon) {
 	if (NULL == pokemon) return -1;
 	return pokemon->cp_extra + pokedexEntryGetCp(pokemon->pokemon_info);
 }
 
-double pokemonGetHP(Pokemon pokemon)
-{
+double pokemonGetHP(Pokemon pokemon) {
 	if (NULL == pokemon) return -1;
 	return pokemon->hp;
 }
 
-int pokemonGetLevel(Pokemon pokemon)
-{
+int pokemonGetLevel(Pokemon pokemon) {
 	if (NULL == pokemon) return -1;
 	return pokemon->level;
 }
 
-char* pokemonGetSpecies(Pokemon pokemon)
-{
+char* pokemonGetSpecies(Pokemon pokemon) {
 	if (NULL == pokemon) return NULL;
 	return pokedexEntryGetSpecies(pokemon->pokemon_info);
 }
 
-PokemonErrorCode pokemonGiveCandy(Pokemon pokemon, int candy_value)
-{
+PokemonErrorCode pokemonGiveCandy(Pokemon pokemon, int candy_value) {
 	if (NULL == pokemon) return POKEMON_INVALID_ARGUMENT;
 	if (candy_value <= 0) return POKEMON_INVALID_ARGUMENT;
 	pokemon->cp_extra += candy_value;
 	return POKEMON_SUCCESS;
 }
 
-PokemonErrorCode pokemonGivePotion(Pokemon pokemon, int potion_value)
-{
+PokemonErrorCode pokemonGivePotion(Pokemon pokemon, int potion_value) {
 	if (NULL == pokemon) return POKEMON_INVALID_ARGUMENT;
 	if (potion_value <= 0) return POKEMON_INVALID_ARGUMENT;
 
@@ -147,8 +137,7 @@ static int pokemonPokecoinsValue(Pokemon pokemon) {
 	return pokecoins_value;
 }
 
-int pokemonCaught(Pokemon pokemon, int new_pokemon_id)
-{
+int pokemonCaught(Pokemon pokemon, int new_pokemon_id) {
 	if (NULL == pokemon) return -1;
 	if (new_pokemon_id <= 0) return -1;
 
@@ -188,8 +177,7 @@ static void pokemonBattleSingle(Pokemon pokemon, double battle_delta,
 }
 
 PokemonErrorCode pokemonBattle(Pokemon pokemon1, Pokemon pokemon2,
-                               double battle_delta1, double battle_delta2)
-{
+                               double battle_delta1, double battle_delta2) {
 	if (NULL == pokemon1 || NULL == pokemon2) return POKEMON_INVALID_ARGUMENT;
 	if (battle_delta1 < 0 || battle_delta2 < 0) return POKEMON_INVALID_ARGUMENT;
 
@@ -201,8 +189,7 @@ PokemonErrorCode pokemonBattle(Pokemon pokemon1, Pokemon pokemon2,
 	return POKEMON_SUCCESS;
 }
 
-PokemonErrorCode isPokemonDead(Pokemon pokemon, bool* is_dead)
-{
+PokemonErrorCode isPokemonDead(Pokemon pokemon, bool* is_dead) {
 	if (NULL == pokemon) return POKEMON_INVALID_ARGUMENT;
 	if (NULL == is_dead) return POKEMON_INVALID_ARGUMENT;
 	(*is_dead) = (pokemon->hp == 0);

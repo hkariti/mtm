@@ -7,6 +7,36 @@
 #include "pokedex.h"
 #include "evolutions.h"
 
+
+/**
+* Pokemon Creature Container
+*
+* Implements a Container for a Japanese Anime Pocket Monster
+*
+* The info is stored in a Pokemon structure, which stores the following info:
+*  - PokedexEntry pokemon_info - Pokedex information about this species
+*  - Extra CP - That was obtain by many sweet & strong Candies
+*  - HP - the current health points (Just health!!)
+*  - Level - current level
+*  - id - all domestic pokemons are aware of their id the trainer gave them
+		  wild pokemons have this field reset to -1
+*
+* The following functions are available:
+*  pokemonCreate   - Creates a new wild pokemon
+*  pokemonDestroy  - Kills a pokemon, freeing all resources
+*  pokemonPrint	   - Prints pokemon info
+*  pokemonCopy	   - Copy the pokemon
+*  pokemonCompareByID - compare 2 pokemons by their id
+*  pokemonGetCP    - returns pokemon total CP
+*  pokemonGetHP    - returns pokemon hp
+*  pokemonGetLevel - returns pokemon level
+*  pokemonGiveCandy- give the pokemon a nice & sweet candy
+*  pokemonGivePotion- heal the pokemon
+*  pokemonIsDead   - checks if the pokemon is dead
+*  pokemonCaught   - catch the pokemon!
+*  pokemonBattle   - perform a battle between 2 pokemons!
+*/
+
 // definitions
 #define DOUBLE_STAR_TYPE_POKECOINS	30
 #define ONE_STAR_TYPE_POKECOINS		20
@@ -15,6 +45,7 @@
 #define MAX_POKEMON_HP				100
 #define UNASSIGNED_POKEMON_ID		-1
 #define START_POKEMON_LEVEL			1
+
 
 /** Type used for returning error codes from pokemon functions */
 typedef enum {
