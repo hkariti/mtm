@@ -10,14 +10,14 @@
 bool testCreateLocation() {
 	Location location;
 	// NULL input
-	location = createLocation(NULL);
+	location = locationCreate(NULL);
 	ASSERT_TEST(NULL == location);
 
 	// valid input
-	location = createLocation("Hong Kong");
+	location = locationCreate("Hong Kong");
 	ASSERT_TEST(NULL != location);
 
-	destroyLocation(location);
+	locationDestroy(location);
 	return true;
 }
 
@@ -25,11 +25,11 @@ bool testDestroyLocation() {
 	LOCATION_SET_UP();
 
 	// NULL Input
-	destroyLocation(NULL);
+	locationDestroy(NULL);
 
 	// Valid input
 	Location loc = demoLocationWithPokemon("Eilat", 1, pokedex, evolutions);
-	destroyLocation(loc);
+	locationDestroy(loc);
 
 	LOCATION_TEAR_DOWN();
 	return true;
@@ -42,20 +42,20 @@ bool testCopyLocation() {
 	Location non_empty_location = demoLocationWithPokemon("Eilat", 5, pokedex, evolutions);
 
 	// NULL input
-	Location location_copy = copyLocation(NULL);
+	Location location_copy = locationCopy(NULL);
 	ASSERT_TEST(NULL == location_copy);
 
 	// Valid input
-	location_copy = copyLocation(non_empty_location);
+	location_copy = locationCopy(non_empty_location);
 	ASSERT_TEST(location_copy != NULL);
-	destroyLocation(location_copy);
+	locationDestroy(location_copy);
 
-	location_copy = copyLocation(empty_location);
+	location_copy = locationCopy(empty_location);
 	ASSERT_TEST(location_copy != NULL);
-	destroyLocation(location_copy);
+	locationDestroy(location_copy);
 
-	destroyLocation(empty_location);
-	destroyLocation(non_empty_location);
+	locationDestroy(empty_location);
+	locationDestroy(non_empty_location);
 	LOCATION_TEAR_DOWN();
 	return true;
 }
@@ -63,7 +63,7 @@ bool testCopyLocation() {
 bool testPrintLocation() {
 	LOCATION_SET_UP();
 
-	printLocation(location, stdout);
+	locationPrint(location, stdout);
 
 	LOCATION_TEAR_DOWN();
 	return true;
@@ -84,9 +84,9 @@ bool testLocationCompare() {
 	result = locationCompare(eilat_1, tel_aviv);
 	ASSERT_TEST(0 > result);
 
-	destroyLocation(eilat_1);
-	destroyLocation(tel_aviv);
-	destroyLocation(eilat_2);
+	locationDestroy(eilat_1);
+	locationDestroy(tel_aviv);
+	locationDestroy(eilat_2);
 
 	LOCATION_TEAR_DOWN();
 	return true;
@@ -107,7 +107,7 @@ bool testLocationGetName() {
 	int cmp = strcmp(name, "Palem");
 	ASSERT_TEST(cmp == 0);
 
-	destroyLocation(palm);
+	locationDestroy(palm);
 	LOCATION_TEAR_DOWN();
 	return true;
 }
@@ -141,7 +141,7 @@ bool testLocationAppendPokemon() {
 	ASSERT_TEST(false == is_empty);
 
 	pokemonDestroy(pokemon);
-	destroyLocation(empty_location);
+	locationDestroy(empty_location);
 
 	LOCATION_TEAR_DOWN();
 	return true;
@@ -167,7 +167,7 @@ bool testLocationPopPokemon() {
 	poppedPokemon = locationPopPokemon(one_pokemon_location);
 	ASSERT_TEST(NULL == poppedPokemon);
 
-	destroyLocation(one_pokemon_location);
+	locationDestroy(one_pokemon_location);
 	LOCATION_TEAR_DOWN();
 	return true;
 }
@@ -186,7 +186,7 @@ bool testLocationIsEmpty() {
 	result = locationIsEmpty(location);
 	ASSERT_TEST(false == result);
 
-	destroyLocation(empty_location);
+	locationDestroy(empty_location);
 	LOCATION_TEAR_DOWN();
 	return true;
 }
@@ -210,9 +210,9 @@ bool testLocationIsNeighbour() {
 	result = locationIsNeighour(eilat, beersheva);
 	ASSERT_TEST(true == result);
 
-	destroyLocation(eilat);
-	destroyLocation(beersheva);
-	destroyLocation(medellin);
+	locationDestroy(eilat);
+	locationDestroy(beersheva);
+	locationDestroy(medellin);
 	LOCATION_TEAR_DOWN();
 	return true;
 }
@@ -244,8 +244,8 @@ bool testLocationAddNeighbor() {
 	is_neighbour = locationIsNeighour(eilat, beersheva);
 	ASSERT_TEST(true == is_neighbour);
 
-	destroyLocation(eilat);
-	destroyLocation(beersheva);
+	locationDestroy(eilat);
+	locationDestroy(beersheva);
 	LOCATION_TEAR_DOWN();
 	return true;
 }

@@ -270,7 +270,7 @@ PokemonGoErrorCode pokemongoReportLocations(PokemonGo pokemon_go) {
 	mtmPrintLocationsHeader(pokemon_go->output_channel);
 	MAP_FOREACH(char*, location_name, pokemon_go->locations) { //TODO: need to check if print with lexicographic order
     Location location = mapGet(pokemon_go->locations, location_name);
-		printLocation(location, pokemon_go->output_channel);
+		locationPrint(location, pokemon_go->output_channel);
 	}
 	return POKEMONGO_SUCCESS;
 }

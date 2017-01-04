@@ -17,7 +17,7 @@ Location demoLocationWithPokemon(char* name, int num_of_pokemon, Pokedex pokedex
 #define LOCATION_TEAR_DOWN()                     \
   evolutionsDestroy(evolutions);                \
   pokedexDestroy(pokedex);                      \
-  destroyLocation(location);
+  locationDestroy(location);
 
 
 #endif

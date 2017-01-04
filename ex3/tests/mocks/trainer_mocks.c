@@ -2,9 +2,9 @@
 
 Map demoLocations(Pokedex pokedex, Evolutions evolutions) {
   Map locations = mapCreate((copyMapKeyElements)stringCopy,
-                            (copyMapDataElements)copyLocation,
+                            (copyMapDataElements)locationCopy,
                             (freeMapKeyElements)free,
-                            (freeMapDataElements)destroyLocation,
+                            (freeMapDataElements)locationDestroy,
                             (compareMapKeyElements)stringCompare);
   Location empty_location, neighbor, full_location;
   empty_location = demoLocationWithPokemon("empty_location", 1, pokedex, evolutions);
@@ -37,16 +37,16 @@ Map demoLocations(Pokedex pokedex, Evolutions evolutions) {
   mapPut(locations, "beijing", beijing);
   mapPut(locations, "palem", palem);
 
-  destroyLocation(empty_location);
-  destroyLocation(neighbor);
-  destroyLocation(full_location);
-  destroyLocation(paris);
-  destroyLocation(london);
-  destroyLocation(madrid);
-  destroyLocation(telaviv); // O__O
-  destroyLocation(jerusalem);
-  destroyLocation(beijing);
-  destroyLocation(palem);
+  locationDestroy(empty_location);
+  locationDestroy(neighbor);
+  locationDestroy(full_location);
+  locationDestroy(paris);
+  locationDestroy(london);
+  locationDestroy(madrid);
+  locationDestroy(telaviv); // O__O
+  locationDestroy(jerusalem);
+  locationDestroy(beijing);
+  locationDestroy(palem);
 
   return locations;
 }

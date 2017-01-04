@@ -10,7 +10,7 @@ struct Location_t {
 	List pokemons;
 };
 
-Location createLocation(char * name)
+Location locationCreate(char * name)
 {
 	if (NULL == name) return NULL;
 	Location location = malloc(sizeof(*location));
@@ -39,7 +39,7 @@ Location createLocation(char * name)
 	return location;
 }
 
-void destroyLocation(Location location)
+void locationDestroy(Location location)
 {
 	if (NULL == location) return;
 	setDestroy(location->neighbors);
@@ -48,7 +48,7 @@ void destroyLocation(Location location)
 	free(location);
 }
 
-Location copyLocation(Location location)
+Location locationCopy(Location location)
 {
 	if (NULL == location) return NULL;
 	Location new_location = malloc(sizeof(*new_location));
@@ -78,7 +78,7 @@ int locationCompare(Location location_1, Location location_2) {
 	return strcmp(location_1->name, location_2->name);
 }
 
-void printLocation(Location location, FILE * output_channel)
+void locationPrint(Location location, FILE * output_channel)
 {
 	assert(location);
 	assert(output_channel);

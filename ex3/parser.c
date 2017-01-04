@@ -136,13 +136,13 @@ static Location locationFromLine(char* line, Pokedex pokedex,
   assert(location_name);
   pokemon_part = strtok(NULL, ";");
   // Now create the object
-  location = createLocation(location_name);
+  location = locationCreate(location_name);
   add_pokemon_result = locationAddPokemonFromLine(location, pokemon_part,
                                                   pokedex, evolutions);
   add_neighbors_result = locationAddNeighborsFromLine(location,
                                                       neighbors_part);
   if (!add_pokemon_result || !add_neighbors_result) {
-    destroyLocation(location);
+    locationDestroy(location);
     return NULL;
   }
   return location;
@@ -152,9 +152,9 @@ Map locationsCreateMapFromFile(FILE* file, Pokedex pokedex,
                                Evolutions evolutions) {
   if (NULL == file || NULL == pokedex || NULL == evolutions) return NULL;
   Map locations = mapCreate((copyMapKeyElements)stringCopy,
-                            (copyMapDataElements)copyLocation,
+                            (copyMapDataElements)locationCopy,
                             (freeMapKeyElements)free,
-                            (freeMapDataElements)destroyLocation,
+                            (freeMapDataElements)locationDestroy,
                             (compareMapKeyElements)stringCompare);
   if (NULL == locations) return NULL;
   char line[MAX_STR_LENGTH + 1];
@@ -168,7 +168,7 @@ Map locationsCreateMapFromFile(FILE* file, Pokedex pokedex,
       return NULL;
     }
     add_location_result = mapPut(locations, locationGetName(location), location);
-    destroyLocation(location);
+    locationDestroy(location);
     if (MAP_OUT_OF_MEMORY == add_location_result) {
       mapDestroy(locations);
       return NULL;
