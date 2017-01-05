@@ -136,7 +136,9 @@ bool locationIsNeighour(Location location, Location neighbour) {
 }
 
 LocationErrorCode locationAddNeighbor(Location location, char* neighbour_name) {
-	if (NULL == location || NULL == neighbour_name) return LOCATION_INVALID_ARGUMENT;
+	if (NULL == location || NULL == neighbour_name) {
+		return LOCATION_INVALID_ARGUMENT;
+	}
 
 	SetResult result = setAdd(location->neighbors, neighbour_name);
 	if (result == SET_NULL_ARGUMENT) return LOCATION_INVALID_ARGUMENT;

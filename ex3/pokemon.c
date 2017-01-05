@@ -179,7 +179,9 @@ static void pokemonBattleSingle(Pokemon pokemon, double battle_delta,
 PokemonErrorCode pokemonBattle(Pokemon pokemon1, Pokemon pokemon2,
                                double battle_delta1, double battle_delta2) {
 	if (NULL == pokemon1 || NULL == pokemon2) return POKEMON_INVALID_ARGUMENT;
-	if (battle_delta1 < 0 || battle_delta2 < 0) return POKEMON_INVALID_ARGUMENT;
+	if (battle_delta1 < 0 || battle_delta2 < 0) {
+		return POKEMON_INVALID_ARGUMENT;
+	}
 
   int old_level1 = pokemon1->level;
   int old_level2 = pokemon2->level;

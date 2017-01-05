@@ -209,7 +209,8 @@ PokemonGoErrorCode pokemongoPokemonTrain(PokemonGo pokemon_go,
 *	POKEMONGO_TRAINER_DOES_NOT_EXIST - The trainer doesn't exist
 *	POKEMONGO_SUCCESS printing performed successfully
 */
-PokemonGoErrorCode pokemongoReportTrainer(PokemonGo pokemon_go, char* trainer_name);
+PokemonGoErrorCode pokemongoReportTrainer(PokemonGo pokemon_go,
+	char* trainer_name);
 
 
 /**

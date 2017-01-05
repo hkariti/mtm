@@ -73,11 +73,11 @@ typedef struct Pokemon_t *Pokemon;
 Pokemon pokemonCreate(PokedexEntry pokemon_info, Evolutions evolutions_map);
 
 /**
-* pokemonDestroy: Deallocates an existing pokemon. Clears all elements by using the
-* stored free functions.
+* pokemonDestroy: Deallocates an existing pokemon. 
+*	Clears all elements by using the stored free functions.
 *
-* @param pokemon - Target pokemon to be deallocated. If ppokemon is NULL nothing will be
-* 		done
+* @param pokemon - Target pokemon to be deallocated.
+*		If ppokemon is NULL nothing will be done
 */
 void pokemonDestroy(Pokemon pokemon);
 
@@ -85,8 +85,8 @@ void pokemonDestroy(Pokemon pokemon);
 * pokemonPrint: prints the current pokemon information to the output channel.
 *				print is done using mtmPrintPokemon function.
 *
-* @param pokemon - Target pokemon to be printed. If pokemon is NULL nothing will be
-* 		 done
+* @param pokemon - Target pokemon to be printed. 
+*		If pokemon is NULL nothing will be done
 *		 output_channel - pointer to a FILE* output stream.
 */
 void pokemonPrint(Pokemon pokemon, FILE* output_channel);

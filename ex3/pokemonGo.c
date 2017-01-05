@@ -203,8 +203,8 @@ PokemonGoErrorCode pokemongoBattleFight(PokemonGo pokemon_go,
 	return POKEMONGO_SUCCESS;
 }
 
-PokemonGoErrorCode pokemongoPokemonHeal(PokemonGo pokemon_go, char* trainer_name,
-                                        int pokemon_id) {
+PokemonGoErrorCode pokemongoPokemonHeal(PokemonGo pokemon_go, 
+	char* trainer_name, int pokemon_id) {
 	if (NULL == pokemon_go || NULL == trainer_name) {
     return POKEMONGO_INVALID_ARGUMENT; 
   }
@@ -227,7 +227,7 @@ PokemonGoErrorCode pokemongoPokemonHeal(PokemonGo pokemon_go, char* trainer_name
 }
 
 PokemonGoErrorCode pokemongoPokemonTrain(PokemonGo pokemon_go,
-                                         char* trainer_name, int pokemon_id) {
+                             char* trainer_name, int pokemon_id) {
 	if (NULL == pokemon_go || NULL == trainer_name) {
     return POKEMONGO_INVALID_ARGUMENT; 
   }
@@ -263,7 +263,7 @@ PokemonGoErrorCode pokemongoReportLocations(PokemonGo pokemon_go) {
 	assert(pokemon_go);
 
 	mtmPrintLocationsHeader(pokemon_go->output_channel);
-	MAP_FOREACH(char*, location_name, pokemon_go->locations) { //TODO: need to check if print with lexicographic order
+	MAP_FOREACH(char*, location_name, pokemon_go->locations) {
     Location location = mapGet(pokemon_go->locations, location_name);
 		locationPrint(location, pokemon_go->output_channel);
 	}
