@@ -88,7 +88,7 @@ EvolutionsErrorCode evolutionsAddEntry(Evolutions evolutions,
  *      The Pokdex entry for the next form will be return if pokemon_to_evolve
  *      is ready to evolve (its level is high enough).
  */
-PokedexEntry getEvolution(Evolutions evolutions, char* pokemon_to_evolve,
+PokedexEntry evolutionsGet(Evolutions evolutions, char* pokemon_to_evolve,
                           int level);
 
 #endif
