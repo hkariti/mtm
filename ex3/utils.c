@@ -24,6 +24,7 @@ int intCompare(int* a, int* b) {
 }
 
 int* intCopy(int *key) {
+  if (NULL == key) return NULL;
   int *key_copy;
   key_copy = malloc(sizeof(int));
   if (NULL == key_copy) return NULL;
@@ -32,5 +33,6 @@ int* intCopy(int *key) {
 }
 
 void intDestroy(int *key) {
+  if (NULL == key) return;
   free(key);
 }

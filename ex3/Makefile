@@ -1,11 +1,11 @@
 CFLAGS=-Wall -pedantic-errors -Werror --std=c99 -DNDEBUG
 LDFLAGS=-L. -lmtm -lm
-modules=pokedex evolutions inventory store trainer pokemon location pokemonGo
+modules=pokedex evolutions inventory store trainer pokemon location pokemonGo utils
 modules_objects=$(addsuffix .o,$(modules))
 modules_tests=$(addsuffix _test,$(modules))
 modules_mocks=$(foreach mod,$(modules),$(if $(wildcard tests/mocks/$(mod)_mocks.c),$(mod)_mocks.o))
 
-pokemon_go_mtm: pokemon_go_mtm.o utils.o parser.o $(modules_objects)
+pokemon_go_mtm: pokemon_go_mtm.o parser.o $(modules_objects)
 	$(CC) ${CFLAGS} -o $@ $^ $(LDFLAGS)
 
 map_mtm_test: map_mtm.o map_mtm_test.o utils.o
@@ -24,12 +24,13 @@ clean:
 
 
 %_test: CFLAGS+=-g
-%_test: %_test.o utils.o $(modules_objects) $(modules_mocks)
+%_test: %_test.o $(modules_objects) $(modules_mocks)
 	$(CC) -o $@ $^ ${LDFLAGS}
 
 %.o:
 	$(CC) ${CFLAGS} -c -o $@ $<
-	
+
+utils_test.o: tests/utils_test.c tests/../utils.h tests/test_utilities.h
 map_mtm_test.o: tests/map_mtm_test.c tests/test_utilities.h \
 	  tests/../map_mtm/map_mtm.h tests/../utils.h
 map_mtm.o: map_mtm/map_mtm.c map_mtm/map_mtm.h
