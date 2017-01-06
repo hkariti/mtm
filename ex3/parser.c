@@ -5,22 +5,44 @@
 #include "pokemon.h"
 #include "utils.h"
 
+// Macro for iterating over all the words in the line, split by any whitespace
 #define WORD_FOREACH(str, iterator)                          \
   for (char* iterator = strtok(str, " \t\r\n"); iterator != NULL;\
        iterator = strtok(NULL, " \t\r\n"))
 
+/**
+ * isLineEmpty - check whether a given input line is empty or has only spaces
+ *
+ * @param line - The line to check
+ *
+ * @return
+ *  true    - line is empty or spaces-only, or NULL argument
+ *  false   - line is not empty.
+ */
 static bool isLineEmpty(char* line) {
-	char* line_copy;
-	char* trimmed_line;
-	line_copy = stringCopy(line);
-	if (NULL == line_copy) return true;
-	trimmed_line = strtok(line_copy, " \t\r\n");
-	free(line_copy);
-	if (NULL == trimmed_line || 0 == strlen(trimmed_line)) return true;
-	return false;
+    int length;
+    if (NULL == line) return true;
+    length = strlen(line);
+    for (int i = 0; i < length; i++) {
+        if (!isspace(line[i])) {
+            return false;
+        }
+    }
+	return true;
 }
 
+/**
+ * pokedexAddFromLine - Parse a single line from the pokedex input file
+ *
+ * @param pokedex   - A pokedex type to add the parsed line to
+ * @param line      - The line to parse
+ *
+ * @return
+ *  false   - memory error or NULL argument.
+ *  true    - successful parse and add to pokedex
+ */
 static bool pokedexAddFromLine(Pokedex pokedex, char* line) {
+  if (NULL == pokedex || NULL == line) return false;
   char *species, *initial_cp_str, *types_part;
   int initial_cp;
   Set types = setCreate((copySetElements)stringCopy, (freeSetElements)free,
@@ -87,6 +109,18 @@ Evolutions evolutionsCreateFromFile(FILE* file, Pokedex pokedex) {
   return evolutions;
 }
 
+/**
+ * locationAddPokemonFromLine - Parse a locaiton's line's pokemon part
+ *
+ * @param location      - A Location type.
+ * @param pokemon_part  - The pokemon part of the line being parsed.
+ * @param pokedex       - A valid Pokedex.
+ * @param evolutions    - A valid Evolutions map.
+ *
+ * @return
+ *  false - NULL argument or memory error
+ *  true  - Successful parsing.
+ */
 static bool locationAddPokemonFromLine(Location location, char* pokemon_part,
                                        Pokedex pokedex, Evolutions evolutions) {
   if (NULL == location || NULL == pokedex || NULL == evolutions) return false;
@@ -107,6 +141,16 @@ static bool locationAddPokemonFromLine(Location location, char* pokemon_part,
   return true;
 }
 
+/**
+ * locationAddNeighborsFromLine - Parse a location's line's neighbors part 
+ *
+ * @param location       - A Location type.
+ * @param neighbors_part - The neighbors part of the line being parsed.
+ *
+ * @return
+ *  false   - NULL argument or memory error
+ *  true    - Parsing was successful.
+ */
 static bool locationAddNeighborsFromLine(Location location,
                                          char* neighbors_part) {
   if (NULL == location) return false;
@@ -120,6 +164,17 @@ static bool locationAddNeighborsFromLine(Location location,
   return true;
 }
 
+/**
+ * locationFromLine - Create a Location type from a single input line
+ *
+ * @param line      - A line from a locations input file.
+ * @param pokedex   - A valid Pokedex.
+ * @param evolutions- A valid Evolutions map.
+ *
+ * @return
+ *  NULL    - NULL arg or memory allocation error
+ *  A valid Location in case of success.
+ */
 static Location locationFromLine(char* line, Pokedex pokedex,
                                     Evolutions evolutions) {
   if (NULL == line || NULL == pokedex || NULL == evolutions) return NULL;
@@ -135,12 +190,14 @@ static Location locationFromLine(char* line, Pokedex pokedex,
   location_name = strtok(name_and_pokemon_part, " \t\r\n");
   assert(location_name);
   pokemon_part = strtok(NULL, ";");
-  // Now create the object
+  // Now create the object.
   location = locationCreate(location_name);
   add_pokemon_result = locationAddPokemonFromLine(location, pokemon_part,
                                                   pokedex, evolutions);
   add_neighbors_result = locationAddNeighborsFromLine(location,
                                                       neighbors_part);
+  // NULL in locationCreate will also be detected here, because the above
+  // functions check for NULL argument.
   if (!add_pokemon_result || !add_neighbors_result) {
     locationDestroy(location);
     return NULL;
