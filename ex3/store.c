@@ -8,6 +8,16 @@ struct store_t {
   Inventory candies;
 };
 
+/**
+ * storeGetInventoryByType - gets the relevant Inventory holding items of a type
+ *
+ * @param store - existing store
+ * @param type  - item type
+ *
+ * @return
+ *  NULL - invalid type
+ *  An Inventory object otherwise
+ */
 static Inventory storeGetInventoryByType(Store store, char* type) {
   assert(store != NULL);
   assert(type != NULL);
