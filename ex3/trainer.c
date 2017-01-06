@@ -7,7 +7,7 @@
 
 struct Trainer_t {
 	char* name;
-  Location current_location;
+    Location current_location;
 	Map pokemons;
 	Inventory potions;
 	Inventory candies;
@@ -16,12 +16,31 @@ struct Trainer_t {
 	int total_pokemon_caught;
 };
 
+/**
+ * inventoryGetByType - get a trainer's Inventory by its type
+ *
+ * @param trainer   - an existing Trainer
+ * @param type      - the item's type
+ *
+ * @return
+ * NULL - the trainer doesn't have an inventory for the type requested 
+ * An Inventory object will be returned on success
+ */
 static Inventory inventoryGetByType(Trainer trainer, char* type) {
   if (strcmp(type, "candy") == 0) return trainer->candies;
   if (strcmp(type, "potion") == 0) return trainer->potions;
   return NULL;
 }
 
+/**
+ * veryifyMemoryAllocations - verify trainerCreate's memory allocs
+ *
+ * @param trainer - a Trainer object
+ *
+ * @return
+ *  false - one of trainer's internal fields wasn't successfully allocated
+ *  true  - everything was allocated successfully
+ */
 static bool verifyMemoryAllocations(Trainer trainer) {
   return trainer->name != NULL &&
     trainer->pokemons != NULL &&
@@ -69,9 +88,11 @@ Trainer trainerCopy(Trainer trainer) {
   trainer_copy = trainerCreate(trainer->name, trainer->money,
                                trainer->current_location);
   if (NULL == trainer_copy) return NULL;
+  // Destroy some empty fields, to be replaced with copies
   mapDestroy(trainer_copy->pokemons);
   inventoryDestroy(trainer_copy->candies);
   inventoryDestroy(trainer_copy->potions);
+  // Copy internal fields
   trainer_copy->potions = inventoryCopy(trainer->potions);
   trainer_copy->candies = inventoryCopy(trainer->candies);
   trainer_copy->pokemons = mapCopy(trainer->pokemons);
@@ -91,7 +112,7 @@ void trainerPrint(Trainer trainer, FILE* output_channel) {
   mtmPrintTrainerHeader(output_channel, trainer->name, location_name,
                         trainer->money, trainer->xp);
   mtmPrintItemsHeaderForTrainer(output_channel);
-  inventoryPrint(trainer->candies, "candy", output_channel); //TODO: Insert type into inventory
+  inventoryPrint(trainer->candies, "candy", output_channel);
   inventoryPrint(trainer->potions, "potion", output_channel);
   mtmPrintPokemonsHeaderForTrainer(output_channel);
   MAP_FOREACH(int*, id, trainer->pokemons) {
@@ -159,6 +180,15 @@ TrainerErrorCode trainerTrainPokemon(Trainer trainer, int pokemon_id) {
   return TRAINER_SUCCESS;
 }
 
+/**
+ * trainerCalculateBattleDelta - calculate one side's delta in a battle
+ *
+ * @param trainer - An existing Trainer that is a side in the battle
+ * @param pokemon   - The trainer's pokemon that is participating in the battle
+ *
+ * @return
+ *  The side's delta - trainer->xp * trainer->cp + (1 + pokemon->hp/200)
+ */
 static double trainerCalculateBattleDelta(Trainer trainer, Pokemon pokemon) {
   if (NULL == trainer || NULL == pokemon) return -1;
 
@@ -214,11 +244,12 @@ TrainerErrorCode trainerHunt(Trainer trainer, FILE* output_channel) {
   char* species;
   Pokemon captured_pokemon;
 
+  // Handle empty location
   if (locationIsEmpty(trainer->current_location)) {
     mtmPrintCatchResult(output_channel, trainer->name, NULL, location_name);
     return TRAINER_SUCCESS;
   }
-
+  // Fetch the pokemon currently in the location
   captured_pokemon = locationPopPokemon(trainer->current_location);
   if (NULL == captured_pokemon) return TRAINER_OUT_OF_MEMORY;
   species = pokemonGetSpecies(captured_pokemon);
@@ -230,6 +261,7 @@ TrainerErrorCode trainerHunt(Trainer trainer, FILE* output_channel) {
   free(captured_pokemon);
   assert(put_result != MAP_NULL_ARGUMENT);
   if (MAP_OUT_OF_MEMORY == put_result) return TRAINER_OUT_OF_MEMORY;
+  // Print catch result
   mtmPrintCatchResult(output_channel, trainer->name, species, location_name);
 
   return TRAINER_SUCCESS;
