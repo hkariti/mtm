@@ -6,6 +6,17 @@
 
 #define ERR_CHANNEL stderr
 
+/**
+ * cleanUpFiles - Close all of the game's files.
+ *
+ * @param input_file        - File for input commands.
+ * @param output_file       - File for program output.
+ * @param pokedex_file      - File with the game's input pokedex.
+ * @param evolutions_file   - File with the game's input evolution map.
+ * @param locations_file    - File with the game's input locations.
+ *
+ * All arguments can be NULL. If so, they're skipped.
+ */
 void cleanUpFiles(FILE* input_file, FILE* output_file, FILE* pokedex_file,
                   FILE* evolutions_file, FILE* locations_file) {
 	if (input_file != NULL) {
@@ -25,6 +36,14 @@ void cleanUpFiles(FILE* input_file, FILE* output_file, FILE* pokedex_file,
 	}
 }
 
+/**
+ * cleanUp - destroy all game objects
+ *
+ * @param pokedex   - The game's Pokedex
+ * @param evolutions- The game's evolutions map.
+ * @param locations - The game's locations map.
+ * @param game      - The game object itself.
+ */
 void cleanUp(Pokedex pokedex, Evolutions evolutions, Map locations,
              PokemonGo game) {
   pokedexDestroy(pokedex);
@@ -33,6 +52,26 @@ void cleanUp(Pokedex pokedex, Evolutions evolutions, Map locations,
   pokemongoDestroy(game);
 }
 
+/**
+ * openFilesFromArgs - Open game files based on command line arguments
+ *
+ * @param argc  - number of cli arguments
+ * @param argv  - an array of words, containig the cli arguments
+ * @param pokedex_file      - Will be filled with the open file object for the
+ *                            pokedex.
+ * @param evolutions_file   - Will be filled with the open file object for the
+ *                            evolutions map.
+ * @param locations_file    - Will be filled with the open file object for the
+ *                            locations map.
+ * @param input_file        - Will be filled with the open file object for the
+ *                            input commands.
+ * @param output_file       - Will be filled with the open file object for the
+ *                            program output.
+ *
+ * @return
+ *  false - Invalid cli arguments or failure to open one of the files.
+ *  true  - Successful run
+ */
 bool openFilesFromArgs(int argc, char** argv, FILE** pokedex_file,
                        FILE** evolutions_file, FILE** locations_file,
                        FILE** input_file, FILE** output_file) {
@@ -62,40 +101,56 @@ bool openFilesFromArgs(int argc, char** argv, FILE** pokedex_file,
   return true;
 }
 
+/**
+ * convertErrorToMtm - Convert PokemonGo error codes to Mtm error codes.
+ *
+ * @param pokemon_go_code - PokemonGo error code to convert
+ *
+ * @return
+ *  The relevant Mtm error code for this error
+ */
 MtmErrorCode convertErrorToMtm(PokemonGoErrorCode pokemon_go_code) {
-  switch (pokemon_go_code) {
-  case POKEMONGO_SUCCESS:
-    return MTM_SUCCESS;
-  case POKEMONGO_OUT_OF_MEMORY:
-    return MTM_OUT_OF_MEMORY;
-  case POKEMONGO_INVALID_ARGUMENT:
-    return MTM_INVALID_ARGUMENT;
-  case POKEMONGO_TRAINER_NAME_ALREADY_EXISTS:
-    return MTM_TRAINER_NAME_ALREADY_EXISTS;
-  case POKEMONGO_TRAINER_DOES_NOT_EXIST:
-    return MTM_TRAINER_DOES_NOT_EXIST;
-  case POKEMONGO_LOCATION_DOES_NOT_EXIST:
-    return MTM_LOCATION_DOES_NOT_EXIST;
-  case POKEMONGO_POKEMON_DOES_NOT_EXIST:
-    return MTM_POKEMON_DOES_NOT_EXIST;
-  case POKEMONGO_ITEM_OUT_OF_STOCK:
-    return MTM_ITEM_OUT_OF_STOCK;
-  case POKEMONGO_BUDGET_IS_NOT_SUFFICIENT:
-    return MTM_BUDGET_IS_NOT_SUFFICIENT;
-  case POKEMONGO_HP_IS_AT_MAX:
-    return MTM_HP_IS_AT_MAX;
-  case POKEMONGO_NO_AVAILABLE_ITEM_FOUND:
-    return MTM_NO_AVAILABLE_ITEM_FOUND;
-  case POKEMONGO_LOCATION_IS_NOT_REACHABLE:
-    return MTM_LOCATION_IS_NOT_REACHABLE;
-  case POKEMONGO_TRAINER_ALREADY_IN_LOCATION:
-    return MTM_TRAINER_ALREADY_IN_LOCATION;
+  // A switch clause is more appropriate, but is passing the 30 lines limit.
+  if (POKEMONGO_SUCCESS == pokemon_go_code) {
+      return MTM_SUCCESS;
+  } else if (POKEMONGO_OUT_OF_MEMORY == pokemon_go_code) {
+      return MTM_OUT_OF_MEMORY;
+  } else if (POKEMONGO_INVALID_ARGUMENT == pokemon_go_code) {
+      return MTM_INVALID_ARGUMENT;
+  } else if (POKEMONGO_TRAINER_NAME_ALREADY_EXISTS == pokemon_go_code) {
+      return MTM_TRAINER_NAME_ALREADY_EXISTS;
+  } else if (POKEMONGO_TRAINER_DOES_NOT_EXIST == pokemon_go_code) {
+      return MTM_TRAINER_DOES_NOT_EXIST;
+  } else if (POKEMONGO_LOCATION_DOES_NOT_EXIST == pokemon_go_code) {
+      return MTM_LOCATION_DOES_NOT_EXIST;
+  } else if (POKEMONGO_POKEMON_DOES_NOT_EXIST == pokemon_go_code) {
+      return MTM_POKEMON_DOES_NOT_EXIST;
+  } else if (POKEMONGO_ITEM_OUT_OF_STOCK == pokemon_go_code) {
+      return MTM_ITEM_OUT_OF_STOCK;
+  } else if (POKEMONGO_BUDGET_IS_NOT_SUFFICIENT == pokemon_go_code) {
+      return MTM_BUDGET_IS_NOT_SUFFICIENT;
+  } else if (POKEMONGO_HP_IS_AT_MAX == pokemon_go_code) {
+      return MTM_HP_IS_AT_MAX;
+  } else if (POKEMONGO_NO_AVAILABLE_ITEM_FOUND == pokemon_go_code) {
+      return MTM_NO_AVAILABLE_ITEM_FOUND;
+  } else if (POKEMONGO_LOCATION_IS_NOT_REACHABLE == pokemon_go_code) {
+      return MTM_LOCATION_IS_NOT_REACHABLE;
+  } else if (POKEMONGO_TRAINER_ALREADY_IN_LOCATION == pokemon_go_code) {
+      return MTM_TRAINER_ALREADY_IN_LOCATION;
   }
-  // This should never happen
-  assert(false);
+  assert(false); // we should never reach here
   return MTM_SUCCESS;
 }
 
+/**
+ * runTrainerCommand - Run the relevant trainer command, based on subcommand
+ *
+ * @param game          - A pokemonGo game
+ * @param subcommand    - The subcommand
+ * @aram args           - An array of args to the subcommand
+ *
+ * The args are assumed to be valid
+ */
 MtmErrorCode runTrainerCommand(PokemonGo game, char* subcommand, char** args) {
   PokemonGoErrorCode command_result = POKEMONGO_SUCCESS; 
   if (strcmp(subcommand, "add") == 0) {
@@ -112,6 +167,15 @@ MtmErrorCode runTrainerCommand(PokemonGo game, char* subcommand, char** args) {
   return convertErrorToMtm(command_result);
 }
 
+/**
+ * runStoreCommand - Run the relevant store command, based on subcommand
+ *
+ * @param game          - A pokemonGo game
+ * @param subcommand    - The subcommand
+ * @aram args           - An array of args to the subcommand
+ *
+ * The args are assumed to be valid
+ */
 MtmErrorCode runStoreCommand(PokemonGo game, char* subcommand, char** args) {
   PokemonGoErrorCode command_result = POKEMONGO_SUCCESS; 
   if (strcmp(subcommand, "add") == 0) {
@@ -124,6 +188,15 @@ MtmErrorCode runStoreCommand(PokemonGo game, char* subcommand, char** args) {
   return convertErrorToMtm(command_result);
 }
 
+/**
+ * runPokemonCommand - Run the relevant pokemon command, based on subcommand
+ *
+ * @param game          - A pokemonGo game
+ * @param subcommand    - The subcommand
+ * @aram args           - An array of args to the subcommand
+ *
+ * The args are assumed to be valid
+ */
 MtmErrorCode runPokemonCommand(PokemonGo game, char* subcommand, char** args) {
   PokemonGoErrorCode command_result = POKEMONGO_SUCCESS; 
   if (strcmp(subcommand, "heal") == 0) {
@@ -137,6 +210,15 @@ MtmErrorCode runPokemonCommand(PokemonGo game, char* subcommand, char** args) {
   return convertErrorToMtm(command_result);
 }
 
+/**
+ * runBattleCommand - Run the relevant battle command, based on subcommand
+ *
+ * @param game          - A pokemonGo game
+ * @param subcommand    - The subcommand
+ * @aram args           - An array of args to the subcommand
+ *
+ * The args are assumed to be valid
+ */
 MtmErrorCode runBattleCommand(PokemonGo game, char* subcommand, char** args) {
   PokemonGoErrorCode command_result = POKEMONGO_SUCCESS; 
   if (strcmp(subcommand, "fight") == 0) {
@@ -149,6 +231,15 @@ MtmErrorCode runBattleCommand(PokemonGo game, char* subcommand, char** args) {
   return convertErrorToMtm(command_result);
 }
 
+/**
+ * runReportCommand - Run the relevant report command, based on subcommand
+ *
+ * @param game          - A pokemonGo game
+ * @param subcommand    - The subcommand
+ * @aram args           - An array of args to the subcommand
+ *
+ * The args are assumed to be valid
+ */
 MtmErrorCode runReportCommand(PokemonGo game, char* subcommand, char** args) {
   PokemonGoErrorCode command_result = POKEMONGO_SUCCESS; 
   if (strcmp(subcommand, "trainer") == 0) {
@@ -164,6 +255,16 @@ MtmErrorCode runReportCommand(PokemonGo game, char* subcommand, char** args) {
   return convertErrorToMtm(command_result);
 }
 
+/**
+ * playGame - the game flow.
+ *
+ * @param game  - a pokemonGo type
+ * @param input - the input file to read commands from
+ *
+ * The flow is to read an input command, parse it and call the relevant
+ * pokemonGo function to handle it. The flow is ended if there's a memory error
+ * or if EOF is reached in the input file.
+ */
 void playGame(PokemonGo game, FILE* input) {
   char *command, *subcommand, *args[10];
   char line[MAX_STR_LENGTH];
@@ -194,19 +295,28 @@ void playGame(PokemonGo game, FILE* input) {
   assert(feof(input));
 }
 
+/**
+ * main - Basic init and start and game flow
+ *
+ * @params in the form of cli arguments:
+ *  -p POKEDEX_FILE -e EVOLUTIONS_FILE -l LOCATIONS_FILE [-i INPUT_FILE]
+ *      [-o OUTPUT_FILE]
+ *
+ * cli arguments MUST be passed in the given order. Arguments in brackets are
+ * optional.
+ */
 int main(int argc, char** argv) {
-
   FILE* locations_file;
   FILE* pokedex_file;
   FILE* evolutions_file;
   FILE* input = stdin;
   FILE* output = stdout;
-
+  // Open input files
   if (!openFilesFromArgs(argc, argv, &pokedex_file, &evolutions_file,
                  &locations_file, &input, &output)) {
     return 0;
   }
-
+  // Parse input files and create the game object
   Pokedex pokedex = pokedexCreateFromFile(pokedex_file);
   Evolutions evolutions = evolutionsCreateFromFile(evolutions_file, pokedex);
   Map locations = locationsCreateMapFromFile(locations_file, pokedex,
@@ -219,6 +329,7 @@ int main(int argc, char** argv) {
     mtmPrintErrorMessage(ERR_CHANNEL, MTM_OUT_OF_MEMORY);
     return 0;
   }
+  // Play! :D
   playGame(game, input);
   cleanUp(pokedex, evolutions, locations, game);
   cleanUpFiles(input, output, pokedex_file, evolutions_file, locations_file);
