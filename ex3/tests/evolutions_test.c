@@ -34,19 +34,23 @@ bool testEvolutionsAddEntry() {
   // Test NULL params
   add_result = evolutionsAddEntry(NULL, "pikachu", 1, (PokedexEntry)0xdeadbeef);
   ASSERT_TEST(EVOLUTIONS_INVALID_ARGUMENT == add_result);
-  add_result = evolutionsAddEntry(evolutions, NULL, 1, (PokedexEntry)0xdeadbeef);
+  add_result = evolutionsAddEntry(evolutions, NULL, 1,
+                                  (PokedexEntry)0xdeadbeef);
   ASSERT_TEST(EVOLUTIONS_INVALID_ARGUMENT == add_result);
   add_result = evolutionsAddEntry(evolutions, "pikachu", 1, NULL);
   ASSERT_TEST(EVOLUTIONS_INVALID_ARGUMENT == add_result);
 
   // Test new entry
-  add_result = evolutionsAddEntry(evolutions, "pikachu", 1, (PokedexEntry)0xdeadbeef);
+  add_result = evolutionsAddEntry(evolutions, "pikachu", 1,
+                                  (PokedexEntry)0xdeadbeef);
   ASSERT_TEST(EVOLUTIONS_SUCCESS == add_result);
 
   // Test existing entry
-  add_result = evolutionsAddEntry(evolutions, "pikachu", 1, (PokedexEntry)0xdeadbeef);
+  add_result = evolutionsAddEntry(evolutions, "pikachu", 1,
+                                  (PokedexEntry)0xdeadbeef);
   ASSERT_TEST(EVOLUTIONS_SUCCESS == add_result);
-  add_result = evolutionsAddEntry(evolutions, "pikachu", 2, (PokedexEntry)0x1337);
+  add_result = evolutionsAddEntry(evolutions, "pikachu", 2,
+                                  (PokedexEntry)0x1337);
   ASSERT_TEST(EVOLUTIONS_SUCCESS == add_result);
 
   evolutionsDestroy(evolutions);

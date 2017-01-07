@@ -122,7 +122,8 @@ bool testPokemonCaught() {
 	setAdd(types, "BUG");
 	setAdd(types, "GROUND");
 	pokedexAddPokemon(pokedex, "weedle", 1000, types);
-	Pokemon weedle = pokemonCreate(pokedexGetPokemonInfo(pokedex, "weedle"), evolutions);
+	Pokemon weedle = pokemonCreate(pokedexGetPokemonInfo(pokedex, "weedle"),
+                                   evolutions);
 	pokecoins = pokemonCaught(weedle, 10);
 	pokemonDestroy(weedle);
 	ASSERT_TEST(pokecoins == REGULAR_TYPE_POKECOINS);
@@ -131,7 +132,9 @@ bool testPokemonCaught() {
 	setAdd(types, "WATER");
 	setAdd(types, "FAIRY");
 	pokedexAddPokemon(pokedex, "tinkertoice", 1000, types);
-	Pokemon tinkertoice = pokemonCreate(pokedexGetPokemonInfo(pokedex, "tinkertoice"), evolutions);
+	Pokemon tinkertoice;
+    tinkertoice = pokemonCreate(pokedexGetPokemonInfo(pokedex, "tinkertoice"),
+                                evolutions);
 	pokecoins = pokemonCaught(tinkertoice, 10);
 	pokemonDestroy(tinkertoice);
 	ASSERT_TEST(pokecoins == ONE_STAR_TYPE_POKECOINS);
@@ -141,7 +144,8 @@ bool testPokemonCaught() {
 	setAdd(types, "FIRE");
 	setAdd(types, "LYING");
 	pokedexAddPokemon(pokedex, "moltres", 1000, types);
-	Pokemon moltres = pokemonCreate(pokedexGetPokemonInfo(pokedex, "moltres"), evolutions);
+	Pokemon moltres = pokemonCreate(pokedexGetPokemonInfo(pokedex, "moltres"),
+                                    evolutions);
 	pokecoins = pokemonCaught(moltres, 10);
 	pokemonDestroy(moltres);
 	ASSERT_TEST(pokecoins == DOUBLE_STAR_TYPE_POKECOINS);
@@ -155,8 +159,10 @@ bool testPokemonCaught() {
 bool testPokemonBattle() {
 	Pokedex pokedex = demoPokedex();
 	Evolutions evolutions = demoEvolutions(pokedex);
-	Pokemon mew = pokemonCreate(pokedexGetPokemonInfo(pokedex, "mew"), evolutions);
-	Pokemon mewtwo = pokemonCreate(pokedexGetPokemonInfo(pokedex, "mewtwo"), evolutions);
+	Pokemon mew = pokemonCreate(pokedexGetPokemonInfo(pokedex, "mew"),
+                                evolutions);
+	Pokemon mewtwo = pokemonCreate(pokedexGetPokemonInfo(pokedex, "mewtwo"),
+                                   evolutions);
 	double mew_hp, mewtwo_hp;
 	int mew_level, mewtwo_level;
 

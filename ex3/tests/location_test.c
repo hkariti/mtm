@@ -38,8 +38,10 @@ bool testDestroyLocation() {
 bool testCopyLocation() {
 	LOCATION_SET_UP();
 
-	Location empty_location = demoLocationWithPokemon("Eilat", 0, pokedex, evolutions);
-	Location non_empty_location = demoLocationWithPokemon("Eilat", 5, pokedex, evolutions);
+	Location empty_location = demoLocationWithPokemon("Eilat", 0, pokedex,
+                                                      evolutions);
+	Location non_empty_location = demoLocationWithPokemon("Eilat", 5, pokedex,
+                                                          evolutions);
 
 	// NULL input
 	Location location_copy = locationCopy(NULL);
@@ -74,7 +76,8 @@ bool testLocationCompare() {
 	int result;
 
 	Location eilat_1 = demoLocationWithPokemon("Eilat", 0, pokedex, evolutions);
-	Location tel_aviv = demoLocationWithPokemon("Tel Aviv", 0, pokedex, evolutions);
+	Location tel_aviv = demoLocationWithPokemon("Tel Aviv", 0, pokedex,
+                                                evolutions);
 	Location eilat_2 = demoLocationWithPokemon("Eilat", 0, pokedex, evolutions);
 
 	result = locationCompare(eilat_1, eilat_2);
@@ -115,7 +118,8 @@ bool testLocationGetName() {
 bool testLocationAppendPokemon() {
 	LOCATION_SET_UP();
 
-	Location empty_location = demoLocationWithPokemon("Eilat", 0, pokedex, evolutions);
+	Location empty_location = demoLocationWithPokemon("Eilat", 0, pokedex,
+                                                      evolutions);
 	Pokemon pokemon = demoPokemon(pokedex, evolutions);
 	LocationErrorCode result;
 	bool is_empty;
@@ -151,9 +155,10 @@ bool testLocationAppendPokemon() {
 bool testLocationPopPokemon() {
 	LOCATION_SET_UP();
 
-	Location one_pokemon_location = demoLocationWithPokemon("Eilat", 1, pokedex, evolutions);
+	Location one_pokemon_location;
 	Pokemon poppedPokemon;
-
+    one_pokemon_location = demoLocationWithPokemon("Eilat", 1, pokedex,
+                                                   evolutions);
 	// Invalid input
 	poppedPokemon = locationPopPokemon(NULL);
 	ASSERT_TEST(NULL == poppedPokemon);
@@ -176,7 +181,8 @@ bool testLocationIsEmpty() {
 	LOCATION_SET_UP();
 
 	bool result;
-	Location empty_location = demoLocationWithPokemon("Eilat", 0, pokedex, evolutions);
+	Location empty_location = demoLocationWithPokemon("Eilat", 0, pokedex,
+                                                      evolutions);
 
 	// empty location
 	result = locationIsEmpty(empty_location);
@@ -196,8 +202,10 @@ bool testLocationIsNeighbour() {
 
 	bool result;
 	Location eilat = demoLocationWithPokemon("Eilat", 0, pokedex, evolutions);
-	Location beersheva = demoLocationWithPokemon("Beer Sheva", 0, pokedex, evolutions);
-	Location medellin = demoLocationWithPokemon("Medellin", 0, pokedex, evolutions);
+	Location beersheva = demoLocationWithPokemon("Beer Sheva", 0, pokedex,
+                                                 evolutions);
+	Location medellin = demoLocationWithPokemon("Medellin", 0, pokedex,
+                                                evolutions);
 
 	locationAddNeighbor(eilat, "Beer Sheva");
 	locationAddNeighbor(beersheva, "Eilat");
@@ -224,7 +232,8 @@ bool testLocationAddNeighbor() {
 	LOCATION_SET_UP();
 
 	Location eilat = demoLocationWithPokemon("Eilat", 0, pokedex, evolutions);
-	Location beersheva = demoLocationWithPokemon("Beer Sheva", 0, pokedex, evolutions);
+	Location beersheva = demoLocationWithPokemon("Beer Sheva", 0, pokedex,
+                                                 evolutions);
 	LocationErrorCode result;
 	bool is_neighbour;
 

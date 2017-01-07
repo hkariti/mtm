@@ -7,16 +7,21 @@ Map demoLocations(Pokedex pokedex, Evolutions evolutions) {
                             (freeMapDataElements)locationDestroy,
                             (compareMapKeyElements)stringCompare);
   Location empty_location, neighbor, full_location;
-  empty_location = demoLocationWithPokemon("empty_location", 1, pokedex, evolutions);
+  empty_location = demoLocationWithPokemon("empty_location", 1, pokedex,
+                                           evolutions);
   neighbor = demoLocationWithPokemon("neighbor", 0, pokedex, evolutions);
-  full_location = demoLocationWithPokemon("full_location", 10, pokedex, evolutions);
+  full_location = demoLocationWithPokemon("full_location", 10, pokedex,
+                                          evolutions);
   locationAddNeighbor(empty_location, "neighbor");
   Location paris = demoLocationWithPokemon("paris", 1, pokedex, evolutions);
   Location london = demoLocationWithPokemon("london", 2, pokedex, evolutions);
   Location madrid = demoLocationWithPokemon("madrid", 10, pokedex, evolutions);
-  Location beijing = demoLocationWithPokemon("beijing", 10, pokedex, evolutions);
-  Location telaviv = demoLocationWithPokemon("tel aviv", 1, pokedex, evolutions);
-  Location jerusalem = demoLocationWithPokemon("jerusalem", 0, pokedex, evolutions);
+  Location beijing = demoLocationWithPokemon("beijing", 10, pokedex,
+                                             evolutions);
+  Location telaviv = demoLocationWithPokemon("tel aviv", 1, pokedex,
+                                             evolutions);
+  Location jerusalem = demoLocationWithPokemon("jerusalem", 0, pokedex,
+                                               evolutions);
   Location palem = demoLocationWithPokemon("palem", 10, pokedex, evolutions);
   locationAddNeighbor(paris, "london");
   locationAddNeighbor(paris, "madrid");
@@ -58,7 +63,8 @@ Trainer demoTrainerEmpty(char* name, Map locations) {
   return trainer;
 }
 
-Trainer demoTrainerFullAtLocation(char* name, Map locations, char* location_name) {
+Trainer demoTrainerFullAtLocation(char* name, Map locations,
+                                  char* location_name) {
   Location location = mapGet(locations, location_name);
   Store store = demoStore();
   Trainer trainer = trainerCreate(name, 1000, location);

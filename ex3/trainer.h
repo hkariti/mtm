@@ -216,7 +216,6 @@ TrainerErrorCode trainerGoToLocation(Trainer trainer, Location location);
  */
 TrainerErrorCode trainerHunt(Trainer trainer, FILE* output_channel);
 
-// INVALID_ARGUMENT, STORE_ITEM_OUT_OF_STOCK, BUDGET_IS_INSUFFICIENT, OUT_OF_MEMORY
 /**
  * trainerBuyItem - Buy an item from the store
  *

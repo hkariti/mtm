@@ -84,16 +84,17 @@ typedef int(*compareMapKeyElements)(MapKeyElement, MapKeyElement);
 /**
 * mapCreate: Allocates a new empty map.
 *
-* @param copyDataElement - Function pointer to be used for copying data elements into
-*  	the map or when copying the map.
-* @param copyKeyElement - Function pointer to be used for copying key elements into
-*  	the map or when copying the map.
-* @param freeDataElement - Function pointer to be used for removing data elements from
-* 		the map
-* @param freeKeyElement - Function pointer to be used for removing key elements from
-* 		the map
-* @param compareKeyElements - Function pointer to be used for comparing key elements
-* 		inside the map. Used to check if new elements already exist in the map.
+* @param copyDataElement - Function pointer to be used for copying data
+*                          elements into the map or when copying the map.
+* @param copyKeyElement - Function pointer to be used for copying key elements
+*                         into the map or when copying the map.
+* @param freeDataElement - Function pointer to be used for removing data
+*                          elements from the map
+* @param freeKeyElement - Function pointer to be used for removing key elements
+*                         from the map
+* @param compareKeyElements - Function pointer to be used for comparing key
+*                             elements inside the map. Used to check if new
+*                             elements already exist in the map.
 * @return
 * 	NULL - if one of the parameters is NULL or allocations failed.
 * 	A new Map in case of success.
@@ -134,15 +135,16 @@ Map mapCopy(Map map);
 int mapGetSize(Map map);
 
 /**
-* mapContains: Checks if a key element exists in the map. The key element will be
-* considered in the map if one of the key elements in the map it determined equal
-* using the comparison function used to initialize the map.
+* mapContains: Checks if a key element exists in the map. The key element will
+* be considered in the map if one of the key elements in the map it determined
+* equal using the comparison function used to initialize the map.
 *
 * @param map - The map to search in
 * @param element - The element to look for. Will be compared using the
 * 		comparison function.
 * @return
-* 	false - if one or more of the inputs is null, or if the key element was not found.
+* 	false - if one or more of the inputs is null, or if the key element was not
+* 	        found.
 * 	true - if the key element was found in the map.
 */
 bool mapContains(Map map, MapKeyElement element);
@@ -154,8 +156,8 @@ bool mapContains(Map map, MapKeyElement element);
 * @param map - The map for which to reassign the data element
 * @param keyElement - The key element which need to be reassigned
 * @param dataElement - The new data element to associate with the given key.
-*      A copy of the element will be inserted as supplied by the copying function
-*      which is given at initialization and old data memory would be
+*      A copy of the element will be inserted as supplied by the copying
+*      function which is given at initialization and old data memory would be
 *      deleted using the free function given at initialization.
 * @return
 * 	MAP_NULL_ARGUMENT if a NULL was sent as map, key, or data
@@ -173,27 +175,28 @@ MapResult mapPut(Map map, MapKeyElement keyElement, MapDataElement dataElement);
 * @param keyElement - The key element which need to be found and whos data
 we want to get.
 * @return
-*  NULL if a NULL pointer was sent or if the map does not contain the requested key.
+*  NULL if a NULL pointer was sent or if the map does'nt have the requested key.
 * 	The data element associated with the key otherwise.
 */
 MapDataElement mapGet(Map map, MapKeyElement keyElement);
 
 /**
-* 	mapRemove: Removes a pair of key and data elements from the map. The elements
-*  are found using the comparison function given at initialization. Once found,
-*  the elements are removed and deallocated using the free functions
+* 	mapRemove: Removes a pair of key and data elements from the map. The
+*  elements are found using the comparison function given at initialization.
+*  Once found, the elements are removed and deallocated using the free functions
 *  supplied at initialization.
 *  Iterator's value is undefined after this operation.
 *
 * @param map -
 * 	The map to remove the elements from.
 * @param keyElement
-* 	The key element to find and remove from the map. The element will be freed using the
-* 	free function given at initialization. The data element associated with this key
-*  will also be freed using the free function given at initialization.
+* 	The key element to find and remove from the map. The element will be freed
+* 	using the free function given at initialization. The data element associated
+* 	with this key will also be freed using the free function given at
+* 	initialization.
 * @return
 * 	MAP_NULL_ARGUMENT if a NULL was sent to the function (either map or key)
-*  MAP_ITEM_DOES_NOT_EXIST if an equal key item does not already exists in the map
+*  MAP_ITEM_DOES_NOT_EXIST if an equal key item doesn't exist in the map
 * 	MAP_SUCCESS the paired elements had been removed successfully
 */
 MapResult mapRemove(Map map, MapKeyElement keyElement);
@@ -213,7 +216,7 @@ MapResult mapRemove(Map map, MapKeyElement keyElement);
 MapKeyElement mapGetFirst(Map map);
 
 /**
-*	mapGetNext: Advances the map iterator to the next key element and returns it.
+*	mapGetNext: Advances the map iterator to the next key element and returns it
 * @param map - The map for which to advance the iterator
 * @return
 * 	NULL if reached the end of the map, or the iterator is at an invalid state

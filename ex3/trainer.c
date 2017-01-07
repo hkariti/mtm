@@ -239,7 +239,9 @@ TrainerErrorCode trainerGoToLocation(Trainer trainer, Location location) {
 }
 
 TrainerErrorCode trainerHunt(Trainer trainer, FILE* output_channel) {
-  if (NULL == trainer || NULL == output_channel) return TRAINER_INVALID_ARGUMENT;
+  if (NULL == trainer || NULL == output_channel) {
+      return TRAINER_INVALID_ARGUMENT;
+  }
   char* location_name = locationGetName(trainer->current_location);
   char* species;
   Pokemon captured_pokemon;

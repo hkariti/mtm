@@ -225,7 +225,8 @@ Map locationsCreateMapFromFile(FILE* file, Pokedex pokedex,
       mapDestroy(locations);
       return NULL;
     }
-    add_location_result = mapPut(locations, locationGetName(location), location);
+    add_location_result = mapPut(locations, locationGetName(location),
+                                 location);
     locationDestroy(location);
     if (MAP_OUT_OF_MEMORY == add_location_result) {
       mapDestroy(locations);

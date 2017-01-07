@@ -52,7 +52,9 @@ void storeDestroy(Store store) {
 }
 
 StoreErrorCode storeAddItem(Store store, char* type, int value) {
-  if (NULL == store || NULL == type || value <= 0) return STORE_INVALID_ARGUMENT;
+  if (NULL == store || NULL == type || value <= 0) {
+      return STORE_INVALID_ARGUMENT;
+  }
 
   Inventory chosen_inventory;
   InventoryErrorCode add_item_result;
@@ -65,7 +67,9 @@ StoreErrorCode storeAddItem(Store store, char* type, int value) {
 }
 
 StoreErrorCode storeBuyItem(Store store, char* type, int value) {
-  if (NULL == store || NULL == type || value <= 0) return STORE_INVALID_ARGUMENT;
+  if (NULL == store || NULL == type || value <= 0) {
+      return STORE_INVALID_ARGUMENT;
+  }
 
   Inventory chosen_inventory;
   InventoryErrorCode remove_result;

@@ -140,7 +140,7 @@ MapResult mapPut(Map map, MapKeyElement key, MapDataElement data) {
 	if (mapContains(map, key)) { // if key already exist, override it
 		mapRemove(map, key);
 	}
-	mapFind(map, key); //now iteratpr points to previous element (See mapFind explanation)
+	mapFind(map, key); //now iterator points to previous element (See mapFind)
 	Element previous_element = map->iterator;
 	if (previous_element != NULL) {
 		new_element->next = previous_element->next;

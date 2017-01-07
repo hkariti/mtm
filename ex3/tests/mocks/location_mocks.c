@@ -1,7 +1,7 @@
 #include "location_mocks.h"
 
-Location demoLocationWithPokemon(char* name, int num_of_pokemon, Pokedex pokedex,
-                                 Evolutions evolutions) {
+Location demoLocationWithPokemon(char* name, int num_of_pokemon,
+                                 Pokedex pokedex, Evolutions evolutions) {
   Location location = locationCreate(name);
   Pokemon pokemon = demoPokemon(pokedex, evolutions);
 
