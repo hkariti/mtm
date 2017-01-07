@@ -1,9 +1,12 @@
 #!/bin/bash
 
-AWK_PROGRAM='current_file != FILENAME { print current_file ":" num, max_length; current_file = FILENAME; max_length=0;} length > max_length {max_length = length($0); num=FNR;}' 
+TAB_WIDTH=2
+TAB_SPACE=$(printf " %.0s" $(seq $TAB_WIDTH))
+AWK_PROGRAM='current_file != FILENAME { print current_file ":" num, max_length; current_file = FILENAME; max_length=0;} { gsub("\t", TAB_SPACE); } length > max_length {max_length = length($0); num=FNR;}' 
+AWK_ARGS=(-v TAB_SPACE="$TAB_SPACE")
 
 if [ $# = 0 ]; then
-    find . -name '*.c' -o -name '*.h' | xargs awk "$AWK_PROGRAM" | sort -k2 -n | awk '$2 > 80'
+    find . -name '*.c' -o -name '*.h' | xargs awk "${AWK_ARGS[@]}" "$AWK_PROGRAM" | sort -k2 -n | awk '$2 > 80'
 else
-    awk "$AWK_PROGRAM" "$@" | sort -k2 -n | awk '$2 > 80'
+    awk "${AWK_ARGS[@]}" "$AWK_PROGRAM" "$@" | sort -k2 -n | awk '$2 > 80'
 fi
