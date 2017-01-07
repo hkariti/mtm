@@ -19,21 +19,21 @@
  */
 void cleanUpFiles(FILE* input_file, FILE* output_file, FILE* pokedex_file,
                   FILE* evolutions_file, FILE* locations_file) {
-	if (input_file != NULL) {
-		fclose(input_file);
-	}
-	if (output_file != NULL) {
-		fclose(output_file);
-	}
-	if (pokedex_file != NULL) {
-		fclose(pokedex_file);
-	}
-	if (evolutions_file != NULL) {
-		fclose(evolutions_file);
-	}
-	if (locations_file != NULL) {
-		fclose(locations_file);
-	}
+  if (input_file != NULL) {
+    fclose(input_file);
+  }
+  if (output_file != NULL) {
+    fclose(output_file);
+  }
+  if (pokedex_file != NULL) {
+    fclose(pokedex_file);
+  }
+  if (evolutions_file != NULL) {
+    fclose(evolutions_file);
+  }
+  if (locations_file != NULL) {
+    fclose(locations_file);
+  }
 }
 
 /**
@@ -271,9 +271,9 @@ void playGame(PokemonGo game, FILE* input) {
   MtmErrorCode command_result;
   while (fgets(line, MAX_STR_LENGTH, input)) {
     tokenizeCommand(line, &command, &subcommand, args);
-	if (NULL == command) {
-		continue;
-	} else if (strcmp(command, "trainer") == 0) {
+  if (NULL == command) {
+    continue;
+  } else if (strcmp(command, "trainer") == 0) {
       command_result = runTrainerCommand(game, subcommand, args);
     } else if (strcmp(command, "store") == 0) {
       command_result = runStoreCommand(game, subcommand, args);

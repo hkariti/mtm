@@ -17,10 +17,10 @@
  * rules
  */
 typedef enum {
-	MTM_OUT_OF_MEMORY, // You should exit program after this error.
-	MTM_INVALID_COMMAND_LINE_PARAMETERS, // You should exit the program after this
-	                                     // error.
-	MTM_CANNOT_OPEN_FILE, // You should exit program after this error.
+  MTM_OUT_OF_MEMORY, // You should exit program after this error.
+  MTM_INVALID_COMMAND_LINE_PARAMETERS, // You should exit the program after this
+                                       // error.
+  MTM_CANNOT_OPEN_FILE, // You should exit program after this error.
   MTM_INVALID_ARGUMENT,
   MTM_TRAINER_NAME_ALREADY_EXISTS,
   MTM_TRAINER_DOES_NOT_EXIST,
@@ -32,7 +32,7 @@ typedef enum {
   MTM_NO_AVAILABLE_ITEM_FOUND ,
   MTM_LOCATION_IS_NOT_REACHABLE,
   MTM_TRAINER_ALREADY_IN_LOCATION,
-	MTM_SUCCESS
+  MTM_SUCCESS
 } MtmErrorCode;
 
 /**
@@ -64,15 +64,15 @@ void mtmPrintErrorMessage(FILE* error_channel, MtmErrorCode code);
  */
 void mtmPrintBattle(FILE* output_channel,
                     char* trainer_1, char* trainer_2,
-										char* pokemon_1, char* pokemon_2,
-										int cp_1, int cp_2,
-										double old_hp_1, double old_hp_2,
-										double new_hp_1, double new_hp_2,
-										int old_level_1, int old_level_2,
-										int new_level_1, int new_level_2,
-										double old_xp_1, double old_xp_2,
-										double new_xp_1, double new_xp_2,
-										bool is_dead_1, bool is_dead_2);
+                    char* pokemon_1, char* pokemon_2,
+                    int cp_1, int cp_2,
+                    double old_hp_1, double old_hp_2,
+                    double new_hp_1, double new_hp_2,
+                    int old_level_1, int old_level_2,
+                    int new_level_1, int new_level_2,
+                    double old_xp_1, double old_xp_2,
+                    double new_xp_1, double new_xp_2,
+                    bool is_dead_1, bool is_dead_2);
 
 /**
  * mtmPrintLocation - prints the header for the locations report.
@@ -157,7 +157,7 @@ void mtmPrintPokemon(FILE* output_channel,
                      int id,
                      char* species,
                      double hp,
-										 int cp,
+                     int cp,
                      int level);
 
 /**

@@ -6,8 +6,8 @@
 
 // The internal data type of the evolutions map
 typedef struct EvolutionEntry_t {
-	PokedexEntry evolved_pokemon;
-	int level;
+  PokedexEntry evolved_pokemon;
+  int level;
 } *EvolutionEntry;
 
 /** 

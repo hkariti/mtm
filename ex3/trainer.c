@@ -6,14 +6,14 @@
 
 
 struct Trainer_t {
-	char* name;
+  char* name;
     Location current_location;
-	Map pokemons;
-	Inventory potions;
-	Inventory candies;
-	int money;
-	double xp;
-	int total_pokemon_caught;
+  Map pokemons;
+  Inventory potions;
+  Inventory candies;
+  int money;
+  double xp;
+  int total_pokemon_caught;
 };
 
 /**

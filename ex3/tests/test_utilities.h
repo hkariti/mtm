@@ -35,7 +35,7 @@
         if (test()) { \
             printf("[OK]\n");\
         } else { \
-        	printf("[Failed]\n"); \
+          printf("[Failed]\n"); \
         } \
 } while(0)
 

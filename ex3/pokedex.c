@@ -6,9 +6,9 @@
 #include "utils.h"
 
 struct PokedexEntry_t {
-	char* species;
-	int cp;
-	Set types;
+  char* species;
+  int cp;
+  Set types;
 };
 
 /**

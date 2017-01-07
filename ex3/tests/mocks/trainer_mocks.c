@@ -82,7 +82,7 @@ Trainer demoTrainerFullAtLocation(char* name, Map locations,
 }
 
 Trainer demoTrainerFull(char* name, Map locations) {
-	return demoTrainerFullAtLocation(name, locations, "full_location");
+  return demoTrainerFullAtLocation(name, locations, "full_location");
 }
 
 Trainer demoTrainerWithItems(char* name, Map locations) {

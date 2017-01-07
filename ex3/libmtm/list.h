@@ -34,7 +34,7 @@
 *   listSort                 - Sorts the list according to a given criteria
 *   listFilter               - Creates a copy of an existing list, filtered by
 *                              a boolean predicate
-*   listClear		      	  - Clears all the data from the list
+*   listClear              - Clears all the data from the list
 */
 
 /** Type for defining the list */
@@ -42,10 +42,10 @@ typedef struct List_t *List;
 
 /** Type used for returning error codes from list functions */
 typedef enum ListResult_t {
-	LIST_SUCCESS,
-	LIST_NULL_ARGUMENT,
-	LIST_OUT_OF_MEMORY,
-	LIST_INVALID_CURRENT,
+  LIST_SUCCESS,
+  LIST_NULL_ARGUMENT,
+  LIST_OUT_OF_MEMORY,
+  LIST_INVALID_CURRENT,
 } ListResult;
 
 /** Element data type for list container */
@@ -129,8 +129,8 @@ typedef bool(*FilterListElement)(ListElement, ListFilterKey);
 * @param freeElement Function pointer to be used for removing elements from
 * the list.
 * @return
-* 	NULL - if one of the parameters is NULL or allocations failed.
-* 	A new List in case of success.
+*   NULL - if one of the parameters is NULL or allocations failed.
+*   A new List in case of success.
 */
 List listCreate(CopyListElement copyElement, FreeListElement freeElement);
 
@@ -381,8 +381,8 @@ void listDestroy(List list);
 * @param list the list to iterate over
 */
 #define LIST_FOREACH(type,iterator,list) \
-	for(type iterator = listGetFirst(list) ; \
-		iterator ;\
-		iterator = listGetNext(list))
+  for(type iterator = listGetFirst(list) ; \
+    iterator ;\
+    iterator = listGetNext(list))
 
 #endif /* LIST_H_ */

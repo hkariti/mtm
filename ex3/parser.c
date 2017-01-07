@@ -29,7 +29,7 @@ static bool isLineEmpty(char* line) {
             return false;
         }
     }
-	return true;
+  return true;
 }
 
 /**
@@ -76,7 +76,7 @@ Pokedex pokedexCreateFromFile(FILE* file) {
     return NULL;
   }
   while (fgets(line, MAX_STR_LENGTH, file) != NULL) {
-	if (isLineEmpty(line)) continue;
+  if (isLineEmpty(line)) continue;
     if (!pokedexAddFromLine(pokedex, line)) {
       pokedexDestroy(pokedex);
       return NULL;
@@ -96,8 +96,8 @@ Evolutions evolutionsCreateFromFile(FILE* file, Pokedex pokedex) {
   PokedexEntry evolution;
   EvolutionsErrorCode add_result;
   while (fgets(line, MAX_STR_LENGTH, file) != NULL) {
-	if (isLineEmpty(line)) continue;
-	sscanf(line, "%s %s %d", pokemon, evolution_name, &level);
+  if (isLineEmpty(line)) continue;
+  sscanf(line, "%s %s %d", pokemon, evolution_name, &level);
     evolution = pokedexGetPokemonInfo(pokedex, evolution_name);
     assert(evolution);
     add_result = evolutionsAddEntry(evolutions, pokemon, level, evolution);
@@ -219,7 +219,7 @@ Map locationsCreateMapFromFile(FILE* file, Pokedex pokedex,
   Location location;
   MapResult add_location_result;
   while (fgets(line, MAX_STR_LENGTH, file) != NULL) {
-	if (isLineEmpty(line)) continue;
+  if (isLineEmpty(line)) continue;
     location = locationFromLine(line, pokedex, evolutions);
     if (NULL == location) {
       mapDestroy(locations);
@@ -270,8 +270,8 @@ void tokenizeCommand(char* line, char** command, char** subcommand,
                      char** args) {
   char *args_part;
   if (isLineEmpty(line)) {
-	  *command = NULL;
-	  return;
+    *command = NULL;
+    return;
   }
   *command = strtok(line, " \t");
   *subcommand = strtok(NULL, " \t\r\n");
