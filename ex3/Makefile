@@ -1,9 +1,12 @@
-CFLAGS=-Wall -pedantic-errors -Werror --std=c99 -DNDEBUG
+CC=gcc
+CFLAGS=-Wall -pedantic-errors -Werror --std=c99 $(DEBUG)
+DEBUG=-DNDEBUG
 LDFLAGS=-L. -lmtm -lm
 modules=pokedex evolutions inventory store trainer pokemon location pokemonGo utils
 modules_objects=$(addsuffix .o,$(modules))
 modules_tests=$(addsuffix _test,$(modules))
 modules_mocks=$(foreach mod,$(modules),$(if $(wildcard tests/mocks/$(mod)_mocks.c),$(mod)_mocks.o))
+zip_ignore=list.h map.h set.h print_utils.h tests/test_utilities.h tests/map_example_test.c map_mtm/map_mtm.h
 
 pokemon_go_mtm: pokemon_go_mtm.o parser.o $(modules_objects)
 	$(CC) ${CFLAGS} -o $@ $^ $(LDFLAGS)
@@ -11,19 +14,19 @@ pokemon_go_mtm: pokemon_go_mtm.o parser.o $(modules_objects)
 map_mtm_test: map_mtm.o map_mtm_test.o utils.o
 	$(CC) $(CFLAGS) -o $@ $^
 
+.PHONY: mtm_run tests clean zip
 mtm_run:
 	$(CC) $(CFLAGS) *.c $(LDFLAGS) -o pokemon_go_mtm
-.PHONY: mtm_run
 
 tests: $(modules_tests) map_mtm_test
-.PHONY: tests
 
 clean:
 	rm -f *.o *_test pokemon_go_mtm
-.PHONY: clean
 
+zip: 
+	rm -f ex3.zip
+	find . -name Makefile -o -name '*.c' -o -name '*.h' | zip -@ ex3.zip $(foreach ignore,$(zip_ignore),-x $(ignore))
 
-%_test: CFLAGS+=-g
 %_test: %_test.o $(modules_objects) $(modules_mocks)
 	$(CC) -o $@ $^ ${LDFLAGS}
 
