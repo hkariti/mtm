@@ -6,7 +6,7 @@ modules=pokedex evolutions inventory store trainer pokemon location pokemonGo ut
 modules_objects=$(addsuffix .o,$(modules))
 modules_tests=$(addsuffix _test,$(modules))
 modules_mocks=$(foreach mod,$(modules),$(if $(wildcard tests/mocks/$(mod)_mocks.c),$(mod)_mocks.o))
-zip_ignore=list.h map.h set.h print_utils.h tests/test_utilities.h tests/map_example_test.c map_mtm/map_mtm.h
+zip_ignore=list.h map.h set.h print_utils.h tests/test_utilities.h tests/map_example_test.c map_mtm/map_mtm.h dry3/* dry/* libmtm/*
 
 pokemon_go_mtm: pokemon_go_mtm.o parser.o $(modules_objects)
 	$(CC) ${CFLAGS} -o $@ $^ $(LDFLAGS)
