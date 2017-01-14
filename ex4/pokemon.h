@@ -60,12 +60,12 @@ class Pokemon {
   // Copy constructor.
   //
   // @param pokemon the pokemon to copy.
-  Pokemon(const Pokemon& pokemon);
+  Pokemon(const Pokemon& pokemon) = default;
   
   // Assignment operator.
   //
   // @param pokemon assignee.
-  Pokemon& operator=(const Pokemon& pokemon);
+  Pokemon& operator=(const Pokemon& pokemon) = default;
 
   // Comparison operators for Pokemons. Pokemons are compared as described in
   // the exercise sheet.
@@ -112,6 +112,16 @@ class Pokemon {
   // @param boost the boost by which the CP value is multiplied.
   // @throw PokemonInvalidArgsException if boost is not bigger than 1.
   void Train(const double& boost);
+
+private:
+	const std::string species;
+	const std::set<PokemonType> types;
+	double cp;
+	const int level;
+	double hp;
+
+	double comparePokemon(const Pokemon& rhs) const;
+	const double HitPower() const;
 };
 
 std::ostream& operator<<(std::ostream& output, const Pokemon& pokemon);
