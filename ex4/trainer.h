@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "pokemon.h"
 
@@ -90,6 +91,14 @@ class Trainer {
   // @param pokemon the pokemon whose data is printed.
   // @return the output stream to which the data is printed.
   friend std::ostream& operator<<(std::ostream& output, const Trainer& trainer);
+
+private:
+	std::string name;
+	Team team;
+	int level;
+	std::vector<Pokemon> pokemons;
+
+	int compareTrainer(const Trainer& rhs) const;
 };
 
 std::ostream& operator<<(std::ostream& output, const Trainer& trainer);
