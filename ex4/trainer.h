@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "pokemon.h"
 
@@ -13,10 +14,28 @@ namespace pokemongo {
 typedef enum {
   BLUE,
   YELLOW,
-  RED,
+  red,
 } Team;
 
+typedef std::vector<Pokemon> PokemonList;
 class Trainer {
+  std::string name;
+  int level;
+  PokemonList pokemon_list;
+  Team team;
+
+  // Returns an iterator to the strongest pokemon
+  //
+  // @return the strongest pokemon iterator
+  // @throw TrainerNoPokemonsFoundException if trainer has no pokemon.
+  PokemonList::const_iterator GetStrongestPokemonIterator() const;
+
+  // Compares against another trainer
+  // 
+  // @return 1 if we are bigger
+  //         0 if both are equal
+  //        -1 if rhs is bigger
+  int compare(const Trainer& rhs) const;
  public:
   // Constructs a new trainer with the given name and team.
   //
