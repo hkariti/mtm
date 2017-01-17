@@ -158,7 +158,6 @@ bool testTryToCatch() {
 }
 
 int main() {
-	int x = 1;
   RUN_TEST(testTrainerCtors);
   RUN_TEST(testAssignment);
   RUN_TEST(testCompareisonOperators);
