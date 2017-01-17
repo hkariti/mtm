@@ -6,7 +6,7 @@ using namespace mtm::pokemongo;
 Trainer::Trainer(const std::string & name, const Team & team)
 	: name(name), team(team), pokemons(), level(1)
 {
-	if (name.size() == 0) throw PokemonInvalidArgsException();
+	if (name.size() == 0) throw TrainerInvalidArgsException();
 }
 
 Pokemon& Trainer::GetStrongestPokemon()
