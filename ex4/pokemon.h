@@ -2,8 +2,8 @@
 #define POKEMON_H
 
 #include <iostream>
-#include <set>
 #include <string>
+#include <set>
 
 namespace mtm {
 namespace pokemongo {
@@ -60,12 +60,12 @@ class Pokemon {
   // Copy constructor.
   //
   // @param pokemon the pokemon to copy.
-  Pokemon(const Pokemon& pokemon) = default;
+  Pokemon(const Pokemon& pokemon);
   
   // Assignment operator.
   //
   // @param pokemon assignee.
-  Pokemon& operator=(const Pokemon& pokemon) = default;
+  Pokemon& operator=(const Pokemon& pokemon);
 
   // Comparison operators for Pokemons. Pokemons are compared as described in
   // the exercise sheet.
@@ -114,10 +114,10 @@ class Pokemon {
   void Train(const double& boost);
 
 private:
-	const std::string species;
-	const std::set<PokemonType> types;
+	std::string species;
+	std::set<PokemonType> types;
 	double cp;
-	const int level;
+	int level;
 	double hp;
 
 	double comparePokemon(const Pokemon& rhs) const;
