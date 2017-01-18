@@ -92,14 +92,29 @@ class Trainer {
   // @return the output stream to which the data is printed.
   friend std::ostream& operator<<(std::ostream& output, const Trainer& trainer);
 
+  // Part C functions
+  int TotalScore();
+  friend Trainer* TrainersBattle(Trainer trainer_1, Trainer trainer_2);
+
+  // Part C members
+  int gym_leader_counter;
+
 private:
+
+	int compareTrainer(const Trainer& rhs) const;
+
+	// Part A members
 	std::string name;
 	Team team;
 	int level;
 	std::vector<Pokemon> pokemons;
 
-	int compareTrainer(const Trainer& rhs) const;
+	// Part C members
+	std::string current_location_name;
+	int battle_score_history;
 };
+
+Trainer* TrainersBattle(Trainer trainer_1, Trainer trainer_2);
 
 std::ostream& operator<<(std::ostream& output, const Trainer& trainer);
 
