@@ -72,7 +72,7 @@ template<typename KeyType, typename ValueType, int k> class KGraph {
   class iterator {
 	  
 	Node* node;
-	const KGraph* graph;
+	KGraph* graph;
 
   public:
 	// Constructs a new iterator that points to a given node in the given graph.
@@ -158,7 +158,7 @@ template<typename KeyType, typename ValueType, int k> class KGraph {
   class const_iterator {
 	  friend iterator;
 
-	Node* node;
+	const Node* node;
 	const KGraph* graph;
 
    public:
