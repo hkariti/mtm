@@ -70,7 +70,8 @@ template<typename KeyType, typename ValueType, int k> class KGraph {
   // moment, the iterator points either to one of the nodes in the graph, or to
   // the end of the graph.
   class iterator {
-	  
+	  friend const_iterator;
+
 	Node* node;
 	KGraph* graph;
 
