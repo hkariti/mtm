@@ -77,6 +77,22 @@ bool Trainer::TryToCatch(Pokemon & pokemon)
 	return true;
 }
 
+bool Trainer::AddItem(Item* item) {
+	if (NULL == item) throw TrainerInvalidArgsException();
+
+	if (item->level > level) return false;
+	items.push_back(item);
+	return true;
+}
+
+void Trainer::BoostPokemon(Pokemon& pokemon) {
+	if (items.empty()) return;
+	std::vector<Item*>::iterator first_item = items.begin();
+	(*first_item)->Use(pokemon);
+	delete *first_item;
+	items.erase(first_item);
+}
+
 std::ostream & mtm::pokemongo::operator<<(std::ostream & output, const Trainer & trainer)
 {
 	output << trainer.name << " (" << trainer.level << ") " << trainer.team << std::endl;
