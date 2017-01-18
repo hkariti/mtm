@@ -13,9 +13,9 @@ namespace pokemongo {
 
 // Teams in game.
 typedef enum {
-  BLUE,
-  YELLOW,
-  RED,
+	BLUE,
+	YELLOW,
+	RED,
 } Team;
 
 class Trainer {
