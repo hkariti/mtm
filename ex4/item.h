@@ -6,7 +6,7 @@ namespace mtm {
 namespace pokemongo {
 class Item {
 public:
-	int level;
+	const unsigned int level;
 	Item(int level) : level(level) {}
 	virtual ~Item() {}
 	virtual void Use(Pokemon&) = 0;
