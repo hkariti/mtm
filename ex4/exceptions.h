@@ -41,6 +41,8 @@ namespace pokemongo {
 	class PokemonGoReachedDeadEndException : public PokemonGoException {};
 	class PokemonGoTrainerNotFoundExcpetion : public PokemonGoException {};
 
+	class ItemException : public MtmException {};
+	class ItemInvalidArgException : public ItemException {};
 }  //  namespace pokemongo
 }  //  namespace mtm
 

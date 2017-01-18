@@ -1,13 +1,16 @@
 #ifndef ITEM_H
 #define ITEM_H
 #include "pokemon.h"
+#include "exceptions.h"
 
 namespace mtm {
 namespace pokemongo {
 class Item {
 public:
-	const unsigned int level;
-	Item(int level) : level(level) {}
+	const int level;
+	Item(int level) : level(level) {
+		if (level < 0) throw ItemInvalidArgException();
+	}
 	virtual ~Item() {}
 	virtual void Use(Pokemon&) = 0;
 };

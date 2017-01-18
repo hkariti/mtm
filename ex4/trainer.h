@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "pokemon.h"
+#include "item.h"
 
 namespace mtm {
 namespace pokemongo {
@@ -95,6 +96,8 @@ public:
 
 	// Part C functions
 	int TotalScore();
+	bool AddItem(Item* item);
+	void BoostPokemon(Pokemon& pokemon);
 	friend Trainer* TrainersBattle(Trainer trainer_1, Trainer trainer_2);
 
 	// Part C members
@@ -113,6 +116,7 @@ private:
 	// Part C members
 	std::string current_location_name;
 	int battle_score_history;
+	std::vector<Item*> items;
 };
 
 Trainer* TrainersBattle(Trainer trainer_1, Trainer trainer_2);
