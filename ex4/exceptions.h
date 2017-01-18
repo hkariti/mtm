@@ -10,9 +10,9 @@ namespace mtm {
 	class KGraphKeyAlreadyExistsExpection : public KGraphExcpetion {};
 	class KGraphIteratorReachedEnd : public KGraphExcpetion {};
 	class KGraphEdgeOutOfRange : public KGraphExcpetion {};
-  class KGraphEdgeAlreadyInUse : public KGraphExcpetion {};
-  class KGraphNodesAlreadyConnected : public KGraphExcpetion {};
-  class kGraphNodesAreNotConnected : public KGraphExcpetion {};
+	class KGraphEdgeAlreadyInUse : public KGraphExcpetion {};
+	class KGraphNodesAlreadyConnected : public KGraphExcpetion {};
+	class kGraphNodesAreNotConnected : public KGraphExcpetion {};
 
 namespace pokemongo {
 
@@ -21,22 +21,25 @@ namespace pokemongo {
 
 	class TrainerException : public MtmException {};
 	class TrainerNoPokemonsFoundException : public TrainerException {};
-  class TrainerInvalidArgsException : public TrainerException {};
+	class TrainerInvalidArgsException : public TrainerException {};
 
-  class LocationException : public MtmException {};
-  class LocationTrainerNotFoundException : public LocationException {};
-  class LocationTrainerAlreadyInLocationException : public LocationException {};
+	class LocationException : public MtmException {};
+	class LocationTrainerNotFoundException : public LocationException {};
+	class LocationTrainerAlreadyInLocationException : public LocationException {};
+
+	class PokestopException : public LocationException {};
+	class PokestopInvalidItemException : public PokestopException {};
 
 	class WorldException : public MtmException {};
-  class WorldInvalidInputLineException : public WorldException {};
+	class WorldInvalidInputLineException : public WorldException {};
 	class WorldLocationNameAlreadyUsed : public WorldException {};
 
 	class PokemonGoException : public MtmException {};
 	class PokemonGoLocationNotFoundException : public PokemonGoException {};
 	class PokemonGoTrainerNameAlreadyUsedExcpetion : public PokemonGoException {};
-  class PokemonGoInvalidArgsException : public PokemonGoException {};
-  class PokemonGoReachedDeadEndException : public PokemonGoException {};
-  class PokemonGoTrainerNotFoundExcpetion : public PokemonGoException {};
+	class PokemonGoInvalidArgsException : public PokemonGoException {};
+	class PokemonGoReachedDeadEndException : public PokemonGoException {};
+	class PokemonGoTrainerNotFoundExcpetion : public PokemonGoException {};
 
 }  //  namespace pokemongo
 }  //  namespace mtm
