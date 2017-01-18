@@ -269,11 +269,11 @@ template<typename KeyType, typename ValueType, int k> class KGraph {
   // @throw KGraphKeyNotFoundException when the given key is not found in the
   //        graph.
   iterator BeginAt(KeyType const& i) {
-	  if (nodes.find(i) == nodes.end()) throw KGraphKeyNotFoundException();
+	  if (!Contains(i)) throw KGraphKeyNotFoundException();
 	  return iterator(&nodes.at(i), this); //TODO: check if get's destroy after functions end
   }
   const_iterator BeginAt(KeyType const& i) const {
-	  if (nodes.find(i) == nodes.end()) throw KGraphKeyNotFoundException();
+	  if (!Contains(i)) throw KGraphKeyNotFoundException();
 	  return const_iterator(&nodes.at(i), this); //TODO: check if get's destroy after functions end
   }
 
@@ -291,7 +291,7 @@ template<typename KeyType, typename ValueType, int k> class KGraph {
   // @throw KGraphKeyAlreadyExistsExpection when trying to insert a node with a
   //        key that already exists in the graph.
   void Insert(KeyType const& key, ValueType const& value) {
-	  if (nodes.find(key) != nodes.end()) {
+	  if (Contains(key)) {
 		  throw KGraphKeyAlreadyExistsExpection();
 	  }
 	  nodes.insert({ key, Node(key, value) });
@@ -303,7 +303,7 @@ template<typename KeyType, typename ValueType, int k> class KGraph {
   // @throw KGraphKeyAlreadyExistsExpection when trying to insert a node with a
   //        key that already exists in the graph.
   void Insert(KeyType const& key) {
-	  if (nodes.find(key) != nodes.end()) {
+	  if (Contains(key)) {
 		  throw KGraphKeyAlreadyExistsExpection();
 	  }
 	  nodes.insert({ key, Node(key, default_value) });
@@ -315,10 +315,10 @@ template<typename KeyType, typename ValueType, int k> class KGraph {
   // @throw KGraphKeyNotFoundException when trying to remove a key that cannot
   //        be found in the graph.
   void Remove(KeyType const& key) {
-	  if (nodes.find(key) == nodes.end()) throw KGraphKeyNotFoundException();
+	  if (!Contains(key)) throw KGraphKeyNotFoundException();
 	  for (int i = 0; i < k; i++) {
 		  if (nodes.at(key)[i] != NULL) {
-			  Disconnect(nodes.at(key), *nodes.at(key)[i]);
+			  Disconnect(nodes.at(key).Key(), (*nodes.at(key)[i]).Key());
 		  }
 	  }
 	  nodes.erase(key);
@@ -332,10 +332,10 @@ template<typename KeyType, typename ValueType, int k> class KGraph {
   // @throw KGraphIteratorReachedEnd when the given iterator points to the end
   //        of the graph.
   void Remove(const iterator& it) {
-	  if (it == nodes.end()) throw KGraphIteratorReachedEnd();
+	  if (it == End()) throw KGraphIteratorReachedEnd();
 	  for (int i = 0; i < k; i++) {
 		  if (nodes.at(*it)[i] != NULL) {
-			  Disconnect(nodes.at(*it), *nodes.at(*it)[i]);
+			  Disconnect(nodes.at(*it).Key(), (*nodes.at(*it)[i]).Key());
 		  }
 	  }
 	  nodes.erase(*it);
@@ -350,7 +350,7 @@ template<typename KeyType, typename ValueType, int k> class KGraph {
   // @param key the key to return its value.
   // @return the value assigned to the given key.
   ValueType& operator[](KeyType const& key) {
-	  if (nodes.find(key) == nodes.end()) {
+	  if (!Contains(key)) {
 		  Insert(key);
 	  }
 	  return nodes.at(key).Value();
@@ -364,9 +364,7 @@ template<typename KeyType, typename ValueType, int k> class KGraph {
   // @throw KGraphKeyNotFoundException if the given key cannot be found in the 
   //        graph.
   ValueType const& operator[](KeyType const& key) const {
-	  if (nodes.find(key) == nodes.end()) {
-		  Insert(key);
-	  }
+	  if (!Contains(key)) throw KGraphKeyNotFoundException();
 	  return nodes.at(key).Value();
   }
 
