@@ -157,6 +157,49 @@ bool testTryToCatch() {
 	return true;
 }
 
+bool testTrainerBattle() {
+	std::set<PokemonType> types;
+	types.insert(NORMAL);
+	Trainer ash = Trainer("ash", RED);
+	Trainer gary = Trainer("gary", YELLOW);
+	Trainer misty = Trainer("misty", BLUE);
+	Pokemon pikachu = Pokemon("pikachu", types, 3, 1);
+	Pokemon mewtwo = Pokemon("mewtwo", types, 1000, 1);
+
+	// test trainers have no pokemons, level doesn't change
+	ASSERT_EQUAL(&ash, TrainersBattle(ash, gary));
+	ASSERT_EQUAL(3, ash.TotalScore());
+	ASSERT_EQUAL(0, gary.TotalScore());
+
+	// test one trainer has pokemons, test trainer level & battle score
+	ash.TryToCatch(pikachu);
+	ASSERT_EQUAL(&ash, TrainersBattle(ash, gary));
+	ASSERT_EQUAL(6, ash.TotalScore());
+	ASSERT_EQUAL(-1, gary.TotalScore());
+	ASSERT_EQUAL(&ash, TrainersBattle(gary, ash));
+	ASSERT_EQUAL(9, ash.TotalScore());
+	ASSERT_EQUAL(-2, gary.TotalScore());
+
+	// test pokemons equal, only team color matter 
+	gary.TryToCatch(pikachu);
+	misty.TryToCatch(pikachu);
+	ASSERT_EQUAL(&gary, TrainersBattle(gary, misty));
+	ASSERT_EQUAL(&gary, TrainersBattle(misty, gary));
+	ASSERT_EQUAL(&ash, TrainersBattle(ash, gary));
+	ASSERT_EQUAL(&ash, TrainersBattle(gary, ash));
+	ASSERT_EQUAL(&misty, TrainersBattle(ash, misty));
+	ASSERT_EQUAL(&misty, TrainersBattle(misty, ash));
+
+	// test pokemons not equal 
+	gary.TryToCatch(mewtwo);
+	ASSERT_EQUAL(&gary, TrainersBattle(gary, ash));
+	ASSERT_EQUAL(&gary, TrainersBattle(ash, gary));
+
+	// test pokemon is dead
+	ASSERT_THROW(TrainerNoPokemonsFoundException, ash.GetStrongestPokemon());
+
+	return true;
+}
 int main() {
   RUN_TEST(testTrainerCtors);
   RUN_TEST(testAssignment);
@@ -165,7 +208,7 @@ int main() {
   RUN_TEST(testGetStrongestPokemon);
   RUN_TEST(testKillStrongestPokemon);
   RUN_TEST(testTryToCatch);
-
+  RUN_TEST(testTrainerBattle);
   return 0;
 }
 
