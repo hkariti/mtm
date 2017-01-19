@@ -9,7 +9,8 @@
 using namespace mtm::pokemongo;
 
 Trainer::Trainer(const std::string & name, const Team & team)
-	: name(name), team(team), pokemons(), level(1), battle_score_history(0)
+	: name(name), team(team), pokemons(), level(1), battle_score_history(0),
+		gym_leader_counter(0)
 {
 	if (name.size() == 0) throw TrainerInvalidArgsException();
 }
@@ -125,12 +126,12 @@ std::ostream & mtm::pokemongo::operator<<(std::ostream & output, const Trainer &
 void Trainer::RaiseLevel(Trainer& loser)
 {
 	level += loser.level / LOSER_TRAINER_LEVEL_FACTOR + 
-		loser.level % LOSER_TRAINER_LEVEL_FACTOR;
+		(loser.level % LOSER_TRAINER_LEVEL_FACTOR ? 1 : 0);
 }
 
 void Trainer::UpdateBattleScoreHistory(Trainer & winner)
 {
-	if (*this == winner) {
+	if (this == &winner) {
 		battle_score_history += TRAINER_WIN_POINTS;
 	}
 	else {
@@ -138,8 +139,8 @@ void Trainer::UpdateBattleScoreHistory(Trainer & winner)
 	}
 }
 
-Trainer* mtm::pokemongo::PreferedTrainerByTeam(Trainer& trainer_1,
-			Trainer& trainer_2) {
+// throws TrainerInvalidArgsException if trainers are from the same team
+Trainer* PreferedTrainerByTeam(Trainer& trainer_1,Trainer& trainer_2) { //TODO:  DOC
 	
 	if (trainer_1.GetTeam() == trainer_2.GetTeam()) {
 		throw TrainerInvalidArgsException();
@@ -170,6 +171,29 @@ Trainer* mtm::pokemongo::PreferedTrainerByTeam(Trainer& trainer_1,
 	}
 }
 
+Trainer * mtm::pokemongo::TrainersBattleWithPokemons(Trainer & trainer_1, Trainer & trainer_2) 
+{
+	Trainer* winner = NULL;
+	Pokemon *pokemon_1 = &trainer_1.GetStrongestPokemon();
+	Pokemon *pokemon_2 = &trainer_2.GetStrongestPokemon();
+	trainer_1.BoostPokemon(*pokemon_1);
+	trainer_2.BoostPokemon(*pokemon_2);
+	if (*pokemon_1 > *pokemon_2) {
+		winner = &trainer_1;
+	}
+	if (*pokemon_2 > *pokemon_1) {
+		winner = &trainer_2;
+	}
+	if ((*pokemon_1).Hit(*pokemon_2)) {
+		trainer_2.KillStrongestPokemon();
+	}
+	if ((*pokemon_2).Hit(*pokemon_1)) {
+		trainer_1.KillStrongestPokemon();
+	}
+	return winner;
+}
+
+
 Trainer* mtm::pokemongo::TrainersBattle(Trainer& trainer_1, Trainer& trainer_2)
 {
 	Trainer *winner = NULL;
@@ -196,24 +220,3 @@ Trainer* mtm::pokemongo::TrainersBattle(Trainer& trainer_1, Trainer& trainer_2)
 	return winner;
 }
 
-Trainer * mtm::pokemongo::TrainersBattleWithPokemons(Trainer & trainer_1, Trainer & trainer_2)
-{
-	Trainer* winner = NULL;
-	Pokemon *pokemon_1 = &trainer_1.GetStrongestPokemon();
-	Pokemon *pokemon_2 = &trainer_2.GetStrongestPokemon();
-	trainer_1.BoostPokemon(*pokemon_1);
-	trainer_2.BoostPokemon(*pokemon_2);
-	if (pokemon_1 > pokemon_2) {
-		winner = &trainer_1;
-	}
-	if (pokemon_2 > pokemon_1) {
-		winner = &trainer_2;
-	}
-	if ((*pokemon_1).Hit(*pokemon_2)) {
-		trainer_2.KillStrongestPokemon();
-	}
-	if ((*pokemon_2).Hit(*pokemon_1)) {
-		trainer_1.KillStrongestPokemon();
-	}
-	return winner;
-}

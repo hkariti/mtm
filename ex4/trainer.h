@@ -98,9 +98,12 @@ public:
 	friend std::ostream& operator<<(std::ostream& output,
 									const Trainer& trainer);
 
+	//TODO:  DOC
+	// function for executing pokemon battle (boosting, hitting, removing if necessary and returning winning trainer)
 	friend Trainer* TrainersBattleWithPokemons(Trainer & trainer_1,
 		Trainer & trainer_2);
 
+	//TODO:  DOC
 	friend Trainer* TrainersBattle(Trainer& trainer_1, Trainer& trainer_2);
 
 
@@ -135,12 +138,6 @@ private:
 
 Trainer* TrainersBattle(Trainer& trainer_1, Trainer& trainer_2);
 
-// function for executing pokemon battle (boosting, hitting, removing if necessary and returning winning trainer)
-Trainer* TrainersBattleWithPokemons(Trainer & trainer_1, Trainer & trainer_2);
-
-
-// throws TrainerInvalidArgsException if trainers are from the same team
-Trainer* PreferedTrainerByTeam(Trainer& trainer_1, Trainer& trainer_2);
 
 
 std::ostream& operator<<(std::ostream& output, const Trainer& trainer);
