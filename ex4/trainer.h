@@ -98,11 +98,15 @@ public:
 	friend std::ostream& operator<<(std::ostream& output,
 									const Trainer& trainer);
 
+	friend Trainer* TrainersBattleWithPokemons(Trainer & trainer_1,
+		Trainer & trainer_2);
+
+	friend Trainer* TrainersBattle(Trainer& trainer_1, Trainer& trainer_2);
+
+
 	// Part C functions
 	int TotalScore();
 	bool AddItem(Item* item);
-	void BoostPokemon(Pokemon& pokemon);
-	friend Trainer* TrainersBattle(Trainer trainer_1, Trainer trainer_2);
 
 	// Part C members
 	int gym_leader_counter;
@@ -110,6 +114,12 @@ public:
 private:
 
 	int compareTrainer(const Trainer& rhs) const;
+
+	// Part C functions
+	void BoostPokemon(Pokemon& pokemon);
+	void RaiseLevel(Trainer& loser);
+	// if current instance is winner, score will be added, else score wil be reduced.
+	void UpdateBattleScoreHistory(Trainer& winner);
 
 	// Part A members
 	std::string name;
@@ -123,7 +133,15 @@ private:
 	std::vector<Item*> items;
 };
 
-Trainer* TrainersBattle(Trainer trainer_1, Trainer trainer_2);
+Trainer* TrainersBattle(Trainer& trainer_1, Trainer& trainer_2);
+
+// function for executing pokemon battle (boosting, hitting, removing if necessary and returning winning trainer)
+Trainer* TrainersBattleWithPokemons(Trainer & trainer_1, Trainer & trainer_2);
+
+
+// throws TrainerInvalidArgsException if trainers are from the same team
+Trainer* PreferedTrainerByTeam(Trainer& trainer_1, Trainer& trainer_2);
+
 
 std::ostream& operator<<(std::ostream& output, const Trainer& trainer);
 
