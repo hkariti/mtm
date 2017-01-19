@@ -9,7 +9,6 @@
 using namespace mtm::pokemongo;
 
 Trainer::Trainer(const std::string & name, const Team & team)
-	: name(name), team(team), level(1), pokemons() 
 	: name(name), team(team), pokemons(), level(1), battle_score_history(0)
 {
 	if (name.size() == 0) throw TrainerInvalidArgsException();
