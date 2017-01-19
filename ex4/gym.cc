@@ -60,6 +60,5 @@ void Gym::Leave(Trainer & trainer)
 				leader = TrainersBattle(*first_prefered, *second_prefered);
 			}
 		}
-
 	}
 }
