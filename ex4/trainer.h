@@ -27,6 +27,10 @@ public:
 	// @throw TrainerInvalidArgsException if name is an empty string.
 	Trainer(const std::string& name, const Team& team);
 
+	// Destroys a trainer
+	//
+	// Destroys all of the trainer's items
+	~Trainer();
 	// Returns a reference to the strongest Pokemon the trainer owns. Strongest 
 	// Pokemon is determined using the comparison operators provided by the class
 	// Pokemon. If two Pokemons are of equal strength, the function returns the

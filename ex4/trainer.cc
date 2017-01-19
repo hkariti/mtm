@@ -4,9 +4,18 @@
 using namespace mtm::pokemongo;
 
 Trainer::Trainer(const std::string & name, const Team & team)
-	: name(name), team(team), pokemons(), level(1)
+	: name(name), team(team), level(1), pokemons() 
 {
 	if (name.size() == 0) throw TrainerInvalidArgsException();
+}
+
+Trainer::~Trainer() {
+	std::vector<Item*>::iterator current_item;
+	// Delete all items
+	for (current_item = items.begin(); current_item != items.end();
+		 current_item++) {
+		delete *current_item;
+	}
 }
 
 Pokemon& Trainer::GetStrongestPokemon()

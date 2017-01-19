@@ -7,7 +7,7 @@ namespace mtm {
 namespace pokemongo{
 class Pokestop: public Location {
 public:
-	~Pokestop() {};
+	~Pokestop();
 	Pokestop() : Location() {};
 	void Arrive(Trainer& trainer) override;
 	void AddItem(Item* item);
