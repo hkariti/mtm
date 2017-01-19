@@ -34,15 +34,14 @@ void Gym::Leave(Trainer & trainer)
 {
 	Location::Leave(trainer);
 	if (leader == &trainer) {
+		trainer.gym_leader_counter--; //TODO: does the leader stay leader if has no replacement, if so - MOVE THIS LINE TO BELOW
 		if (trainers_.empty()) {
-			//TODO: does the leader stay leader if has no replacement?
-			leader = NULL;
+			leader = NULL; 	//TODO: does the leader stay leader if has no replacement?
 			return;
 		}
 		leader = PreferedTeamTrainer(trainer.GetTeam());
 		if (NULL == leader) { //no trainers from the same team exist
-			Trainer* first_prefered = NULL;
-			Trainer* second_prefered = NULL;
+			Trainer *first_prefered = NULL, *second_prefered = NULL;
 			for (int team = BLUE; team <= RED; team++) {
 				if (team != trainer.GetTeam()) {
 					if (NULL == first_prefered) {
@@ -60,5 +59,6 @@ void Gym::Leave(Trainer & trainer)
 				leader = TrainersBattle(*first_prefered, *second_prefered);
 			}
 		}
+		leader->gym_leader_counter++;
 	}
 }
