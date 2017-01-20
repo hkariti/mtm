@@ -17,6 +17,7 @@ class Gym : public Location {
 public:
 
 	~Gym() {}
+	Gym() : leader(NULL) {}
 
 	// make copy and assignment operator as compiler's default
 	Gym(const Gym& gym) = default;
