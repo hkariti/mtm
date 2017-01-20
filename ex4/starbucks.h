@@ -12,7 +12,11 @@ namespace mtm {
 			std::vector<Pokemon> pokemons;
 
 		public:
-			// main ctor which provided vector of pokemons
+
+			// Constructs a new Starbucks coffee shop 
+			// with pokemons and no coffee!
+			//
+			// @param pokemons the list of pokemons in the shop
 			Starbucks(const std::vector<Pokemon> pokemons);
 
 			~Starbucks() {}
@@ -21,10 +25,19 @@ namespace mtm {
 			Starbucks(const Starbucks& gym) = default;
 			Starbucks& operator=(const Starbucks& gym) = default;
 
-			// throws LocationTrainerAlreadyInLocationException
+			// Handle a new trainer arriving to Starbucks,
+			// Buying coffee and try to catch the first pokemon he sees!
+			//
+			// @param trainer the trainer arriving.
+			// @throw LocationTrainerAlreadyInLocationException 
+			//			if trainer is already in the location.
 			void Arrive(Trainer& trainer) override;
 
-			// throws LocationTrainerNotFoundException
+			// Handle an old trainer leaving the starbucks for a new adventure
+			//
+			// @param trainer the trainer leaving.
+			// @throw LocationTrainerNotFoundException if trainer is not
+			//		  in the location.
 			void Leave(Trainer& trainer) override;
 
 		};
