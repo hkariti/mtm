@@ -21,7 +21,7 @@ public:
 	~Candy() {}
 	void Use(Pokemon& pokemon) override {
 		int pokemon_level = pokemon.Level();
-		double cp_multiplier = 1 + (double)pokemon_level/10;
+		double cp_multiplier = 1 + ((double)pokemon_level)/10;
 		pokemon.Train(cp_multiplier);
 	}
 };
