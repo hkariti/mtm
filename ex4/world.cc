@@ -84,7 +84,8 @@ void World::AddStarbucks(std::istringstream & iss, std::string name)
 	std::vector<Pokemon> pokemons;
 	while (!iss.eof()) {
 		std::string species;
-		int cp = -1, level = -1;
+		double cp = -1;
+		int level = -1;
 		iss >> species >> cp >> level;
 		try {
 			pokemons.push_back(Pokemon(species, cp, level));
