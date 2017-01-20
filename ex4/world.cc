@@ -25,20 +25,24 @@ std::istream & mtm::pokemongo::operator >> (std::istream & input, World & world)
 	std::string line, location_type, location_name;
 	std::getline(input, line);
 	std::istringstream iss(line);
-	iss >> location_type;
-	iss >> location_name;
+	iss >> location_type >> location_name;
 	if (location_name.empty()) throw WorldInvalidInputLineException();
-	if (location_type == "GYM") {
-		world.AddGym(iss, location_name);
+	try {
+		if (location_type == "GYM") {
+			world.AddGym(iss, location_name);
+		}
+		else if (location_type == "POKESTOP") {
+			world.AddPokestop(iss, location_name);
+		}
+		else if (location_type == "STARBUCKS") {
+			world.AddStarbucks(iss, location_name);
+		}
+		else {
+			throw WorldInvalidInputLineException();
+		}
 	}
-	else if (location_type == "POKESTOP") {
-		world.AddPokestop(iss, location_name);
-	}
-	else if (location_type == "STARBUCKS") {
-		world.AddStarbucks(iss, location_name);
-	}
-	else {
-		throw WorldInvalidInputLineException();
+	catch (KGraphKeyAlreadyExistsExpection) {
+		throw WorldLocationNameAlreadyUsed();
 	}
 	return input;
 }
