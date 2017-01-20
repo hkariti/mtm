@@ -4,6 +4,10 @@
 using namespace mtm::pokemongo;
 
 #define MAX_POKEMON_HP		100
+#define STRING_TYPES	{"NORMAL", "ROCK", "BUG", "FAIRY", "GROUND", \
+						"GRASS", "WATER", "ICE", "GHOST", "POISON", \
+						"ELECTRIC", "FIRE", "FLYING", "PSYCHIC"}
+
 
 
 Pokemon::Pokemon(const std::string & species, const std::set<PokemonType>& types, const double & cp, const int & level)
@@ -96,9 +100,10 @@ void Pokemon::Train(const double & boost)
 
 std::ostream & mtm::pokemongo::operator<<(std::ostream & output, const Pokemon & pokemon)
 {
+	std::string string_types[] = STRING_TYPES;
 	output << pokemon.species << " (" << pokemon.level << "/" << pokemon.cp << "/" << pokemon.hp << ")";
 	for (const PokemonType& type : pokemon.types) {
-		output << " " << type;
+		output << " " << string_types[type];
 	}
 	output << std::endl;
 	return output;

@@ -5,6 +5,7 @@
 #define TRAINER_WIN_POINTS			2
 #define TRAINER_LOSE_POINTS			-1
 #define GYM_LEADER_POINTS			10
+#define STRING_TEAM					{"BLUE", "YELLOW", "RED"}
 
 using namespace mtm::pokemongo;
 
@@ -119,8 +120,9 @@ void Trainer::BoostPokemon(Pokemon& pokemon) {
 std::ostream & mtm::pokemongo::operator<<(std::ostream & output,
 	const Trainer & trainer)
 {
-	output << trainer.name << " (" << trainer.level << ") " << trainer.team
-		<< std::endl;
+	std::string teams_strings[] = STRING_TEAM;
+	output << trainer.name << " (" << trainer.level << ") "
+		<< teams_strings[trainer.team] << std::endl;
 	for (const Pokemon& pokemon : trainer.pokemons) {
 		output << pokemon;
 	}
