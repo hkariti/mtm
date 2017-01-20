@@ -17,16 +17,28 @@ class Gym : public Location {
 public:
 
 	~Gym() {}
+
+	// Constructs a new gym with no leader.
 	Gym() : leader(NULL) {}
 
 	// make copy and assignment operator as compiler's default
 	Gym(const Gym& gym) = default;
 	Gym& operator=(const Gym& gym) = default;
 
-	// throws LocationTrainerAlreadyInLocationException
+	// Handle a new trainer arriving to Gym, trying his luck to be the leader!
+	//
+	// @param trainer the trainer arriving.
+	// @throw LocationTrainerAlreadyInLocationException if trainer is already
+	//		  in the gym.
 	void Arrive(Trainer& trainer) override;
 
-	// throws LocationTrainerNotFoundException
+	// Handle an old trainer leaving the gym for a new adventure
+	// If the trainer was the leader, making other trainer (if exist) the
+	// leader according to the exercise sheet.
+	//
+	// @param trainer the trainer leaving.
+	// @throw LocationTrainerNotFoundException if trainer is not
+	//		  in the gym.
 	void Leave(Trainer& trainer) override;
 
 };

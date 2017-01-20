@@ -34,9 +34,9 @@ void Gym::Leave(Trainer & trainer)
 {
 	Location::Leave(trainer);
 	if (leader == &trainer) {
-		trainer.gym_leader_counter--; //TODO: does the leader stay leader if has no replacement, if so - MOVE THIS LINE TO BELOW
+		trainer.gym_leader_counter--;
 		if (trainers_.empty()) {
-			leader = NULL; 	//TODO: does the leader stay leader if has no replacement?
+			leader = NULL;
 			return;
 		}
 		leader = PreferedTeamTrainer(trainer.GetTeam());
