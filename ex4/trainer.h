@@ -138,7 +138,7 @@ public:
 	/*				Part C Members					*/
 	
 	// Counter for how many gym trainer is their leader
-	int gym_leader_counter;
+	bool is_leader;
 
 	// Trainer's current location name
 	std::string current_location_name;

@@ -10,7 +10,7 @@ using namespace mtm::pokemongo;
 
 Trainer::Trainer(const std::string & name, const Team & team)
 	: name(name), team(team), pokemons(), level(1), battle_score_history(0),
-		gym_leader_counter(0)
+		is_leader(false)
 {
 	if (name.size() == 0) throw TrainerInvalidArgsException();
 }
@@ -97,7 +97,7 @@ bool Trainer::TryToCatch(Pokemon & pokemon)
 int Trainer::TotalScore()
 {
 	return level + battle_score_history +
-		gym_leader_counter * GYM_LEADER_POINTS;
+		(is_leader ? GYM_LEADER_POINTS : 0);
 }
 
 bool Trainer::AddItem(Item* item) {

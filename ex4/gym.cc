@@ -21,12 +21,14 @@ Trainer * Gym::PreferedTeamTrainer(Team team)
 void Gym::Arrive(Trainer & trainer)
 {
 	Location::Arrive(trainer);
+	leader->is_leader = false;
 	if (trainers_.size() == 1) {
 		leader = &trainer;
 	}
 	else if (leader->GetTeam() != trainer.GetTeam()) {
 		leader = TrainersBattle(*leader, trainer);
 	}
+	leader->is_leader = true;
 }
 
 
@@ -34,7 +36,7 @@ void Gym::Leave(Trainer & trainer)
 {
 	Location::Leave(trainer);
 	if (leader == &trainer) {
-		trainer.gym_leader_counter--;
+		trainer.is_leader = false;
 		if (trainers_.empty()) {
 			leader = NULL;
 			return;
@@ -59,6 +61,6 @@ void Gym::Leave(Trainer & trainer)
 				leader = TrainersBattle(*first_prefered, *second_prefered);
 			}
 		}
-		leader->gym_leader_counter++;
+		leader->is_leader = true;
 	}
 }
