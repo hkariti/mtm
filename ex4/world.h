@@ -58,12 +58,18 @@ class World : public KGraph<std::string, Location*, 4> {
   //        the given name in the world.
   friend std::istream& operator>>(std::istream& input, World& world);
 
+
+
   // Disable copy constructor.
   World(const World& world) = delete;
 
   // Disable assignment operator.
   void operator=(const World& world) = delete;
 
+protected:
+	void AddGym(std::istringstream& iss, std::string name);
+	void AddPokestop(std::istringstream& iss, std::string name);
+	void AddStarbucks(std::istringstream& iss, std::string name);
 };
 
 std::istream& operator>>(std::istream& input, World& world);
