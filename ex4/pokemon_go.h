@@ -3,13 +3,19 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 #include "world.h"
+#include "trainer.h"
 
 namespace mtm {
 namespace pokemongo {
 
 class PokemonGo {
+protected:
+	std::unordered_map<std::string, Trainer> trainers;
+	const World* world;
+
  public:
   // Initilaizes a new game with the given world. This passes ownership of
   // world, meaning the constructed PokemonGo is responsible for deleting all
