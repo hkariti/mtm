@@ -102,7 +102,7 @@ class Pokemon {
   //
   // @param the Pokemon to hit.
   // @return true iff the hitten Pokemon died (HP reached zero).
-  bool Hit(Pokemon& victim);
+	bool Hit(Pokemon& victim);
 
   // Heals the Pokemon by increasing its HP to 100.
   void Heal();
@@ -121,7 +121,7 @@ private:
 	double hp;
 
 	double comparePokemon(const Pokemon& rhs) const;
-	const double HitPower() const;
+	double HitPower() const;
 };
 
 std::ostream& operator<<(std::ostream& output, const Pokemon& pokemon);

@@ -22,7 +22,7 @@ class Location {
   }
 
   virtual void Leave(Trainer& trainer) {
-    std::vector<Trainer*>::iterator position = 
+    std::vector<Trainer*>::iterator position =
         std::find(trainers_.begin(), trainers_.end(), &trainer);
     if (position == trainers_.end()) {
       throw LocationTrainerNotFoundException();

@@ -33,7 +33,7 @@ Pokemon & mtm::pokemongo::Pokemon::operator=(const Pokemon & pokemon)
 	return *this;
 }
 
-const double Pokemon::HitPower() const {
+double Pokemon::HitPower() const {
 	return cp * level;
 }
 
