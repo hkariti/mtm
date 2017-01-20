@@ -36,6 +36,7 @@ void PokemonGo::MoveTrainer(const std::string & trainer_name, const Direction & 
 		World::const_iterator it = world->BeginAt(trainer.current_location_name);
 		it.Move(dir);
 		if (it == world->End()) throw PokemonGoReachedDeadEndException();
+		(*world)[trainer.current_location_name]->Leave(trainer);
 		trainer.current_location_name = (*it);
 		(*world)[*it]->Arrive(trainer);
 	}
