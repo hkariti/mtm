@@ -2,10 +2,18 @@
 #define WORLD_H
 
 #include <iostream>
+#include <string>
+#include "k_graph.h"
+#include "location.h"
+#include "item.h"
+#include "pokemon.h"
 
 
 namespace mtm {
 namespace pokemongo {
+
+	using namespace mtm;
+
 
 typedef int Direction;
 
@@ -14,7 +22,7 @@ static const int SOUTH = 1;
 static const int EAST = 2;
 static const int WEST = 3;
 
-class World{
+class World : public KGraph<std::string, Location*, 4> {
  public:
   // Constructs a new empty world.
   World();
@@ -52,6 +60,10 @@ class World{
 
   // Disable copy constructor.
   World(const World& world) = delete;
+
+  // Disable assignment operator.
+  void operator=(const World& world) = delete;
+
 };
 
 std::istream& operator>>(std::istream& input, World& world);
