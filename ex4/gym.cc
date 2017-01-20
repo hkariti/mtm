@@ -21,11 +21,11 @@ Trainer * Gym::PreferedTeamTrainer(Team team)
 void Gym::Arrive(Trainer & trainer)
 {
 	Location::Arrive(trainer);
-	leader->is_leader = false;
 	if (trainers_.size() == 1) {
 		leader = &trainer;
 	}
 	else if (leader->GetTeam() != trainer.GetTeam()) {
+		leader->is_leader = false;
 		leader = TrainersBattle(*leader, trainer);
 	}
 	leader->is_leader = true;
