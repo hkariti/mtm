@@ -140,6 +140,9 @@ public:
 	// Counter for how many gym trainer is their leader
 	int gym_leader_counter;
 
+	// Trainer's current location name
+	std::string current_location_name;
+
 private:
 
 	// Compare between 2 trainers, according to sheet instructions
@@ -187,9 +190,6 @@ private:
 
 	/*				Part C Members					*/
 	
-	// Trainer's current location name
-	std::string current_location_name;
-
 	// Trainer's battle history score log
 	int battle_score_history;
 
