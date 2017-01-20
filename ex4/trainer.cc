@@ -26,7 +26,8 @@ Trainer::~Trainer() {
 
 Pokemon& Trainer::GetStrongestPokemon()
 {
-	return const_cast<Pokemon&>(static_cast<const Trainer*>(this)->GetStrongestPokemon());
+	return const_cast<Pokemon&>(static_cast<const Trainer*>
+		(this)->GetStrongestPokemon());
 }
 
 const Pokemon & Trainer::GetStrongestPokemon() const
@@ -44,7 +45,8 @@ const Pokemon & Trainer::GetStrongestPokemon() const
 void Trainer::KillStrongestPokemon()
 {
 	if (pokemons.empty()) throw TrainerNoPokemonsFoundException();
-	pokemons.erase(std::find(pokemons.begin(), pokemons.end(), GetStrongestPokemon()));
+	pokemons.erase(std::find(pokemons.begin(),
+		pokemons.end(), GetStrongestPokemon()));
 }
 
 int Trainer::compareTrainer(const Trainer & rhs) const
@@ -114,9 +116,11 @@ void Trainer::BoostPokemon(Pokemon& pokemon) {
 	items.erase(first_item);
 }
 
-std::ostream & mtm::pokemongo::operator<<(std::ostream & output, const Trainer & trainer)
+std::ostream & mtm::pokemongo::operator<<(std::ostream & output,
+	const Trainer & trainer)
 {
-	output << trainer.name << " (" << trainer.level << ") " << trainer.team << std::endl;
+	output << trainer.name << " (" << trainer.level << ") " << trainer.team
+		<< std::endl;
 	for (const Pokemon& pokemon : trainer.pokemons) {
 		output << pokemon;
 	}
@@ -139,8 +143,14 @@ void Trainer::UpdateBattleScoreHistory(Trainer & winner)
 	}
 }
 
-// throws TrainerInvalidArgsException if trainers are from the same team
-Trainer* PreferedTrainerByTeam(Trainer& trainer_1,Trainer& trainer_2) { //TODO:  DOC
+// See which trainer is better according to his team
+//
+// @throws TrainerInvalidArgsException if both trainers are in the same team
+
+// @param trainer_1 first trainer in battle
+// @param trainer_2 second trainer in battle
+// @return pointer to the winning trainer!
+Trainer* PreferedTrainerByTeam(Trainer& trainer_1,Trainer& trainer_2) {
 	
 	if (trainer_1.GetTeam() == trainer_2.GetTeam()) {
 		throw TrainerInvalidArgsException();
@@ -171,7 +181,8 @@ Trainer* PreferedTrainerByTeam(Trainer& trainer_1,Trainer& trainer_2) { //TODO: 
 	}
 }
 
-Trainer * mtm::pokemongo::TrainersBattleWithPokemons(Trainer & trainer_1, Trainer & trainer_2) 
+Trainer * mtm::pokemongo::TrainersBattleWithPokemons(Trainer & trainer_1,
+	Trainer & trainer_2) 
 {
 	Trainer* winner = NULL;
 	Pokemon *pokemon_1 = &trainer_1.GetStrongestPokemon();

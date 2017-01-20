@@ -98,48 +98,106 @@ public:
 	friend std::ostream& operator<<(std::ostream& output,
 									const Trainer& trainer);
 
-	//TODO:  DOC
-	// function for executing pokemon battle (boosting, hitting, removing if necessary and returning winning trainer)
-	friend Trainer* TrainersBattleWithPokemons(Trainer & trainer_1,
-		Trainer & trainer_2);
 
-	//TODO:  DOC
+
+	/*				Part C functions				*/
+
+	// Perform a battle between 2 mightly trainers!
+	//
+	// @param trainer_1 first trainer in battle
+	// @param trainer_2 second trainer in battle
+	// @return pointer to the winning trainer!
 	friend Trainer* TrainersBattle(Trainer& trainer_1, Trainer& trainer_2);
 
 
-	// Part C functions
+	// Helper function which performs a battle with 2 trainers with pokemons!
+	// This function assumes both trainers have pokemons
+	//
+	// @param trainer_1 first trainer in battle
+	// @param trainer_2 second trainer in battle
+	// @return pointer to the winning trainer!
+	friend Trainer* TrainersBattleWithPokemons(Trainer & trainer_1,
+		Trainer & trainer_2);
+
+
+	// Trainer's score for the team!
+	//
+	// @return total score the trainer is worth, taking into account
+	//		   it's level, if he's gym leader and battle score history.
 	int TotalScore();
+
+
+	// Adds item to trainer's Inventory!
+	//
+	// @param the item to add
+	// @return false if trainer cannot recieve the item due to it's level
+	//		   true if item was added successfully
 	bool AddItem(Item* item);
 
-	// Part C members
+
+	/*				Part C Members					*/
+	
+	// Counter for how many gym trainer is their leader
 	int gym_leader_counter;
 
 private:
 
+	// Compare between 2 trainers, according to sheet instructions
+	//
+	// @param 2nd trainer to compare to
+	// @return 0 if trainers are equal
+	//		   1 if this trainer is better
+	//		   -1 if rhs trainer is better
 	int compareTrainer(const Trainer& rhs) const;
 
-	// Part C functions
+
+	/*				Part C functions				*/
+
+	// Boost pokemon with oldest item
+	// Doesn't do anything if trainer has no items
+	//
+	// @param Pokemon to boost
 	void BoostPokemon(Pokemon& pokemon);
+
+	// Raising Trainer's level after winning battle!
+	//
+	// @param The other loser trainer
 	void RaiseLevel(Trainer& loser);
-	// if current instance is winner, score will be added, else score wil be reduced.
+
+	// Updating Trainer's Battle Score Log
+	//
+	// @param The winner of the battle, 
+	//		  if current instance is equal to winner score will be added
+	//		  else score will be reduced
 	void UpdateBattleScoreHistory(Trainer& winner);
 
-	// Part A members
+	/*				Part A Members					*/
+
+	// Trainer's name
 	std::string name;
+
+	// Trainer's Team
 	Team team;
+
+	// Trainer's level
 	int level;
+
+	// Trainer's list of pokemons
 	std::vector<Pokemon> pokemons;
 
-	// Part C members
+	/*				Part C Members					*/
+	
+	// Trainer's current location name
 	std::string current_location_name;
+
+	// Trainer's battle history score log
 	int battle_score_history;
+
+	// Trainer's Inventory
 	std::vector<Item*> items;
 };
 
 Trainer* TrainersBattle(Trainer& trainer_1, Trainer& trainer_2);
-
-
-
 std::ostream& operator<<(std::ostream& output, const Trainer& trainer);
 
 }  // namespace mtm
