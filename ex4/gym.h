@@ -10,8 +10,11 @@ class Gym : public Location {
 
 	Trainer* leader;
 
-	// Get's pointer to the most prefered team trainer in gym
-	// return's NULL if no trainer for that team exist in gym
+	// Gets pointer to the most preferred team trainer in gym.
+	// A preferred trainer is the strongest trainer from the same
+	// team given.
+	// @param team - Team to find the preferred trainer from
+	// return NULL if no trainer for that team exist in gym
 	Trainer* PreferedTeamTrainer(Team team);
 
 public:

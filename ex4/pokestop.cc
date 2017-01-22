@@ -22,6 +22,7 @@ void Pokestop::Arrive(Trainer& trainer) {
 		}
 	}
 
+	// Call the parent's arrive function
 	this->Location::Arrive(trainer);
 }
 
