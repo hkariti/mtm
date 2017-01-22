@@ -9,26 +9,22 @@ using namespace mtm::pokemongo;
 						"ELECTRIC", "FIRE", "FLYING", "PSYCHIC"}
 
 
-
-Pokemon::Pokemon(const std::string & species, const std::set<PokemonType>& types, const double & cp, const int & level)
-	: species(species), types(types), cp(cp), level(level), hp(MAX_POKEMON_HP)
-{
-	if (cp <= 0 || level <= 0 || species.size() == 0) throw PokemonInvalidArgsException();
+Pokemon::Pokemon(const std::string & species, const std::set<PokemonType>& types,
+				 const double & cp, const int & level)
+	: species(species), types(types), cp(cp), level(level), hp(MAX_POKEMON_HP) {
+	if (cp <= 0 || level <= 0 || species.size() == 0) {
+		throw PokemonInvalidArgsException();
+	}
 }
 
-
-Pokemon::Pokemon(const std::string & species, const double & cp, const int & level) 
-	: Pokemon(species, GetDefaultTypes(species), cp, level)
-{
-}
+Pokemon::Pokemon(const std::string & species, const double & cp,
+				 const int & level)
+	: Pokemon(species, GetDefaultTypes(species), cp, level) {}
 
 Pokemon::Pokemon(const Pokemon & pokemon)
-	: Pokemon(pokemon.species, pokemon.types, pokemon.cp, pokemon.level)
-{
-}
+	: Pokemon(pokemon.species, pokemon.types, pokemon.cp, pokemon.level) {}
 
-Pokemon & mtm::pokemongo::Pokemon::operator=(const Pokemon & pokemon)
-{
+Pokemon & mtm::pokemongo::Pokemon::operator=(const Pokemon & pokemon) {
 	types = pokemon.types;
 	species = pokemon.species;
 	cp = pokemon.cp;
@@ -72,13 +68,11 @@ bool Pokemon::operator>=(const Pokemon& rhs) const {
 	return comparePokemon(rhs) >= 0;
 }
 
-int Pokemon::Level() const
-{
+int Pokemon::Level() const {
 	return level;
 }
 
-bool Pokemon::Hit(Pokemon & victim)
-{
+bool Pokemon::Hit(Pokemon & victim) {
 	victim.hp -= HitPower();
 	if (victim.hp <= 0) {
 		victim.hp = 0;
@@ -87,21 +81,20 @@ bool Pokemon::Hit(Pokemon & victim)
 	return false;
 }
 
-void Pokemon::Heal()
-{
+void Pokemon::Heal() {
 	hp = MAX_POKEMON_HP;
 }
 
-void Pokemon::Train(const double & boost)
-{
+void Pokemon::Train(const double & boost) {
 	if (boost <= 1) throw PokemonInvalidArgsException();
 	cp *= boost;
 }
 
-std::ostream & mtm::pokemongo::operator<<(std::ostream & output, const Pokemon & pokemon)
-{
+std::ostream & mtm::pokemongo::operator<<(std::ostream & output,
+										  const Pokemon & pokemon) {
 	std::string string_types[] = STRING_TYPES;
-	output << pokemon.species << " (" << pokemon.level << "/" << pokemon.cp << "/" << pokemon.hp << ")";
+	output << pokemon.species << " (" << pokemon.level << "/" << pokemon.cp \
+		   << "/" << pokemon.hp << ")";
 	for (const PokemonType& type : pokemon.types) {
 		output << " " << string_types[type];
 	}
