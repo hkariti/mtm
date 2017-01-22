@@ -16,7 +16,7 @@ World::~World()
 {
 	std::map<std::string, Node*>::iterator it;
 	for (it = KGraph::nodes_.begin(); it != KGraph::nodes_.end(); it++) {
-		KGraph::Remove((*it).first);
+		delete (*this)[(*it).first];
 	}
 }
 
