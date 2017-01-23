@@ -238,7 +238,7 @@ template<typename KeyType, typename ValueType, int k> class KGraph {
   //
   // @param default_value the default value in the graph.
   explicit KGraph(ValueType const& default_value)
-	  : default_value(default_value), nodes()
+	  : nodes(), default_value(default_value)
   {}
 
   // A copy constructor. Copies the given graph. The constructed graph will have
@@ -246,7 +246,7 @@ template<typename KeyType, typename ValueType, int k> class KGraph {
   //
   // @param k_graph the graph to copy.
   KGraph(const KGraph& k_graph)
-	  : default_value(k_graph.default_value), nodes(k_graph.nodes)
+	  : nodes(k_graph.nodes), default_value(k_graph.default_value)
   {
 	  typename std::unordered_map<KeyType, Node>::iterator it;
 	  for (it = nodes.begin(); it != nodes.end(); it++) {

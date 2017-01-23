@@ -7,8 +7,7 @@ using namespace mtm;
 using mtm::KGraph;
 using std::string;
 
-//TODO: for some reason compiler can't find header externed one
-std::string location; // Used for finding the origin of an exception
+extern std::string location; // Used for finding the origin of an exception
 
 #define CREATE_GRAPH()		KGraph<string, string, 5> graph("DEFAULT"); \
 							graph.Insert("cpp"); \
