@@ -116,9 +116,9 @@ public:
 	//
 	// @param trainer_1 first trainer in battle
 	// @param trainer_2 second trainer in battle
-	// @return pointer to the winning trainer!
+	// @return pointer to the winning trainer, or NULL if there's a tie
 	friend Trainer* TrainersBattleWithPokemons(Trainer & trainer_1,
-		Trainer & trainer_2);
+											   Trainer & trainer_2);
 
 
 	// Trainer's score for the team!

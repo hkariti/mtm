@@ -177,8 +177,7 @@ Trainer* mtm::pokemongo::TrainersBattleWithPokemons(Trainer& trainer_1,
 	trainer_2.BoostPokemon(*pokemon_2);
 	if (*pokemon_1 > *pokemon_2) {
 		winner = &trainer_1;
-	}
-	if (*pokemon_2 > *pokemon_1) {
+	} else if (*pokemon_2 > *pokemon_1) {
 		winner = &trainer_2;
 	}
 	if ((*pokemon_1).Hit(*pokemon_2)) {
@@ -201,15 +200,16 @@ Trainer* mtm::pokemongo::TrainersBattle(Trainer& trainer_1,
 	} else if (!trainer_1.pokemons.empty() && trainer_2.pokemons.empty()) {
 		winner = &trainer_1;
 	}
+	// Update the winner's level, if there's a winner already.
 	if (winner == &trainer_1) {
 		trainer_1.RaiseLevel(trainer_2);
 	} else if (winner == &trainer_2) {
 		trainer_2.RaiseLevel(trainer_1);
 	} else {
+		// No winner yet. Decide by team without updating the trainers' stats.
 		winner = PreferedTrainerByTeam(trainer_1, trainer_2);
 	}
 	trainer_1.UpdateBattleScoreHistory(*winner);
 	trainer_2.UpdateBattleScoreHistory(*winner);
 	return winner;
 }
-
