@@ -59,7 +59,7 @@ void World::AddPokestop(std::istringstream & iss, std::string name) {
 			} else if (item_type == "CANDY") {
 				pokestop->AddItem(new Candy(item_level));
 			} else {
-				throw ItemInvalidArgException();
+				throw WorldInvalidInputLineException();
 			}
 		}
 		catch (ItemInvalidArgException) {
