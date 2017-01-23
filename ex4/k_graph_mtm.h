@@ -248,7 +248,7 @@ template<typename KeyType, typename ValueType, int k> class KGraph {
   KGraph(const KGraph& k_graph)
 	  : default_value(k_graph.default_value), nodes(k_graph.nodes)
   {
-	  std::unordered_map<KeyType, Node>::iterator it;
+	  typename std::unordered_map<KeyType, Node>::iterator it;
 	  for (it = nodes.begin(); it != nodes.end(); it++) {
 		  Node* new_node = &(*it).second;
 		  const Node* original_node = &k_graph.nodes.at(new_node->Key());
