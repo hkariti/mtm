@@ -4,7 +4,7 @@ LDFLAGS=-lmtm -Llibmtm/mac
 DEBUG=-DNDEBUG
 modules=item pokemon trainer pokestop
 objects=pokemon.o trainer.o pokestop.o
-tests=item_test pokemon_test trainer_test pokestop_test
+tests=item_test pokemon_test trainer_test pokestop_test k_graph_mtm_test
 
 .PHONY: tests clean
 
@@ -33,3 +33,5 @@ pokestop.o: pokestop.cc pokestop.h location.h exceptions.h trainer.h \
 pokestop_test.o: tests/pokestop_test.cc tests/../pokestop.h \
 	  tests/../location.h tests/../exceptions.h tests/../trainer.h \
 	  tests/../pokemon.h tests/../item.h tests/test_utils.h
+k_graph_mtm_test.o: tests/k_graph_mtm_test.cc tests/test_utils.h \
+	  tests/../k_graph_mtm.h tests/../exceptions.h
