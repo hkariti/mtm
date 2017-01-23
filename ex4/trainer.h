@@ -199,6 +199,8 @@ private:
 };
 
 Trainer* TrainersBattle(Trainer& trainer_1, Trainer& trainer_2);
+	// TODO: This is ugly being here, but gcc complains otherwise
+Trainer* TrainersBattleWithPokemons(Trainer& trainer_1, Trainer& trainer_2);
 std::ostream& operator<<(std::ostream& output, const Trainer& trainer);
 
 }  // namespace mtm

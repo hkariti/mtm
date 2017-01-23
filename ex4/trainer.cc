@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "trainer.h"
 #include "exceptions.h"
 
@@ -10,8 +12,8 @@
 using namespace mtm::pokemongo;
 
 Trainer::Trainer(const std::string & name, const Team & team)
-	: name(name), team(team), pokemons(), level(1), battle_score_history(0),
-		is_leader(false) {
+	: is_leader(false), name(name), team(team), level(1), pokemons(),
+	  battle_score_history(0) {
 	if (name.size() == 0) throw TrainerInvalidArgsException();
 }
 
@@ -42,8 +44,8 @@ const Pokemon & Trainer::GetStrongestPokemon() const {
 
 void Trainer::KillStrongestPokemon() {
 	if (pokemons.empty()) throw TrainerNoPokemonsFoundException();
-	pokemons.erase(std::find(pokemons.begin(),
-		pokemons.end(), GetStrongestPokemon()));
+	pokemons.erase(std::find(pokemons.begin(), pokemons.end(),
+							 GetStrongestPokemon()));
 }
 
 int Trainer::compareTrainer(const Trainer & rhs) const {
@@ -171,8 +173,8 @@ Trainer* PreferedTrainerByTeam(Trainer& trainer_1,Trainer& trainer_2) {
 	}
 }
 
-Trainer * mtm::pokemongo::TrainersBattleWithPokemons(Trainer & trainer_1,
-	Trainer & trainer_2)  {
+Trainer* mtm::pokemongo::TrainersBattleWithPokemons(Trainer& trainer_1,
+	Trainer& trainer_2)  {
 	Trainer* winner = NULL;
 	Pokemon *pokemon_1 = &trainer_1.GetStrongestPokemon();
 	Pokemon *pokemon_2 = &trainer_2.GetStrongestPokemon();
