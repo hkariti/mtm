@@ -9,6 +9,7 @@ Trainer * Gym::PreferedTeamTrainer(Team team) {
 			if (NULL == prefered_trainer) {
 				prefered_trainer = trainer;
 			}
+			// TODO: should be *trainer and *preferred_trainer here?
 			if (trainer > prefered_trainer) {
 				prefered_trainer = trainer;
 			}
