@@ -11,8 +11,7 @@ using namespace mtm::pokemongo;
 
 Trainer::Trainer(const std::string & name, const Team & team)
 	: name(name), team(team), pokemons(), level(1), battle_score_history(0),
-		is_leader(false)
-{
+		is_leader(false) {
 	if (name.size() == 0) throw TrainerInvalidArgsException();
 }
 
@@ -25,14 +24,12 @@ Trainer::~Trainer() {
 	}
 }
 
-Pokemon& Trainer::GetStrongestPokemon()
-{
+Pokemon& Trainer::GetStrongestPokemon() {
 	return const_cast<Pokemon&>(static_cast<const Trainer*>
 		(this)->GetStrongestPokemon());
 }
 
-const Pokemon & Trainer::GetStrongestPokemon() const
-{
+const Pokemon & Trainer::GetStrongestPokemon() const {
 	if (pokemons.empty()) throw TrainerNoPokemonsFoundException();
 	const Pokemon *strongestPokemon = &pokemons[0];
 	for (const Pokemon& pokemon : pokemons) {
@@ -43,15 +40,13 @@ const Pokemon & Trainer::GetStrongestPokemon() const
 	return *strongestPokemon;
 }
 
-void Trainer::KillStrongestPokemon()
-{
+void Trainer::KillStrongestPokemon() {
 	if (pokemons.empty()) throw TrainerNoPokemonsFoundException();
 	pokemons.erase(std::find(pokemons.begin(),
 		pokemons.end(), GetStrongestPokemon()));
 }
 
-int Trainer::compareTrainer(const Trainer & rhs) const
-{
+int Trainer::compareTrainer(const Trainer & rhs) const {
 	if (pokemons.empty() && rhs.pokemons.empty()) return 0;
 	if (pokemons.empty()) return -1;
 	if (rhs.pokemons.empty()) return 1;
@@ -78,25 +73,21 @@ bool Trainer::operator>=(const Trainer& rhs) const {
 	return compareTrainer(rhs) >= 0;
 }
 
-bool Trainer::IsAlly(const Trainer & trainer) const
-{
+bool Trainer::IsAlly(const Trainer & trainer) const {
 	return team == trainer.team;
 }
 
-Team Trainer::GetTeam() const
-{
+Team Trainer::GetTeam() const {
 	return team;
 }
 
-bool Trainer::TryToCatch(Pokemon & pokemon)
-{
+bool Trainer::TryToCatch(Pokemon & pokemon) {
 	if (pokemon.Level() > level) return false;
 	pokemons.push_back(pokemon);
 	return true;
 }
 
-int Trainer::TotalScore()
-{
+int Trainer::TotalScore() {
 	return level + battle_score_history +
 		(is_leader ? GYM_LEADER_POINTS : 0);
 }
@@ -118,8 +109,7 @@ void Trainer::BoostPokemon(Pokemon& pokemon) {
 }
 
 std::ostream & mtm::pokemongo::operator<<(std::ostream & output,
-	const Trainer & trainer)
-{
+	const Trainer & trainer) {
 	std::string teams_strings[] = STRING_TEAM;
 	output << trainer.name << " (" << trainer.level << ") "
 		<< teams_strings[trainer.team] << std::endl;
@@ -129,14 +119,12 @@ std::ostream & mtm::pokemongo::operator<<(std::ostream & output,
 	return output;
 }
 
-void Trainer::RaiseLevel(Trainer& loser)
-{
+void Trainer::RaiseLevel(Trainer& loser) {
 	level += loser.level / LOSER_TRAINER_LEVEL_FACTOR + 
 		(loser.level % LOSER_TRAINER_LEVEL_FACTOR ? 1 : 0);
 }
 
-void Trainer::UpdateBattleScoreHistory(Trainer & winner)
-{
+void Trainer::UpdateBattleScoreHistory(Trainer & winner) {
 	if (this == &winner) {
 		battle_score_history += TRAINER_WIN_POINTS;
 	}
@@ -184,8 +172,7 @@ Trainer* PreferedTrainerByTeam(Trainer& trainer_1,Trainer& trainer_2) {
 }
 
 Trainer * mtm::pokemongo::TrainersBattleWithPokemons(Trainer & trainer_1,
-	Trainer & trainer_2) 
-{
+	Trainer & trainer_2)  {
 	Trainer* winner = NULL;
 	Pokemon *pokemon_1 = &trainer_1.GetStrongestPokemon();
 	Pokemon *pokemon_2 = &trainer_2.GetStrongestPokemon();
@@ -207,8 +194,7 @@ Trainer * mtm::pokemongo::TrainersBattleWithPokemons(Trainer & trainer_1,
 }
 
 
-Trainer* mtm::pokemongo::TrainersBattle(Trainer& trainer_1, Trainer& trainer_2)
-{
+Trainer* mtm::pokemongo::TrainersBattle(Trainer& trainer_1, Trainer& trainer_2) {
 	Trainer *winner = NULL;
 	if (!trainer_1.pokemons.empty() && !trainer_2.pokemons.empty()) {
 		winner = TrainersBattleWithPokemons(trainer_1, trainer_2);

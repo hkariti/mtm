@@ -9,19 +9,16 @@
 using namespace mtm::pokemongo;
 
 World::World()
-	: KGraph(NULL)
-{}
+	: KGraph(NULL) {}
 
-World::~World()
-{
+World::~World() {
 	std::map<std::string, Node*>::iterator it;
 	for (it = KGraph::nodes_.begin(); it != KGraph::nodes_.end(); it++) {
 		delete (*this)[(*it).first];
 	}
 }
 
-std::istream & mtm::pokemongo::operator >> (std::istream & input, World & world)
-{
+std::istream & mtm::pokemongo::operator >> (std::istream & input, World & world) {
 	std::string line, location_type, location_name;
 	std::getline(input, line);
 	std::istringstream iss(line);
@@ -47,14 +44,12 @@ std::istream & mtm::pokemongo::operator >> (std::istream & input, World & world)
 	return input;
 }
 
-void World::AddGym(std::istringstream & iss, std::string name)
-{
+void World::AddGym(std::istringstream & iss, std::string name) {
 	if (!iss.eof()) throw WorldInvalidInputLineException();
 	KGraph::Insert(name, new Gym);
 }
 
-void World::AddPokestop(std::istringstream & iss, std::string name)
-{
+void World::AddPokestop(std::istringstream & iss, std::string name) {
 	Pokestop* pokestop = new Pokestop;
 	while (!iss.eof()) {
 		std::string item_type;
@@ -79,8 +74,7 @@ void World::AddPokestop(std::istringstream & iss, std::string name)
 	KGraph::Insert(name, pokestop);
 }
 
-void World::AddStarbucks(std::istringstream & iss, std::string name)
-{
+void World::AddStarbucks(std::istringstream & iss, std::string name) {
 	std::vector<Pokemon> pokemons;
 	while (!iss.eof()) {
 		std::string species;

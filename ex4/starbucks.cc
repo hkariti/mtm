@@ -3,11 +3,9 @@
 using namespace mtm::pokemongo;
 
 Starbucks::Starbucks(const std::vector<Pokemon> pokemons) 
-	: pokemons(pokemons)
-{}
+	: pokemons(pokemons) {}
 
-void Starbucks::Arrive(Trainer & trainer)
-{
+void Starbucks::Arrive(Trainer & trainer) {
 	Location::Arrive(trainer);
 	if (!pokemons.empty()) {
 		if (trainer.TryToCatch(pokemons.front())) {
@@ -17,8 +15,7 @@ void Starbucks::Arrive(Trainer & trainer)
 	}
 }
 
-void Starbucks::Leave(Trainer & trainer)
-{
+void Starbucks::Leave(Trainer & trainer) {
 	Location::Leave(trainer);
 	
 	// Do Nothing
