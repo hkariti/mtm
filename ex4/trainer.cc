@@ -194,7 +194,8 @@ Trainer * mtm::pokemongo::TrainersBattleWithPokemons(Trainer & trainer_1,
 }
 
 
-Trainer* mtm::pokemongo::TrainersBattle(Trainer& trainer_1, Trainer& trainer_2) {
+Trainer* mtm::pokemongo::TrainersBattle(Trainer& trainer_1,
+										Trainer& trainer_2) {
 	Trainer *winner = NULL;
 	if (!trainer_1.pokemons.empty() && !trainer_2.pokemons.empty()) {
 		winner = TrainersBattleWithPokemons(trainer_1, trainer_2);

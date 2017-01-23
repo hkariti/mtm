@@ -9,8 +9,9 @@ using namespace mtm::pokemongo;
 						"ELECTRIC", "FIRE", "FLYING", "PSYCHIC"}
 
 
-Pokemon::Pokemon(const std::string & species, const std::set<PokemonType>& types,
-				 const double & cp, const int & level)
+Pokemon::Pokemon(const std::string & species,
+				 const std::set<PokemonType>& types, const double & cp,
+				 const int & level)
 	: species(species), types(types), cp(cp), level(level), hp(MAX_POKEMON_HP) {
 	if (cp <= 0 || level <= 0 || species.size() == 0) {
 		throw PokemonInvalidArgsException();

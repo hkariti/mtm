@@ -25,7 +25,8 @@ namespace pokemongo {
 
 	class LocationException : public MtmException {};
 	class LocationTrainerNotFoundException : public LocationException {};
-	class LocationTrainerAlreadyInLocationException : public LocationException {};
+	class LocationTrainerAlreadyInLocationException : \
+		public LocationException {};
 
 	class PokestopException : public LocationException {};
 	class PokestopInvalidItemException : public PokestopException {};
@@ -36,7 +37,8 @@ namespace pokemongo {
 
 	class PokemonGoException : public MtmException {};
 	class PokemonGoLocationNotFoundException : public PokemonGoException {};
-	class PokemonGoTrainerNameAlreadyUsedExcpetion : public PokemonGoException {};
+	class PokemonGoTrainerNameAlreadyUsedExcpetion : \
+		public PokemonGoException {};
 	class PokemonGoInvalidArgsException : public PokemonGoException {};
 	class PokemonGoReachedDeadEndException : public PokemonGoException {};
 	class PokemonGoTrainerNotFoundExcpetion : public PokemonGoException {};

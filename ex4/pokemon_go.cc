@@ -8,7 +8,8 @@ PokemonGo::~PokemonGo() {
 	delete world;
 }
 
-void PokemonGo::AddTrainer(const std::string & name, const Team & team, const std::string & location) {
+void PokemonGo::AddTrainer(const std::string & name, const Team & team,
+						   const std::string & location) {
 	try {
 		Trainer trainer(name, team);
 		if (trainers.find(name) != trainers.end()) {
@@ -26,10 +27,12 @@ void PokemonGo::AddTrainer(const std::string & name, const Team & team, const st
 	}
 }
 
-void PokemonGo::MoveTrainer(const std::string & trainer_name, const Direction & dir) {
+void PokemonGo::MoveTrainer(const std::string & trainer_name,
+							const Direction & dir) {
 	try {
 		Trainer& trainer = trainers.at(trainer_name);
-		World::const_iterator it = world->BeginAt(trainer.current_location_name);
+		World::const_iterator it = \
+			world->BeginAt(trainer.current_location_name);
 		it.Move(dir);
 		if (it == world->End()) throw PokemonGoReachedDeadEndException();
 		(*world)[trainer.current_location_name]->Leave(trainer);
@@ -50,7 +53,8 @@ std::string PokemonGo::WhereIs(const std::string & trainer_name) {
 	}
 }
 
-const std::vector<Trainer*>& PokemonGo::GetTrainersIn(const std::string & location) {
+const std::vector<Trainer*>& PokemonGo::GetTrainersIn(
+												const std::string & location) {
 	try {
 		World::const_iterator it = world->BeginAt(location);
 		return (*world)[*it]->GetTrainers();

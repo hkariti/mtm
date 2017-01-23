@@ -18,7 +18,8 @@ World::~World() {
 	}
 }
 
-std::istream & mtm::pokemongo::operator >> (std::istream & input, World & world) {
+std::istream & mtm::pokemongo::operator >> (std::istream & input,
+											World & world) {
 	std::string line, location_type, location_name;
 	std::getline(input, line);
 	std::istringstream iss(line);

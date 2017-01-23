@@ -29,8 +29,10 @@ bool testKGraphInsert() {
 	ASSERT_NO_THROW(graph.Insert("pablo", "escobar"));
 
 	// test insert double
-	ASSERT_THROW(KGraphKeyAlreadyExistsExpection, graph.Insert("pablo", "escobar"));
-	ASSERT_THROW(KGraphKeyAlreadyExistsExpection, graph.Insert("pablo", "the narcos"));
+	ASSERT_THROW(KGraphKeyAlreadyExistsExpection,
+				 graph.Insert("pablo", "escobar"));
+	ASSERT_THROW(KGraphKeyAlreadyExistsExpection,
+				 graph.Insert("pablo", "the narcos"));
 	ASSERT_THROW(KGraphKeyAlreadyExistsExpection, graph.Insert("pablo"));
 	ASSERT_TRUE(graph["pablo"] == "escobar");
 	// check default value
@@ -147,7 +149,8 @@ bool testKGraphConnect() {
 	ASSERT_THROW(KGraphNodesAlreadyConnected, graph.Connect("cpp", "is", 1, 0));
 
 	// edge already in use
-	ASSERT_THROW(KGraphEdgeAlreadyInUse, graph.Connect("d language", "is", 3, 0));
+	ASSERT_THROW(KGraphEdgeAlreadyInUse,
+				 graph.Connect("d language", "is", 3, 0));
 
 	return true;
 }
@@ -160,7 +163,8 @@ bool testKGraphDisconnect() {
 	ASSERT_THROW(KGraphKeyNotFoundException, graph.Disconnect("c", "is"));
 
 	// not connected
-	ASSERT_THROW(kGraphNodesAreNotConnected, graph.Disconnect("d language", "is"));
+	ASSERT_THROW(kGraphNodesAreNotConnected,
+				 graph.Disconnect("d language", "is"));
 
 	// success 
 	ASSERT_NO_THROW(graph.Disconnect("cpp", "is"));

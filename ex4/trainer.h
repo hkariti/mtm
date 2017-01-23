@@ -32,9 +32,9 @@ public:
 	// Destroys all of the trainer's items
 	~Trainer();
 	// Returns a reference to the strongest Pokemon the trainer owns. Strongest 
-	// Pokemon is determined using the comparison operators provided by the class
-	// Pokemon. If two Pokemons are of equal strength, the function returns the
-	// one that was caught earlier by the trainer.
+	// Pokemon is determined using the comparison operators provided by the
+	// class Pokemon. If two Pokemons are of equal strength, the function
+	// returns the one that was caught earlier by the trainer.
 	//
 	// @return the strongest pokemon.
 	// @throw TrainerNoPokemonsException if trainer has no Pokemons.
@@ -42,7 +42,8 @@ public:
 	const Pokemon& GetStrongestPokemon() const;
 
 	// Kills the strongest Pokemon. Removes the Pokemon that is returned from
-	// GetStrongestPokemon() from the collection of Pokemons owned by the trainer
+	// GetStrongestPokemon() from the collection of Pokemons owned by the
+	// trainer.
 	//
 	// @throw TrainerNoPokemonsException if trainer has no Pokemons.
 	void KillStrongestPokemon();
