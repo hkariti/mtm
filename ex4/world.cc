@@ -28,14 +28,11 @@ std::istream & mtm::pokemongo::operator >> (std::istream & input,
 	try {
 		if (location_type == "GYM") {
 			world.AddGym(iss, location_name);
-		}
-		else if (location_type == "POKESTOP") {
+		} else if (location_type == "POKESTOP") {
 			world.AddPokestop(iss, location_name);
-		}
-		else if (location_type == "STARBUCKS") {
+		} else if (location_type == "STARBUCKS") {
 			world.AddStarbucks(iss, location_name);
-		}
-		else {
+		} else {
 			throw WorldInvalidInputLineException();
 		}
 	}
@@ -59,11 +56,9 @@ void World::AddPokestop(std::istringstream & iss, std::string name) {
 		try {
 			if (item_type == "POTION") {
 				pokestop->AddItem(new Potion(item_level));
-			}
-			else if (item_type == "CANDY") {
+			} else if (item_type == "CANDY") {
 				pokestop->AddItem(new Candy(item_level));
-			}
-			else {
+			} else {
 				throw ItemInvalidArgException();
 			}
 		}

@@ -129,8 +129,7 @@ void Trainer::RaiseLevel(Trainer& loser) {
 void Trainer::UpdateBattleScoreHistory(Trainer & winner) {
 	if (this == &winner) {
 		battle_score_history += TRAINER_WIN_POINTS;
-	}
-	else {
+	} else {
 		battle_score_history += TRAINER_LOSE_POINTS;
 	}
 }
@@ -150,24 +149,20 @@ Trainer* PreferedTrainerByTeam(Trainer& trainer_1,Trainer& trainer_2) {
 	if (trainer_1.GetTeam() == BLUE) {
 		if (trainer_2.GetTeam() == YELLOW) {
 			return &trainer_2;
-		}
-		else {
+		} else {
 			return &trainer_1;
 		}
 	}
 	if (trainer_1.GetTeam() == RED) {
 		if (trainer_2.GetTeam() == YELLOW) {
 			return &trainer_1;
-		}
-		else {
+		} else {
 			return &trainer_2;
 		}
-	}
-	else { // trainer_1 team is yellow
+	} else { // trainer_1 team is yellow
 		if (trainer_2.GetTeam() == BLUE) {
 			return &trainer_1;
-		}
-		else {
+		} else {
 			return &trainer_2;
 		}
 	}
@@ -201,20 +196,16 @@ Trainer* mtm::pokemongo::TrainersBattle(Trainer& trainer_1,
 	Trainer *winner = NULL;
 	if (!trainer_1.pokemons.empty() && !trainer_2.pokemons.empty()) {
 		winner = TrainersBattleWithPokemons(trainer_1, trainer_2);
-	}
-	else if (trainer_1.pokemons.empty() && !trainer_2.pokemons.empty()) {
+	} else if (trainer_1.pokemons.empty() && !trainer_2.pokemons.empty()) {
 		winner = &trainer_2;
-	}
-	else if (!trainer_1.pokemons.empty() && trainer_2.pokemons.empty()) {
+	} else if (!trainer_1.pokemons.empty() && trainer_2.pokemons.empty()) {
 		winner = &trainer_1;
 	}
 	if (winner == &trainer_1) {
 		trainer_1.RaiseLevel(trainer_2);
-	}
-	else if (winner == &trainer_2) {
+	} else if (winner == &trainer_2) {
 		trainer_2.RaiseLevel(trainer_1);
-	}
-	else {
+	} else {
 		winner = PreferedTrainerByTeam(trainer_1, trainer_2);
 	}
 	trainer_1.UpdateBattleScoreHistory(*winner);
