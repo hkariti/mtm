@@ -1,21 +1,67 @@
+#include <vector>
+#include <set>
+#include <iostream>
+
 /* Question 1 */
+template <class Iterator>
+class ContainerOperator {
+    public:
+    virtual ~ContainerOperator() {};
+    virtual bool operator()(const Iterator& begin1, Iterator const& end1,
+                        Iterator const& begin2, Iterator const& end2) const = 0;
+};
+
 template<typename T, class Iterator> 
 std::set<T> runAlg(Iterator begin, Iterator end,
-	container_operator<Iterator> cmp) {
+	ContainerOperator<Iterator>& op) {
 
-    typename std::set<T> filtered;
-    for (Iterator it = begin; it != container.end(); it++) {
-        if (cmp(begin, it, it, end)) {
+    std::set<T> filtered;
+    for (Iterator it = begin; it != end; it++) {
+        if (op(begin, it, it, end)) {
             filtered.insert(*it);
         }
     }
     return filtered;
 }
 
-/*
- * Question 2
- *
- * The operator compares the last element from its first argument with the first element of its second argument,
- * and returns true if the first is LARGER than the second (empty collection for first arg returns true). Upon run of the above algorithm, if the array
- * is indeed sorted smallest-to-largest, the returning set will be empty.
- */
+// Question 2
+template <class Iterator>
+class IsLarger : public ContainerOperator<Iterator> {
+    public:
+    ~IsLarger() {};
+    virtual bool operator()(const Iterator& begin1, Iterator const& end1,
+                        Iterator const& begin2, Iterator const& end2) const {
+        if (begin1 == end1) return false;
+        Iterator current, next;
+        current = next = begin1;
+        next++;
+        for (; next != end1; next++, current++); // Find the last item
+        return *current > *begin2;
+    }
+};
+
+template <typename T, class Iterator> bool is_sorted(Iterator begin,
+                                                     Iterator end) {
+    IsLarger<Iterator> op;
+    std::set<T> filtered;
+
+    filtered = runAlg<T, Iterator>(begin, end, op);
+    return filtered.empty();
+}
+
+using namespace std;
+int main() {
+    vector<int> vec;
+    for (int i = 0; i < 10; i++) {
+        vec.push_back(i);
+    }
+    //vec.push_back(1);
+
+    if (is_sorted<int, vector<int>::iterator>(vec.begin(), vec.end())) {
+        cout << "sorted" << endl;
+    } else {
+        cout << "unsorted" ;
+        cout << endl;
+    }
+    return 0;
+}
