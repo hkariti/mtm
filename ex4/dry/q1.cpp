@@ -40,12 +40,12 @@ class IsLarger : public ContainerOperator<Iterator> {
     }
 };
 
-template <typename T, class Iterator> bool is_sorted(Iterator begin,
-                                                     Iterator end) {
-    IsLarger<Iterator> op;
-    std::set<T> filtered;
+bool is_sorted(std::vector<int>& array) {
+    IsLarger<std::vector<int>::iterator> op;
+    std::set<int> filtered;
 
-    filtered = runAlg<T, Iterator>(begin, end, op);
+    filtered = runAlg<int, std::vector<int>::iterator>(array.begin(),
+                                                       array.end(), op);
     return filtered.empty();
 }
 
@@ -55,9 +55,9 @@ int main() {
     for (int i = 0; i < 10; i++) {
         vec.push_back(i);
     }
-    //vec.push_back(1);
+    vec.push_back(1);
 
-    if (is_sorted<int, vector<int>::iterator>(vec.begin(), vec.end())) {
+    if (is_sorted(vec)) {
         cout << "sorted" << endl;
     } else {
         cout << "unsorted" ;
