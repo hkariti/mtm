@@ -1,8 +1,10 @@
 /* Question 1 */
-template<typename T, typename Iter> std::set<T> runAlg(Iter begin, Iter end, oper<Iter> cmp) {
-    Iter it = begin;
-    typename set::set<T> filtered;
-    for (; it != container.end(); it++) {
+template<typename T, class Iterator> 
+std::set<T> runAlg(Iterator begin, Iterator end,
+	container_operator<Iterator> cmp) {
+
+    typename std::set<T> filtered;
+    for (Iterator it = begin; it != container.end(); it++) {
         if (cmp(begin, it, it, end)) {
             filtered.insert(*it);
         }
