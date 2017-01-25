@@ -19,8 +19,8 @@ public:
 	~Starbucks() {}
 
 	// make copy and assignment operator as compiler's default
-	Starbucks(const Starbucks& gym) = default;
-	Starbucks& operator=(const Starbucks& gym) = default;
+	Starbucks(const Starbucks& starbucks) = default;
+	Starbucks& operator=(const Starbucks& starbucks) = default;
 
 	// Handle a new trainer arriving to Starbucks,
 	// Buying coffee and try to catch the first pokemon he sees!
