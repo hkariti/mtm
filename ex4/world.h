@@ -12,9 +12,6 @@
 namespace mtm {
 namespace pokemongo {
 
-	using namespace mtm;
-
-
 typedef int Direction;
 
 static const int NORTH = 0;
@@ -60,8 +57,6 @@ class World : public KGraph<std::string, Location*, 4> {
   //        the given name in the world.
   friend std::istream& operator>>(std::istream& input, World& world);
 
-
-
   // Disable copy constructor.
   World(const World& world) = delete;
 
@@ -69,8 +64,20 @@ class World : public KGraph<std::string, Location*, 4> {
   void operator=(const World& world) = delete;
 
 protected:
+
+	// Add new Gym to world
+	// @param iss suppose to be empty stream (not args for gym)
+	// @throw WorldInvalidInputLineException if iss has content
 	void AddGym(std::istringstream& iss, std::string name);
+
+	// Add new Pokestop to world
+	// @param iss Stream containing all Pokestop items
+	// @throw WorldInvalidInputLineException if pokestop args are invalid
 	void AddPokestop(std::istringstream& iss, std::string name);
+
+	// Add new Starbucks to world
+	// @param iss Stream containing all Starbucks items
+	// @throw WorldInvalidInputLineException if starbucks args are invalid
 	void AddStarbucks(std::istringstream& iss, std::string name);
 };
 
