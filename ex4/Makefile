@@ -55,4 +55,4 @@ starbucks.o: starbucks.cc starbucks.h location.h exceptions.h trainer.h \
 trainer.o: trainer.cc trainer.h pokemon.h item.h exceptions.h
 world.o: world.cc world.h k_graph.h location.h exceptions.h trainer.h \
 	pokemon.h item.h gym.h pokestop.h starbucks.h
-
+test_utils.o: tests/test_utils.cc tests/test_utils.h
