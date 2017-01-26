@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <stdexcept>
 #include "k_graph.h"
 #include "location.h"
 #include "item.h"
