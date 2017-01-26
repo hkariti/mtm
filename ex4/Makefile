@@ -6,12 +6,17 @@ modules=item pokemon trainer pokestop
 objects=pokemon.o trainer.o pokestop.o gym.o pokemon_go.o starbucks.o world.o
 tests=item_test pokemon_test trainer_test pokestop_test k_graph_mtm_test starbucks_test world_test gym_test pokemon_go_test
 
-.PHONY: tests clean
+.PHONY: tests clean zip
+
 
 tests: DEBUG=-g
 tests: $(tests)
 %_test: %_test.o test_utils.o $(objects)
 	$(CXX) -o $@ $^ $(LDFLAGS)
+
+zip:
+	rm -f ex4.zip
+	find . -name '*.cc' -o -name '*.h' | xargs -I '{}' zip ex4.zip '{}' -x '*test_utils*' k_graph.h location.h example_tests/'*' 'libmtm/*'
 
 %.o:
 	$(CXX) $(CXXFLAGS) $(DEBUG) -c -o $@ $<
