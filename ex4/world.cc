@@ -25,26 +25,27 @@ std::istream & mtm::pokemongo::operator >> (std::istream & input,
 	std::istringstream iss(line);
 	iss >> location_type >> location_name;
 	if (location_name.empty()) throw WorldInvalidInputLineException();
-	try {
-		if (location_type == "GYM") {
-			world.AddGym(iss, location_name);
-		} else if (location_type == "POKESTOP") {
-			world.AddPokestop(iss, location_name);
-		} else if (location_type == "STARBUCKS") {
-			world.AddStarbucks(iss, location_name);
-		} else {
-			throw WorldInvalidInputLineException();
-		}
-	}
-	catch (KGraphKeyAlreadyExistsExpection) {
-		throw WorldLocationNameAlreadyUsed();
+	if (location_type == "GYM") {
+		world.AddGym(iss, location_name);
+	} else if (location_type == "POKESTOP") {
+		world.AddPokestop(iss, location_name);
+	} else if (location_type == "STARBUCKS") {
+		world.AddStarbucks(iss, location_name);
+	} else {
+		throw WorldInvalidInputLineException();
 	}
 	return input;
 }
 
 void World::AddGym(std::istringstream & iss, std::string name) {
 	if (!iss.eof()) throw WorldInvalidInputLineException();
-	KGraph::Insert(name, new Gym);
+	Gym* gym = new Gym;
+	try {
+		KGraph::Insert(name, new Gym);
+	} catch (KGraphKeyAlreadyExistsExpection) {
+		delete gym;
+		throw WorldLocationNameAlreadyUsed();
+	}
 }
 
 void World::AddPokestop(std::istringstream & iss, std::string name) {
@@ -67,7 +68,12 @@ void World::AddPokestop(std::istringstream & iss, std::string name) {
 			throw WorldInvalidInputLineException();
 		}
 	}
-	KGraph::Insert(name, pokestop);
+	try {
+		KGraph::Insert(name, pokestop);
+	} catch (KGraphKeyAlreadyExistsExpection) {
+		delete pokestop;
+		throw WorldLocationNameAlreadyUsed();
+	}
 }
 
 void World::AddStarbucks(std::istringstream & iss, std::string name) {
@@ -84,5 +90,11 @@ void World::AddStarbucks(std::istringstream & iss, std::string name) {
 			throw WorldInvalidInputLineException();
 		}
 	}
-	KGraph::Insert(name, new Starbucks(pokemons));
+    Starbucks* starbucks = new Starbucks(pokemons);
+	try {
+		KGraph::Insert(name, starbucks);
+	} catch (KGraphKeyAlreadyExistsExpection) {
+		delete starbucks;
+		throw WorldLocationNameAlreadyUsed();
+	}
 }
