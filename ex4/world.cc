@@ -41,7 +41,7 @@ void World::AddGym(std::istringstream & iss, std::string name) {
 	if (!iss.eof()) throw WorldInvalidInputLineException();
 	Gym* gym = new Gym;
 	try {
-		KGraph::Insert(name, new Gym);
+		KGraph::Insert(name, gym);
 	} catch (KGraphKeyAlreadyExistsExpection) {
 		delete gym;
 		throw WorldLocationNameAlreadyUsed();
