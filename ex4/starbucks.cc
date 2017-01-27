@@ -7,12 +7,10 @@ Starbucks::Starbucks(const std::vector<Pokemon> pokemons)
 
 void Starbucks::Arrive(Trainer & trainer) {
 	Location::Arrive(trainer);
-	std::vector<Pokemon>::iterator current_pokemon;
-	for (current_pokemon = pokemons.begin(); current_pokemon != pokemons.end();
-		 current_pokemon++) {
-		if (trainer.TryToCatch(*current_pokemon)) {
-			pokemons.erase(current_pokemon);
-			break;
+	if (!pokemons.empty()) {
+		if (trainer.TryToCatch(pokemons.front())) {
+			//  catch succeeded - remove pokemon from list
+			pokemons.erase(pokemons.begin());
 		}
 	}
 }

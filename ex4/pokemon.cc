@@ -94,7 +94,7 @@ void Pokemon::Train(const double & boost) {
 std::ostream & mtm::pokemongo::operator<<(std::ostream & output,
 										  const Pokemon & pokemon) {
 	std::string string_types[] = STRING_TYPES;
-	output << pokemon.species << "(" << pokemon.level << "/" << pokemon.cp \
+	output << pokemon.species << " (" << pokemon.level << "/" << pokemon.cp \
 		   << "/" << pokemon.hp << ")";
 	for (const PokemonType& type : pokemon.types) {
 		output << " " << string_types[type];
