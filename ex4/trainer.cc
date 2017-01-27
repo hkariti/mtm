@@ -113,7 +113,7 @@ void Trainer::BoostPokemon(Pokemon& pokemon) {
 std::ostream & mtm::pokemongo::operator<<(std::ostream & output,
 	const Trainer & trainer) {
 	std::string teams_strings[] = STRING_TEAM;
-	output << trainer.name << " (" << trainer.level << ") "
+	output << trainer.name << " " << trainer.level << " "
 		<< teams_strings[trainer.team] << std::endl;
 	for (const Pokemon& pokemon : trainer.pokemons) {
 		output << pokemon;
