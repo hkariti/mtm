@@ -109,15 +109,3 @@ bool testTrain() {
 
 	return true;
 }
-
-
-int main() {
-  RUN_TEST(testPokemonCtors);
-  RUN_TEST(testAssignment);
-  RUN_TEST(testCompareisonOperators);
-  RUN_TEST(testLevel);
-  RUN_TEST(testTrain);
-
-  return 0;
-}
-

@@ -119,14 +119,3 @@ bool testGetTrainers() {
 	
 	return true;
 }
-
-int main() {
-	RUN_TEST(testConstructor);
-	RUN_TEST(testDestructor);
-	RUN_TEST(testAddItem);
-	RUN_TEST(testArrive);
-	RUN_TEST(testLeave);
-	RUN_TEST(testGetTrainers);
-
-	return 0;
-}

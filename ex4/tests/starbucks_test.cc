@@ -59,11 +59,3 @@ bool testLeave() {
 	delete starbucks;
 	return true;
 }
-
-
-int main() {
-	RUN_TEST(testArrive);
-	RUN_TEST(testLeave);
-	return 0;
-}
-

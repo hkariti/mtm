@@ -169,11 +169,3 @@ bool testGetScore() {
 
 	return true;
 }
-
-int main() {
-	RUN_TEST(testTrainerAdd);
-	RUN_TEST(testTrainerMove);
-	RUN_TEST(testWhereIs);
-	RUN_TEST(testTrainersIn);
-	RUN_TEST(testGetScore);
-}

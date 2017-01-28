@@ -99,11 +99,3 @@ bool testGymLeave() {
 
 	return true;
 }
-
-
-int main() {
-  RUN_TEST(testGymArrive);
-  RUN_TEST(testGymLeave);
-  return 0;
-}
-

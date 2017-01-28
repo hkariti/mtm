@@ -29,10 +29,3 @@ bool testPotion() {
 	ASSERT_NO_THROW(potion.Use(pokemon));
 	return true;
 }
-
-int main() {
-	RUN_TEST(testCandy);
-	RUN_TEST(testPotion);
-
-	return 0;
-}

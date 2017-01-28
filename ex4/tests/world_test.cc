@@ -60,9 +60,3 @@ bool WorldInput() {
 
 	return true;
 }
-
-int main() {
-  RUN_TEST(WorldInput);
-  return 0;
-}
-

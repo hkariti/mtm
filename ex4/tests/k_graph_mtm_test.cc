@@ -283,21 +283,3 @@ bool testKGraphCopyCtor() {
 
 	return true;
 }
-
-int main() {
-
-	RUN_TEST(testKGraphInsert);
-	RUN_TEST(testKGraphBeginAt);
-	RUN_TEST(testKGraphRemove);
-	RUN_TEST(testKGraphSubscriptOperator);
-	RUN_TEST(testKGraphContains);
-	RUN_TEST(testKGraphConnect);
-	RUN_TEST(testKGraphDisconnect);
-	RUN_TEST(testKGraphCopyCtor);
-	RUN_TEST(testIteratorMove);
-	RUN_TEST(testIteratorDereference);
-	RUN_TEST(testIteratorCompare);
-
-
-	return 0;
-}

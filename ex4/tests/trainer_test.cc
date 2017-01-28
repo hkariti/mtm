@@ -200,15 +200,3 @@ bool testTrainerBattle() {
 
 	return true;
 }
-int main() {
-  RUN_TEST(testTrainerCtors);
-  RUN_TEST(testAssignment);
-  RUN_TEST(testCompareisonOperators);
-  RUN_TEST(testIsAlly);
-  RUN_TEST(testGetStrongestPokemon);
-  RUN_TEST(testKillStrongestPokemon);
-  RUN_TEST(testTryToCatch);
-  RUN_TEST(testTrainerBattle);
-  return 0;
-}
-
