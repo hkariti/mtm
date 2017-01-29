@@ -12,6 +12,9 @@ Pokestop::~Pokestop() {
 }
 
 void Pokestop::Arrive(Trainer& trainer) {
+	// Call the parent's arrive function
+	this->Location::Arrive(trainer);
+
 	std::vector<Item*>::iterator current_item;
 	// Find the first item the new trainer can take and give it to them
 	for (current_item = items.begin(); current_item != items.end();
@@ -21,9 +24,6 @@ void Pokestop::Arrive(Trainer& trainer) {
 			break;
 		}
 	}
-
-	// Call the parent's arrive function
-	this->Location::Arrive(trainer);
 }
 
 void Pokestop::AddItem(Item* item) {
