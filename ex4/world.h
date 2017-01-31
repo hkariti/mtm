@@ -64,6 +64,8 @@ class World : public KGraph<std::string, Location*, 4> {
   // Disable assignment operator.
   void operator=(const World& world) = delete;
 
+  void Remove(std::string const& key);
+
 protected:
 
 	// Add new Gym to world

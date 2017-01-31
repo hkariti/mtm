@@ -58,5 +58,15 @@ bool WorldInput() {
 	std::istringstream input_14("GYM coffee_shop");
 	ASSERT_THROW(WorldLocationNameAlreadyUsed, input_14 >> world);
 
+    return true;
+}
+
+bool WorldRemove() {
+	World world;
+    // Remove location
+	std::istringstream input_15("GYM coffee_shop1");
+	ASSERT_NO_THROW(input_15 >> world);
+    ASSERT_NO_THROW(world.Remove("coffee_shop1"));
+
 	return true;
 }

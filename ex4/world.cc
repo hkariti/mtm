@@ -37,6 +37,11 @@ std::istream & mtm::pokemongo::operator >> (std::istream & input,
 	return input;
 }
 
+void World::Remove(std::string const& key) {
+	delete (*this)[key];
+	KGraph::Remove(key);
+}
+
 void World::AddGym(std::istringstream & iss, std::string name) {
 	if (!iss.eof()) throw WorldInvalidInputLineException();
 	Gym* gym = new Gym;
